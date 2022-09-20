@@ -1,0 +1,23 @@
+.search-form label {
+    margin-bottom: 10px;
+}
+
+.form-horizontal label {
+    font-size: 14px;
+}
+
+
+#myDiv {
+    display: none;
+    text-align: center;
+}
+
+.form-group.required label:after {
+    color: #d00;
+    content: "*";
+    position: absolute;
+    margin-left: 3px;
+    top:3px;
+}
+
+

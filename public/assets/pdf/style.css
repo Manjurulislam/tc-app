@@ -1,0 +1,95 @@
+body{
+    font-family: 'DM Sans', sans-serif;
+    list-style: none;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+.content {
+    margin: 0 auto;
+    position: relative;
+}
+.content .logo {
+    width: 70px;
+}
+.content .mojib {
+    width: 100px;
+    text-align: right;
+}
+
+.board_name {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.top_section {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 2.5rem;
+}
+.top_section tr th {
+    text-align: center;
+    border: none;
+    padding-bottom: 5px;
+}
+
+.website_link {
+    font-size: 12px;
+    margin-bottom: 30px;
+}
+
+.logo {
+    width: 70px;
+}
+.mojib {
+    width: 100px;
+}
+
+.des {
+    margin-bottom: 0.5rem;
+    line-height: 1.75;
+    text-align: justify;
+    text-indent: 2rem;
+}
+.inner_table {
+    border-collapse: collapse;
+    width: 100%;
+}
+.inner_table tr th {
+    text-align: center;
+    border: 1px solid #dddddd;
+}
+
+.inner_table tr td {
+    border: 1px solid #dddddd;
+    padding: 6px;
+}
+
+.table_category {
+    text-align: center;
+    margin: 0.5rem 0 1.5rem;
+    font-weight: 600;
+}
+
+
+.note {
+    margin-bottom: 4.5rem;
+    list-style-type: none;
+}
+.note li {
+    padding-bottom: 8px;
+    padding-left: 0.5rem;
+}
+.note p {
+    padding-bottom: 10px;
+}
+
+.info {
+    font-size: 12px;
+    text-align: justify;
+}
