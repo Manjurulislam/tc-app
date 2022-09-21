@@ -14,11 +14,10 @@ class Application extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id', 'app_no', 'eiin_no', 'college_code',
-        'college_name', 'department', 'class', 'roll_no',
-        'session', 'district', 'upazila', 'post_office',
+        'student_id', 'eiin_no', 'college_code',
+        'college_name', 'post_office','district', 'upazila',
         'sonali_sheba_no', 'sonali_sheba_branch',
-        'payment_date', 'payment_status', 'app_date', 'status'
+        'payment_date', 'payment_status', 'applied_at', 'status'
     ];
 
     public static $status = [

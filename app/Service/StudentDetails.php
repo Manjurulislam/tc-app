@@ -10,57 +10,36 @@ use Illuminate\Support\Facades\Log;
 class StudentDetails
 {
 
-    public function post(Request $request): object
+    public function post($rollNo, $year)
     {
         try {
             $apiUrl   = 'http://172.104.51.235:9999/api/student.php';
-            $exam     = $request->exam;
-            $year     = $request->year;
-            $rollNo   = $request->rollNo;
-            $response = Http::timeout(25)->withOptions([
-                'debug'  => false,
-                'verify' => false,
-            ])->get($apiUrl, $this->setBodyParam($exam, $year, $rollNo));
+            $response = Http::timeout(25)->withOptions(['debug' => false, 'verify' => false,])
+                ->get($apiUrl, $this->setBodyParam($rollNo, $year));
 
             $content = json_decode($response);
 
-            $data = [
+            return [
                 'name'        => data_get($content, 'data.name', ''),
                 'father_name' => data_get($content, 'data.father_name', ''),
                 'mother_name' => data_get($content, 'data.mother_name', ''),
-                'gender'      => data_get($content, 'data.gender', ''),
-                'dob'         => data_get($content, 'data.dob', ''),
-                'roll'        => data_get($content, 'data.roll', ''),
+                'roll_no'     => data_get($content, 'data.roll', ''),
                 'reg_no'      => data_get($content, 'data.registration', ''),
-                'eiin_no'     => data_get($content, 'data.eiin', ''),
-                'exam'        => data_get($content, 'data.exam', ''),
-                'session'     => data_get($content, 'data.session', ''),
-                'year'        => data_get($content, 'data.year', ''),
-                'religion'    => data_get($content, 'data.religion', ''),
-            ];
-
-            $status = data_get($content, 'status');
-
-            return (object) [
-                'status'  => $status == 'success' ? 200 : 400,
-                'message' => $status == 'success' ? 'Student found' : 'Data not found',
-                'data'    => $status == 'success' ? $data : [],
+                'pass_year'   => data_get($content, 'data.year', ''),
+                'board'       => data_get($content, 'data.board', ''),
+                'gpa'         => data_get($content, 'data.gpa', ''),
             ];
         } catch (\Exception $e) {
-            Log::debug($e->getMessage());
-            return (object) [
-                'status'  => 500,
-                'message' => 'Something went wrong',
-                'data'    => [],
-            ];
+            Log::debug($e);
+            return [];
         }
     }
 
-    public function setBodyParam($exam, $year, $roll): array
+    public function setBodyParam($roll, $year): array
     {
         return [
             'board' => 'din',
-            'exam'  => $exam,
+            'exam'  => 'ssc',
             'year'  => $year,
             'roll'  => $roll,
         ];
