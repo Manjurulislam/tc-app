@@ -7,30 +7,30 @@
     <div class="card-body border border-2">
         <div class="row">
             <div class="col-md-4">
-                <div class="form-group">
+                <div class="form-group required">
                     <label for="ssc_roll">Roll No.</label>
                     <input type="text" class="form-control" id="ssc_roll" wire:model="sscRoll">
                     @error('sscRoll') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="form-group">
+                <div class="form-group required">
                     <label for="ssc_reg">Registration No.</label>
                     <input type="text" class="form-control" id="ssc_reg" wire:model="sscReg">
                     @error('sscReg') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="form-group">
+                <div class="form-group required">
                     <label for="pass_year">Passing Year</label>
-                    <input type="text" class="form-control" id="pass_year" wire:model="sscPassYear">
+                    <input type="text" class="form-control" id="pass_year" wire:model="sscPassYear" wire:change="details">
                     @error('sscPassYear') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <div class="form-group">
+                <div class="form-group required">
                     <label for="phone">Mobile</label>
                     <input type="text" class="form-control" id="phone" wire:model="stdPhone">
                     @error('stdPhone') <small class="form-text text-danger">{{ $message }}</small>@enderror
@@ -71,7 +71,6 @@
                     <input type="text" class="form-control" id="mother" disabled wire:model="stdMotherName">
                 </div>
             </div>
-
         </div>
     </div>
 </div>
