@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
         $data = [
             [
                 'name'       => 'Admin',
-                'email'      => 'admin@mail.com',
+                'email'      => 'admin.tcapp@mail.com',
                 'username'   => 'admin',
                 'password'   => bcrypt('admin@123'),
                 'created_at' => Carbon::now(),

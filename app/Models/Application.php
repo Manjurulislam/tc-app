@@ -42,11 +42,6 @@ class Application extends Model
         $query->where('status', ApplicationStatus::PENDING);
     }
 
-    public function scopeCorrection($query)
-    {
-        $query->where('status', ApplicationStatus::LITERALLY);
-    }
-
     public function scopeApprove($query)
     {
         $query->where('status', ApplicationStatus::APPROVED);

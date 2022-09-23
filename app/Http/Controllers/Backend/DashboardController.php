@@ -13,11 +13,8 @@ class DashboardController extends Controller
     public function index()
     {
         $pending   = Application::pending()->count();
-        $literally = Application::correction()->count();
-        $meeting   = Application::meeting()->count();
-        $invalid   = Application::invalid()->count();
         $approved  = Application::approve()->count();
-        return view('backend.dashboard.index', compact('pending', 'literally', 'meeting', 'approved', 'invalid'));
+        return view('backend.dashboard.index', compact('pending',  'approved'));
     }
 
     public function getPending()

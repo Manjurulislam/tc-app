@@ -11,7 +11,7 @@
 <div class="login-box">
     <div class="card card-outline card-indigo">
         <div class="card-header text-center">
-            <a href="" class="h1">E-Office</a>
+            <a href="" class="h1">TC APP</a>
         </div>
         <div class="card-body">
             <p class="login-box-msg">Sign in to start your session</p>

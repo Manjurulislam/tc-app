@@ -25,16 +25,16 @@
                     <li class="nav-item">
                         <a href="{{route('pending')}}" class="nav-link">Pending</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{route('literally')}}" class="nav-link">Literally correction</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{route('meeting')}}" class="nav-link">For Meeting</a>
-                    </li>
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{route('literally')}}" class="nav-link">Literally correction</a>--}}
+{{--                    </li>--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{route('meeting')}}" class="nav-link">For Meeting</a>--}}
+{{--                    </li>--}}
 
-                    <li class="nav-item">
-                        <a href="{{route('invalid')}}" class="nav-link">Invalid</a>
-                    </li>
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{route('invalid')}}" class="nav-link">Invalid</a>--}}
+{{--                    </li>--}}
 
                     <li class="nav-item">
                         <a href="{{route('approve')}}" class="nav-link">Approve</a>

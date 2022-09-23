@@ -1,4 +1,4 @@
 @extends('layouts.app')
 @section('content')
-    <livewire:applications />
+    <livewire:pending-list />
 @endsection

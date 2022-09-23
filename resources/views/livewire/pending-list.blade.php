@@ -40,23 +40,10 @@
                     <tr class="thead-dark font-weight-light">
                         <th></th>
                         <th>SL</th>
-                        <th>Exam</th>
-                        <th>Roll</th>
-                        <th>Reg.</th>
                         <th>Name</th>
                         <th>Father Name</th>
                         <th>Mother Name</th>
-                        <th>DOB</th>
-                        <th>Cor. Name</th>
-                        <th>Cor. Father Name</th>
-                        <th>Cor. Mother Name</th>
-                        <th>Cor. DOB</th>
                         <th>Phone</th>
-                        <th>Religion</th>
-                        <th>Gender</th>
-                        <th>Institute</th>
-                        <th>Center</th>
-                        <th>Photo</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -66,39 +53,13 @@
                         @foreach($items as $item)
                             <tr>
                                 <td>
-                                    <input type="checkbox" wire:model="selectedStudents" value="{{ $item->id }}"
-                                           style="margin-left: -16px">
+                                    <input type="checkbox" wire:model="selectedStudents" value="{{ $item->id }}" style="margin-left: -16px">
                                 </td>
                                 <td>{{$loop->index + 1}}</td>
-                                <td>
-                                    {{$item->exams ? $item->exams->map(function ($item){ return $item->exam->title;   })->implode(',') : ''}}
-                                </td>
-                                <td>
-                                    {{$item->exams ? $item->exams->map(function ($item){ return $item->roll_no;   })->implode(',') : ''}}
-                                </td>
-                                <td>
-                                    {{$item->exams ? $item->exams->map(function ($item){ return $item->reg_no;   })->implode(',') : ''}}
-                                </td>
                                 <td>{{$item->student ? $item->student->name : ''}}</td>
                                 <td>{{$item->student ? $item->student->father_name : ''}}</td>
                                 <td>{{$item->student ? $item->student->mother_name : ''}}</td>
-                                <td>{{$item->student ? $item->student->dob : ''}}</td>
-                                <td>{{$item->cor_name ?? 'N/A'}}</td>
-                                <td>{{$item->cor_father_name ?? 'N/A'}}</td>
-                                <td>{{$item->cor_mother_name ?? 'N/A'}}</td>
-                                <td>{{$item->cor_dob ?? 'N/A'}}</td>
                                 <td>{{$item->student ? $item->student->phone :''}}</td>
-                                <td>{{$item->student ? $item->student->religion:''}}</td>
-                                <td>{{$item->student ? $item->student->gender:''}}</td>
-                                <td>{{$item->student ? $item->student->institute:''}}</td>
-                                <td>{{$item->student ? $item->student->center_code:''}}</td>
-                                <td>
-                                    @if($item->photo)
-                                        <img src="{{$item->photo}}" width="50" height="40">
-                                    @else
-                                        N/A
-                                    @endif
-                                </td>
 
                                 <td class="text-capitalize">
                                     <span class="badge bg-success">Pending</span>

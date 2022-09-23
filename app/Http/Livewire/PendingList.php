@@ -31,15 +31,9 @@ class PendingList extends Component
                         $q->where('name', 'like', '%' . $this->search . '%')
                             ->orWhere('father_name', 'like', '%' . $this->search . '%')
                             ->orWhere('mother_name', 'like', '%' . $this->search . '%')
-                            ->orWhere('eiin_no', 'like', '%' . $this->search . '%')
-                            ->orWhere('center_code', 'like', '%' . $this->search . '%')
                             ->orWhere('phone', 'like', '%' . $this->search . '%');
-                    })
-                    ->orWhereHas('exams', function ($q) {
-                        $q->where('roll_no', 'like', '%' . $this->search . '%')
-                            ->orWhere('reg_no', 'like', '%' . $this->search . '%');
                     });
-            })->pending()->with('exams')->latest()->paginate(20),
+            })->pending()->latest()->paginate(20),
         ]);
     }
 
