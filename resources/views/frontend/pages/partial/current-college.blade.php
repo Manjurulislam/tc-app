@@ -46,10 +46,10 @@
                 <div class="form-group required">
                     <label for="group">Group</label>
                     <select class="form-control" id="group" wire:model="group">
-                        <option selected>Select</option>
-                        <option value="science">Science</option>
-                        <option value="commerce">Commerce</option>
-                        <option value="ars">Ars</option>
+                        <option value="">Select</option>
+                        <option value="Science">Science</option>
+                        <option value="Business Studies">Business Studies</option>
+                        <option value="Humanities">Humanities</option>
                     </select>
                     @error('group') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>

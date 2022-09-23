@@ -8,13 +8,10 @@
     <meta name="generator" content="Hugo 0.84.0">
     <title>TC Application</title>
     <link rel="stylesheet"  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
     <link rel="stylesheet" href="{{asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
-    <link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
     <link href="{{asset('assets/dist/css/adminlte.css')}}" rel="stylesheet">
     <link href="{{asset('assets/custom/front-style.css')}}" rel="stylesheet">
 </head>
@@ -62,13 +59,13 @@
 
 </div>
 
-<footer class="blog-footer fixed-bottom">
-    <div class="footer-copyright text-center py-3 text-sm">
-        © {{date('Y')}} Copyright:
-        <a href="/"> Dinajpur Education Board</a>
-        All rights reserved.
-    </div>
-</footer>
+{{--<footer class="blog-footer fixed-bottom">--}}
+{{--    <div class="footer-copyright text-center py-3 text-sm">--}}
+{{--        © {{date('Y')}} Copyright:--}}
+{{--        <a href="/"> Dinajpur Education Board</a>--}}
+{{--        All rights reserved.--}}
+{{--    </div>--}}
+{{--</footer>--}}
 @include('frontend.layouts.front-footer')
 </body>
 </html>

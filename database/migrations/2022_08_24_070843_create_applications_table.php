@@ -16,6 +16,7 @@ class CreateApplicationsTable extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('detail_id')->nullable();
             $table->integer('eiin_no');
             $table->string('college_code', 50);
             $table->string('college_name');

@@ -32,7 +32,7 @@
             <div class="col-md-4">
                 <div class="form-group required">
                     <label for="phone">Mobile</label>
-                    <input type="text" class="form-control" id="phone" wire:model="stdPhone">
+                    <input type="text" class="form-control" id="phone" wire:model="phone">
                     @error('stdPhone') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>

@@ -14,8 +14,8 @@ class Application extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id', 'eiin_no', 'college_code',
-        'college_name', 'post_office','district', 'upazila',
+        'student_id', 'eiin_no', 'detail_id', 'college_code',
+        'college_name', 'post_office', 'district', 'upazila',
         'sonali_sheba_no', 'sonali_sheba_branch',
         'payment_date', 'payment_status', 'applied_at', 'status'
     ];
