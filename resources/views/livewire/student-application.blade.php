@@ -13,7 +13,7 @@
 
                 @if($hasSit)
                     <div class="jumbotron">
-                        <h1 class="text-center text-danger text-uppercase">Sit Not available at {{$addColName}}</h1>
+                        <h1 class="text-center text-danger text-uppercase">Seat Not available at {{$addColName}}</h1>
                     </div>
                 @endif
             </form>
