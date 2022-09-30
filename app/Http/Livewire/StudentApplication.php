@@ -2,10 +2,9 @@
 
 namespace App\Http\Livewire;
 
-use App\Models\Detail;
+use App\Models\CollegeDetails;
 use App\Models\InstInfo;
 use App\Models\Student;
-use App\Models\Subject;
 use App\Service\StudentDetails;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -23,12 +22,11 @@ class StudentApplication extends Component
         $addColEiin, $addColCode, $addColName, $addColPost,
         $addColUpozila, $addColDistrict, $instituteId;
 
-    public    $subjects    = '';
-    public    $subjectsArr = [];
-    public    $hasSit      = false;
-    public    $setSubjects = false;
-    public    $showDiv     = false;
-    protected $rules       = [
+    public $subjects = [];
+    public $hasSit   = false;
+    public $showDiv  = false;
+
+    protected $rules    = [
         'sscRoll'        => 'required|numeric',
         'sscReg'         => 'required|numeric',
         'sscPassYear'    => 'required|min:4',
@@ -46,9 +44,8 @@ class StudentApplication extends Component
         'addColPost'     => 'required',
         'addColUpozila'  => 'required',
         'addColDistrict' => 'required',
-        'subjects'       => 'required',
     ];
-    protected $messages    = [
+    protected $messages = [
         'phone.required'          => 'Mobile number is required',
         'curCollegeEiin.required' => 'Eiin is required',
         'addColEiin.required'     => 'Eiin is required',
@@ -61,14 +58,13 @@ class StudentApplication extends Component
         'addColDistrict.required' => 'District is required',
     ];
 
-    public function hydrate()
-    {
-        $this->emit('select2Hydrate');
-    }
+//    public function hydrate()
+//    {
+//        $this->emit('select2Hydrate');
+//    }
 
     public function render()
     {
-        $this->subjectsArr = Subject::orderBy('subj_name')->whereNotIn('subj_code', [101, 107, 275])->get();
         return view('livewire.student-application');
     }
 
@@ -81,15 +77,30 @@ class StudentApplication extends Component
     public function updatedAddColEiin($value)
     {
         if ($this->addColEiin && $this->group) {
-            $institute         = Detail::where('eiin', $value)->first();
-            $this->addColName  = data_get($institute, 'college_name', '');
-            $this->instituteId = data_get($institute, 'id', '');
-            $clauos            = ['eiin' => $value, 'group_name' => $this->group];
-            $availableSit      = Detail::where($clauos)->whereRaw('available_seats < total_seats')->exists();
-            $this->setSubjects = $availableSit;
-            $this->showDiv     = $availableSit;
-            $this->hasSit      = !$availableSit;
+            $institute        = CollegeDetails::where('eiin', $value)->first();
+            $this->addColName = data_get($institute, 'college_name', '');
+            $this->showDiv    = $this->isSeatAvailable();
+            $this->hasSit     = !$this->isSeatAvailable();
+            $this->subjects   = $this->subjects();
         }
+    }
+
+    public function isSeatAvailable()
+    {
+        $clause = ['eiin' => $this->addColEiin, 'group_name' => $this->group];
+        return CollegeDetails::where($clause)->whereRaw('available_seats < total_seats')->exists();
+    }
+
+
+    public function subjects()
+    {
+        $subjects = [];
+
+        if ($this->sscRoll && $this->sscReg) {
+            $query    = DB::table('hsc_registration')->where(['stu_ssc_roll' => $this->sscRoll, 'stu_ssc_regi' => $this->sscReg])->first();
+            $subjects = data_get($query, 'sub_comp');
+        }
+        return $subjects;
     }
 
 
@@ -134,10 +145,7 @@ class StudentApplication extends Component
 
     public function prepareData(): array
     {
-        $addSubject = [101, 102, 107, 108, 275];
-        $subjectIDs = array_map('intval', json_decode(json_encode($this->subjects)));
-        $subjects   = array_merge($subjectIDs, $addSubject);
-        $password   = Str::random(8) . 'db';
+        $password = Str::random(8) . 'db';
 
         $student      = [
             'name'        => $this->stdName,
@@ -158,16 +166,15 @@ class StudentApplication extends Component
             'post_office'      => $this->curPostOffice,
             'upazila'          => $this->curUpozilla,
             'district'         => $this->curDistrict,
-            'subjects'         => $subjects,
+            'subjects'         => $this->subjects,
             'ssc_roll_no'      => $this->sscRoll,
             'ssc_reg_no'       => $this->sscReg,
-            'ssc_passing_year' => $this->sscPassYear,
+            'ssc_pass_year' => $this->sscPassYear,
             'ssc_cgpa'         => $this->sscGpa,
             'ssc_bord'         => $this->sscBoard,
         ];
         $application  = [
             'eiin_no'      => $this->addColEiin,
-            'detail_id'    => $this->instituteId,
             'college_code' => $this->addColCode,
             'college_name' => $this->addColName,
             'post_office'  => $this->addColPost,

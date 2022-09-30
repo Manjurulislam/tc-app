@@ -51,5 +51,10 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-12">
+            @if(!blank($subjects))
+                <p>Subjects : {{$subjects}}</p>
+            @endif
+        </div>
     </div>
 </div>

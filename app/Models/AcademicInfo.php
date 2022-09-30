@@ -14,7 +14,7 @@ class AcademicInfo extends Model
         'student_id', 'eiin_no', 'college_name',
         'group', 'class', 'roll_no', 'session',
         'district', 'upazila', 'post_office', 'subjects',
-        'ssc_roll_no', 'ssc_reg_no', 'ssc_passing_year',
+        'ssc_roll_no', 'ssc_reg_no', 'ssc_pass_year',
         'ssc_cgpa', 'ssc_bord'
     ];
 

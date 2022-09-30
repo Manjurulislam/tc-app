@@ -15,11 +15,11 @@ class CreateInstInfosTable extends Migration
     {
         Schema::create('inst_infos', function (Blueprint $table) {
             $table->id();
-            $table->integer('eiin');
-            $table->integer('code');
-            $table->string('inst_Name');
-            $table->string('pass1');
-            $table->string('pass2');
+            $table->integer('eiin')->index();
+            $table->integer('code')->index();
+            $table->string('inst_Name')->index();
+            $table->string('pass1')->index();
+            $table->string('pass2')->index();
             $table->integer('is_confirm');
             $table->integer('student_count');
             $table->timestamps();
