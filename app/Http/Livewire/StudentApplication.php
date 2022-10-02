@@ -118,8 +118,8 @@ class StudentApplication extends Component
             [$studentData, $academicInfo, $application] = $this->prepareData();
             $student = Student::create($studentData);
             $student->academicInfo()->create($academicInfo);
-            $application = $student->application()->create($application);
-            $application->approve()->create([
+            $applicationData = $student->application()->create($application);
+            $applicationData->approves()->create([
                 'inst_id'   => $this->instituteId,
                 'is_parent' => 1,
             ]);
