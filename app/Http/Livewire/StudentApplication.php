@@ -15,19 +15,19 @@ use Livewire\Component;
 class StudentApplication extends Component
 {
 
-    public $sscRoll, $sscReg, $sscPassYear, $sscGpa, $sscBoard,
+    public $ssc_roll_no, $sscReg, $sscPassYear, $sscGpa, $sscBoard,
         $stdName, $phone, $stdFatherName, $stdMotherName,
         $curCollegeEiin, $curCollegeName, $group, $class, $roll,
         $session, $curPostOffice, $curUpozilla, $curDistrict,
         $addColEiin, $addColCode, $addColName, $addColPost,
         $addColUpozila, $addColDistrict, $instituteId;
 
-    public $subjects = [];
+    public $subjects = '';
     public $hasSit   = false;
     public $showDiv  = false;
 
     protected $rules    = [
-        'sscRoll'        => 'required|numeric',
+        'ssc_roll_no'    => 'required|numeric|unique:academic_infos',
         'sscReg'         => 'required|numeric',
         'sscPassYear'    => 'required|min:4',
         'phone'          => 'required|regex:/(01)[0-9]{9}/|unique:students',
@@ -46,7 +46,6 @@ class StudentApplication extends Component
         'addColDistrict' => 'required',
     ];
     protected $messages = [
-        'phone.required'          => 'Mobile number is required',
         'curCollegeEiin.required' => 'Eiin is required',
         'addColEiin.required'     => 'Eiin is required',
         'addColCode.required'     => 'College code is required',
@@ -71,7 +70,8 @@ class StudentApplication extends Component
     public function updatedCurCollegeEiin($value)
     {
         $institute            = InstInfo::where('eiin', $value)->first();
-        $this->curCollegeName = data_get($institute, 'inst_Name', '');
+        $this->instituteId    = data_get($institute, 'id');
+        $this->curCollegeName = data_get($institute, 'inst_Name');
     }
 
     public function updatedAddColEiin($value)
@@ -96,8 +96,10 @@ class StudentApplication extends Component
     {
         $subjects = [];
 
-        if ($this->sscRoll && $this->sscReg) {
-            $query    = DB::table('hsc_registration')->where(['stu_ssc_roll' => $this->sscRoll, 'stu_ssc_regi' => $this->sscReg])->first();
+        if ($this->ssc_roll_no && $this->sscReg) {
+            $query    = DB::table('hsc_registration')
+                ->where(['stu_ssc_roll' => $this->ssc_roll_no, 'stu_ssc_regi' => $this->sscReg])
+                ->first();
             $subjects = data_get($query, 'sub_comp');
         }
         return $subjects;
@@ -116,7 +118,11 @@ class StudentApplication extends Component
             [$studentData, $academicInfo, $application] = $this->prepareData();
             $student = Student::create($studentData);
             $student->academicInfo()->create($academicInfo);
-            $student->application()->create($application);
+            $application = $student->application()->create($application);
+            $application->approve()->create([
+                'inst_id'   => $this->instituteId,
+                'is_parent' => 1,
+            ]);
             DB::commit();
             session()->flash('success', 'Application received Successfully.');
         } catch (\Throwable $e) {
@@ -129,13 +135,13 @@ class StudentApplication extends Component
 //======================== ssc data from api ======================================
     public function details()
     {
-        if ($this->sscRoll && $this->sscPassYear) {
-            $response = app(StudentDetails::class)->post($this->sscRoll, $this->sscPassYear);
+        if ($this->ssc_roll_no && $this->sscPassYear) {
+            $response = app(StudentDetails::class)->post($this->ssc_roll_no, $this->sscPassYear);
 
             $this->stdName       = data_get($response, 'name');
             $this->stdFatherName = data_get($response, 'father_name');
             $this->stdMotherName = data_get($response, 'mother_name');
-            $this->sscRoll       = data_get($response, 'roll_no');
+            $this->ssc_roll_no   = data_get($response, 'roll_no');
             $this->sscReg        = data_get($response, 'reg_no');
             $this->sscPassYear   = data_get($response, 'pass_year');
             $this->sscBoard      = data_get($response, 'board');
@@ -152,35 +158,36 @@ class StudentApplication extends Component
             'father_name' => $this->stdFatherName,
             'mother_name' => $this->stdMotherName,
             'phone'       => $this->phone,
-            'username'    => $this->sscRoll . 'DB',
+            'username'    => $this->ssc_roll_no . 'DB',
             'password'    => bcrypt($password),
             'pwd_hint'    => $password,
         ];
         $academicInfo = [
-            'eiin_no'          => $this->curCollegeEiin,
-            'college_name'     => $this->curCollegeName,
-            'group'            => $this->group,
-            'class'            => $this->class,
-            'roll_no'          => $this->roll,
-            'session'          => $this->session,
-            'post_office'      => $this->curPostOffice,
-            'upazila'          => $this->curUpozilla,
-            'district'         => $this->curDistrict,
-            'subjects'         => $this->subjects,
-            'ssc_roll_no'      => $this->sscRoll,
-            'ssc_reg_no'       => $this->sscReg,
+            'eiin_no'       => $this->curCollegeEiin,
+            'college_name'  => $this->curCollegeName,
+            'group'         => $this->group,
+            'class'         => $this->class,
+            'roll_no'       => $this->roll,
+            'session'       => $this->session,
+            'post_office'   => $this->curPostOffice,
+            'upazila'       => $this->curUpozilla,
+            'district'      => $this->curDistrict,
+            'subjects'      => $this->subjects,
+            'ssc_roll_no'   => $this->ssc_roll_no,
+            'ssc_reg_no'    => $this->sscReg,
             'ssc_pass_year' => $this->sscPassYear,
-            'ssc_cgpa'         => $this->sscGpa,
-            'ssc_bord'         => $this->sscBoard,
+            'ssc_cgpa'      => $this->sscGpa,
+            'ssc_bord'      => $this->sscBoard,
         ];
         $application  = [
-            'eiin_no'      => $this->addColEiin,
-            'college_code' => $this->addColCode,
-            'college_name' => $this->addColName,
-            'post_office'  => $this->addColPost,
-            'upazila'      => $this->addColUpozila,
-            'district'     => $this->addColDistrict,
-            'applied_at'   => Carbon::now()->toDateTimeString(),
+            'from_college_eiin' => $this->curCollegeEiin,
+            'to_college_eiin'   => $this->addColEiin,
+            'college_code'      => $this->addColCode,
+            'college_name'      => $this->addColName,
+            'post_office'       => $this->addColPost,
+            'upazila'           => $this->addColUpozila,
+            'district'          => $this->addColDistrict,
+            'applied_at'        => Carbon::now()->toDateTimeString(),
         ];
         return [$student, $academicInfo, $application];
     }

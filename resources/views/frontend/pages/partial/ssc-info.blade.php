@@ -9,8 +9,8 @@
             <div class="col-md-4">
                 <div class="form-group required">
                     <label for="ssc_roll">Roll No.</label>
-                    <input type="text" class="form-control" id="ssc_roll" wire:model="sscRoll">
-                    @error('sscRoll') <small class="form-text text-danger">{{ $message }}</small>@enderror
+                    <input type="text" class="form-control" id="ssc_roll" wire:model="ssc_roll_no">
+                    @error('ssc_roll_no') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>
             <div class="col-md-4">
@@ -33,7 +33,7 @@
                 <div class="form-group required">
                     <label for="phone">Mobile</label>
                     <input type="text" class="form-control" id="phone" wire:model="phone">
-                    @error('stdPhone') <small class="form-text text-danger">{{ $message }}</small>@enderror
+                    @error('phone') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>
             <div class="col-md-4">

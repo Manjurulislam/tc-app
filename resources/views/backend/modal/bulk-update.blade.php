@@ -14,24 +14,10 @@
                         <label for="status">Status:</label>
                         <select class="form-control custom-select" id="status" wire:model="status">
                             <option>Select</option>
-                            <option value="2">Literally correction</option>
-                            <option value="3">For Meeting</option>
                             <option value="4">Approved</option>
-                            <option value="5">Invalid</option>
                         </select>
                         @error('status') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
-
-                    @if($status == 3)
-                        <div class="form-group">
-                            <label for="mno">Meeting No:</label>
-                            <input type="text" class="form-control" id="mno" wire:model="meetingNo">
-                        </div>
-                        <div class="form-group">
-                            <label for="date">Meeting Date:</label>
-                            <input type="datetime-local" class="form-control" id="date" wire:model="meetingDate">
-                        </div>
-                    @endif
                 </form>
             </div>
             <div class="modal-footer">

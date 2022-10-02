@@ -1,8 +1,6 @@
 <div class="row">
     <div class="col-12">
-{{--        @include('backend.modal.update')--}}
-        @include('backend.modal.details')
-{{--        @include('backend.modal.bulk-update')--}}
+        @include('backend.modal.update')
         <div class="card card-outline card-primary">
             <div class="card-header">
                 <h3 class="card-title">Application List</h3>
@@ -21,9 +19,9 @@
                             </div>
                         </div>
                         <div class="col-6 text-right">
-{{--                            <button class="btn btn-success btn-sm" wire:click="export">--}}
-{{--                                Export--}}
-{{--                            </button>--}}
+                            {{--                            <button class="btn btn-success btn-sm" wire:click="export">--}}
+                            {{--                                Export--}}
+                            {{--                            </button>--}}
                         </div>
                     </div>
                 </div>
@@ -38,6 +36,7 @@
                 <table class="table table-bordered table-sm small text-nowrap">
                     <thead>
                     <tr class="thead-dark font-weight-light">
+                        <th></th>
                         <th>SL</th>
                         <th>Name</th>
                         <th>Father Name</th>
@@ -56,31 +55,38 @@
                     @if(!blank($items))
                         @foreach($items as $item)
                             <tr>
+                                <td>
+                                    <input type="checkbox" wire:model="selectedStudents" value="{{ $item->id }}" style="margin-left: -16px">
+                                </td>
                                 <td>{{$loop->index + 1}}</td>
-                                <td>{{$item->student ? $item->student->name : ''}}</td>
-                                <td>{{$item->student ? $item->student->father_name : ''}}</td>
-                                <td>{{$item->student ? $item->student->mother_name : ''}}</td>
-                                <td>{{$item->student ? $item->student->phone :''}}</td>
-                                <td>{{$item->student->academicInfo ? $item->student->academicInfo->college_name :''}}</td>
-                                <td>{{$item->college_name}}</td>
-                                <td>{{$item->student->academicInfo ? $item->student->academicInfo->ssc_roll_no :''}}</td>
-                                <td>{{$item->student->academicInfo ? $item->student->academicInfo->ssc_reg_no :''}}</td>
-                                <td>{{$item->student->academicInfo ? $item->student->academicInfo->subjects :''}}</td>
+                                <td>{{$item->applications ? $item->applications->student->name : ''}}</td>
+                                <td>{{$item->applications ? $item->applications->student->father_name : ''}}</td>
+                                <td>{{$item->applications ? $item->applications->student->mother_name : ''}}</td>
+                                <td>{{$item->applications ? $item->applications->student->phone :''}}</td>
+                                <td>{{$item->applications ? $item->applications->student->academicInfo->college_name :''}} ({{$item->applications->from_college_eiin}})</td>
+                                <td>{{$item->applications->college_name}} ({{$item->applications->to_college_eiin}})</td>
+                                <td>{{$item->applications ? $item->applications->student->academicInfo->ssc_roll_no :''}}</td>
+                                <td>{{$item->applications ? $item->applications->student->academicInfo->ssc_reg_no :''}}</td>
+                                <td>{{$item->applications ? $item->applications->student->academicInfo->subjects :''}}</td>
                                 <td class="text-capitalize">
-                                    <span class="badge bg-success">{{\App\Models\Application::$status[$item->status]}}</span>
+                                    <span class="badge bg-success">{{\App\Models\Application::$status[$item->applications->status]}}</span>
                                 </td>
                                 <td>
-                                    <button data-toggle="modal" data-target="#detailModal" wire:click="show({{ $item->id }})" class="btn btn-warning btn-xs">
-                                        Details
-                                    </button>
+                                    @if(!$item->is_approved)
+                                        <button data-toggle="modal" data-target="#updateModal" wire:click="updateStatus({{ $item->id }})" class="btn btn-primary btn-xs">
+                                            Approve
+                                        </button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
                     @endif
+
                     </tbody>
                 </table>
             </div>
             <!-- /.card-body -->
+
             <div class="card-footer p-1 clearfix">
                 <div class="d-flex">
                     <div class="mx-auto">

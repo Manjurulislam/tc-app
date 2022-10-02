@@ -14,22 +14,19 @@ class Application extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_id', 'eiin_no', 'college_code',
+        'student_id', 'from_college_eiin', 'detail_id', 'college_code',
         'college_name', 'post_office', 'district', 'upazila',
-        'sonali_sheba_no', 'sonali_sheba_branch',
+        'sonali_sheba_no','to_college_eiin',
         'payment_date', 'payment_status', 'applied_at', 'status'
     ];
 
     public static $status = [
-        ApplicationStatus::PENDING   => 'PENDING',
-        ApplicationStatus::LITERALLY => 'LITERALLY CORRECTION',
-        ApplicationStatus::MEETING   => 'MEETING',
-        ApplicationStatus::APPROVED  => 'APPROVED',
-        ApplicationStatus::INVALID   => 'INVALID',
+        ApplicationStatus::PENDING  => 'PENDING',
+        ApplicationStatus::APPROVED => 'APPROVED',
     ];
 
     protected $dates = [
-        'created_at', 'app_date'
+        'created_at', 'applied_at'
     ];
 
     public function student(): BelongsTo
@@ -47,5 +44,9 @@ class Application extends Model
         $query->where('status', ApplicationStatus::APPROVED);
     }
 
+    public function approves(): HasMany
+    {
+        return $this->hasMany(ApproveApplication::class);
+    }
 
 }

@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
                 'name'       => 'Admin',
                 'email'      => 'admin.tcapp@mail.com',
                 'username'   => 'admin',
+                'role'       => 1,
                 'password'   => bcrypt('admin@123'),
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

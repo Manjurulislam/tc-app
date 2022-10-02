@@ -8,7 +8,7 @@
             <form wire:submit.prevent="submit">
                 @include('frontend.pages.partial.ssc-info')
                 @include('frontend.pages.partial.current-college')
-                @include('frontend.pages.partial.addmit-college', $subjects)
+                @include('frontend.pages.partial.addmit-college')
                 @if($hasSit)
                     <div class="jumbotron">
                         <h1 class="text-center text-danger text-uppercase">Seat Not available at {{$addColName}}</h1>

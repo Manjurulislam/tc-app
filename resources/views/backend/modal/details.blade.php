@@ -35,26 +35,6 @@
                                         <th>Phone</th>
                                         <td>{{$details->student->phone}}</td>
                                     </tr>
-                                    <tr>
-                                        <th>Religion</th>
-                                        <td>{{$details->student->religion}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Gender</th>
-                                        <td>{{$details->student->gender}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>DOB</th>
-                                        <td>{{$details->student->dob}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Center Code</th>
-                                        <td>{{$details->student->center_code}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Institute</th>
-                                        <td>{{$details->student->institute}}</td>
-                                    </tr>
                                 </table>
                             </div>
                             <!-- /.card-body -->
@@ -63,163 +43,88 @@
                     <div class="col-12">
                         <div class="card card-outline card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Required to Correction</h3>
+                                <h3 class="card-title">Current College</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body table-responsive p-0">
                                 <table class="table table-bordered table-sm text-nowrap">
                                     <tr>
                                         <th style="width: 8%">Name</th>
-                                        <td>{{$details->cor_name ?? 'N/A'}}</td>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->college_name :''}}</td>
                                     </tr>
                                     <tr>
-                                        <th>Father Name</th>
-                                        <td>{{$details->cor_father_name ?? 'N/A'}}</td>
+                                        <th>Group</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->group :''}}</td>
                                     </tr>
                                     <tr>
-                                        <th>Mother Name</th>
-                                        <td>{{$details->cor_mother_name ?? 'N/A'}}</td>
+                                        <th>Class</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->class :''}}</td>
                                     </tr>
                                     <tr>
-                                        <th>Religion</th>
-                                        <td>{{$details->cor_religion ?? 'N/A'}}</td>
+                                        <th>Class Roll</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->roll_no :''}}</td>
                                     </tr>
                                     <tr>
-                                        <th>Gender</th>
-                                        <td>{{$details->cor_gender ?? 'N/A'}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>DOB</th>
-                                        <td>{{$details->cor_dob ?? 'N/A'}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Remarks</th>
-                                        <td>{{$details->remarks}}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <!-- /.card-body -->
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="card card-outline card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title">Correction for exam</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <div class="card-body table-responsive p-0">
-                                <table class="table table-bordered table-sm text-nowrap">
-                                    <thead>
-                                    <tr>
-                                        <th>Exam</th>
-                                        <th>EIIN NO</th>
-                                        <th>Roll NO.</th>
-                                        <th>Registration NO.</th>
-                                        <th>Passing Year</th>
                                         <th>Session</th>
-                                        <th>Center</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->session :''}}</td>
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @if(!blank($details->exams))
-                                        @foreach($details->exams as $item)
-                                            <tr>
-                                                <td>{{data_get($item,'exam.title','')}}</td>
-                                                <td>{{data_get($item,'eiin_no')}}</td>
-                                                <td>{{data_get($item,'roll_no')}}</td>
-                                                <td>{{data_get($item,'reg_no')}}</td>
-                                                <td>{{data_get($item,'passing_year')}}</td>
-                                                <td>{{data_get($item,'session')}}</td>
-                                                <td>{{data_get($item,'center')}}</td>
-                                            </tr>
-                                        @endforeach
-                                    @endif
-                                    </tbody>
+                                    <tr>
+                                        <th>Subjects</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->subjects :''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>SSC Roll</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->ssc_roll_no :''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>SSC Reg No.</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->ssc_reg_no :''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>SCC Passing Year</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->ssc_pass_year :''}}</td>
+                                    </tr>
                                 </table>
                             </div>
                             <!-- /.card-body -->
                         </div>
-                        <!-- /.card -->
                     </div>
                     <div class="col-12">
                         <div class="card card-outline card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Attachments</h3>
+                                <h3 class="card-title">Applied for admission</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body table-responsive p-0">
                                 <table class="table table-bordered table-sm text-nowrap">
-                                    @if($details->birthCertificate)
-                                        <tr>
-                                            <th style="width: 15%">Birth Certificate</th>
-                                            <td>
-                                                <a href="{{$details->birthCertificate}}" target="_blank" class="btn btn-success btn-xs">
-                                                    <i class="fas fa-file-download"></i> Download
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endif
-
-                                    @if($details->schoolCertificate)
-                                        <tr>
-                                            <th style="width: 15%">Primary School Certificate</th>
-                                            <td>
-                                                <a href="{{$details->schoolCertificate}}" target="_blank" class="btn btn-success btn-xs">
-                                                    <i class="fas fa-file-download"></i> Download
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endif
-
-                                    @if($details->testimonial)
-                                        <tr>
-                                            <th style="width: 15%">Testimonial</th>
-                                            <td>
-                                                <a href="{{$details->testimonial}}" target="_blank" class="btn btn-success btn-xs">
-                                                    <i class="fas fa-file-download"></i> Download
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endif
-
-                                    @if($details->nid)
-                                        <tr>
-                                            <th style="width: 15%">NID</th>
-                                            <td>
-                                                <a href="{{$details->nid}}" target="_blank" class="btn btn-success btn-xs">
-                                                    <i class="fas fa-file-download"></i> Download
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endif
-
-                                    @if($details->affidavit)
-                                        <tr>
-                                            <th style="width: 15%">Affidavit</th>
-                                            <td>
-                                                <a href="{{$details->affidavit}}" target="_blank" class="btn btn-success btn-xs">
-                                                    <i class="fas fa-file-download"></i> Download
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endif
-
-                                    @if($details->nidGurd)
-                                        <tr>
-                                            <th style="width: 15%">Nid Extra</th>
-                                            <td>
-                                                <a href="{{$details->nidGurd}}" target="_blank" class="btn btn-success btn-xs">
-                                                    <i class="fas fa-file-download"></i> Download
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endif
-
+                                    <tr>
+                                        <th style="width: 8%">EIIN NO.</th>
+                                        <td>{{$details->eiin_no}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th style="width: 8%">College code</th>
+                                        <td>{{$details->college_code}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>College Name</th>
+                                        <td>{{$details->college_name}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Post Office</th>
+                                        <td>{{$details->post_office}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Upazila</th>
+                                        <td>{{$details->upazila}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>District</th>
+                                        <td>{{$details->district}}</td>
+                                    </tr>
                                 </table>
                             </div>
                             <!-- /.card-body -->
                         </div>
-                        <!-- /.card -->
                     </div>
                 </div>
                 @endif

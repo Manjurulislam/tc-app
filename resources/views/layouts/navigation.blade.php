@@ -2,7 +2,7 @@
     <div class="container">
         <a href="{{route('dashboard')}}" class="navbar-brand">
             {{--            <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">--}}
-            <span class="brand-text font-weight-light">E-Office</span>
+            <span class="brand-text font-weight-light">Online TC Application</span>
         </a>
 
         <button class="navbar-toggler order-1" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -16,29 +16,20 @@
                 <li class="nav-item">
                     @if(auth()->guard('student')->check())
                         <a href="{{route('student.dashboard')}}" class="nav-link">Dashboard</a>
+                    @elseif(auth()->guard('inst')->check())
+                        <a href="{{route('college.dashboard')}}" class="nav-link">Dashboard</a>
                     @else
                         <a href="{{route('dashboard')}}" class="nav-link">Dashboard</a>
                     @endif
                 </li>
 
-                @if(!auth()->guard('student')->check())
+                @if(auth()->guard('web')->check())
                     <li class="nav-item">
-                        <a href="{{route('pending')}}" class="nav-link">Pending</a>
+                        <a href="{{route('application')}}" class="nav-link">Application</a>
                     </li>
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{route('literally')}}" class="nav-link">Literally correction</a>--}}
-{{--                    </li>--}}
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{route('meeting')}}" class="nav-link">For Meeting</a>--}}
-{{--                    </li>--}}
-
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{route('invalid')}}" class="nav-link">Invalid</a>--}}
-{{--                    </li>--}}
-
-                    <li class="nav-item">
-                        <a href="{{route('approve')}}" class="nav-link">Approve</a>
-                    </li>
+                    {{--                    <li class="nav-item">--}}
+                    {{--                        <a href="{{route('approve')}}" class="nav-link">Approve</a>--}}
+                    {{--                    </li>--}}
                 @endif
             </ul>
         </div>
@@ -52,6 +43,8 @@
                     <span class="d-none d-md-inline">
                         @if(auth()->guard('student')->check())
                             {{auth()->guard('student')->user()->name}}
+                        @elseif(auth()->guard('inst')->check())
+                            {{auth()->guard('inst')->user()->inst_Name}}
                         @else
                             {{auth()->user()->name }}
                         @endif
@@ -68,6 +61,8 @@
                                 <small>Member since
                                     {{ auth()->guard('student')->user()->created_at ? auth()->guard('student')->user()->created_at->format('M Y') : '' }}
                                 </small>
+                            @elseif(auth()->guard('inst')->check())
+                                {{auth()->guard('inst')->user()->inst_Name}}
                             @else
                                 {{auth()->user()->name }}
                                 <small>Member
@@ -86,14 +81,22 @@
                             <form id="logout-form" action="{{ route('student.logout') }}" method="POST" class="d-none">
                                 @csrf
                             </form>
+                        @elseif(auth()->guard('inst')->check())
+                            <a href="javascript:void(0)"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                               class="btn btn-default btn-flat float-right">Sign out
+                            </a>
+                            <form id="logout-form" action="{{ route('college.logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         @else
-                        <a href="javascript:void(0)"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                           class="btn btn-default btn-flat float-right">Sign out
-                        </a>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                            @csrf
-                        </form>
+                            <a href="javascript:void(0)"
+                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                               class="btn btn-default btn-flat float-right">Sign out
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
                         @endif
                     </li>
                 </ul>

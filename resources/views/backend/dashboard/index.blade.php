@@ -10,7 +10,7 @@
                 <div class="icon">
                     <i class="fas fa-list"></i>
                 </div>
-                <a href="{{route('pending')}}" class="small-box-footer">
+                <a href="{{route('application')}}" class="small-box-footer">
                     More
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>

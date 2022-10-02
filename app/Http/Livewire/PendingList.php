@@ -24,28 +24,18 @@ class PendingList extends Component
 
     public function render()
     {
-        return view('livewire.pending-list', [
-            'items' => Application::where(function ($query) {
-                $query->where('sonali_sheba_no', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('student', function ($q) {
-                        $q->where('name', 'like', '%' . $this->search . '%')
-                            ->orWhere('father_name', 'like', '%' . $this->search . '%')
-                            ->orWhere('mother_name', 'like', '%' . $this->search . '%')
-                            ->orWhere('phone', 'like', '%' . $this->search . '%');
-                    });
-            })->pending()->latest()->paginate(20),
-        ]);
+        $data = ['items' => Application::where(function ($query) {
+            $query->where('sonali_sheba_no', 'like', '%' . $this->search . '%')
+                ->orWhereHas('student', function ($q) {
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('father_name', 'like', '%' . $this->search . '%')
+                        ->orWhere('mother_name', 'like', '%' . $this->search . '%')
+                        ->orWhere('phone', 'like', '%' . $this->search . '%');
+                });
+        })->pending()->latest()->paginate(20)];
+
+        return view('livewire.pending-list', $data);
     }
-
-
-    public function edit($id)
-    {
-        $this->updateMode = true;
-        $item             = Application::find($id);
-        $this->appId      = $id;
-        $this->status     = $item->status;
-    }
-
 
     public function show($id)
     {
@@ -61,20 +51,12 @@ class PendingList extends Component
     public function update()
     {
         $this->validate([
-            'status'      => 'required',
-            'meetingNo'   => 'required_if:status,3',
-            'meetingDate' => 'required_if:status,3',
+            'status' => 'required',
         ]);
-
-
-        $meetingData = $this->meetingDate ? Carbon::parse($this->meetingDate)->format('Y-m-d h:i:s') : null;
 
         $item = Application::find($this->appId);
         $item->update([
-            'prev_status'  => $item->status,
-            'status'       => $this->status,
-            'meeting_no'   => $this->meetingNo,
-            'meeting_date' => $meetingData
+            'status' => $this->status
         ]);
         $this->updateMode = false;
         $this->resetInputFields();
@@ -88,22 +70,16 @@ class PendingList extends Component
     public function bulkUpdate()
     {
         $this->validate([
-            'status'      => 'required',
-            'meetingNo'   => 'required_if:status,3',
-            'meetingDate' => 'required_if:status,3',
+            'status' => 'required'
         ]);
 
-        $meetingData  = $this->meetingDate ? Carbon::parse($this->meetingDate)->format('Y-m-d h:i:s') : null;
         $applications = Application::whereIn('id', $this->selectedStudents)->get();
 
         if (!blank($applications)) {
             foreach ($applications as $item) {
                 $application = Application::find($item->id);
                 $application->update([
-                    'prev_status'  => $item->status,
-                    'status'       => $this->status,
-                    'meeting_no'   => $this->meetingNo,
-                    'meeting_date' => $meetingData
+                    'status' => $this->status,
                 ]);
             }
             $this->selectedStudents = [];

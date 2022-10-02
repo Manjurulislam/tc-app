@@ -16,14 +16,14 @@ class CreateApplicationsTable extends Migration
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id')->index();
-            $table->integer('eiin_no')->index();
+            $table->integer('from_college_eiin')->index();
+            $table->integer('to_college_eiin')->index();
             $table->string('college_code', 50);
             $table->string('college_name')->index();
             $table->string('post_office');
             $table->string('upazila');
             $table->string('district');
             $table->string('sonali_sheba_no')->unique()->nullable();
-            $table->string('sonali_sheba_branch')->nullable();
             $table->boolean('payment_status')->default(0);
             $table->boolean('status')->default(1);
             $table->dateTime('applied_at');

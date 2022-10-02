@@ -12,42 +12,38 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $pending   = Application::pending()->count();
-        $approved  = Application::approve()->count();
-        return view('backend.dashboard.index', compact('pending',  'approved'));
+        $pending  = Application::pending()->count();
+        $approved = Application::approve()->count();
+        return view('backend.dashboard.index', compact('pending', 'approved'));
     }
 
     public function getPending()
     {
-        return view('backend.dashboard.pending-list');
+        $user = auth()->user();
+
+        if (data_get($user, 'role') == 1) {
+            return view('backend.dashboard.pending-list');
+        }
+
+        return view('backend.college.index');
     }
 
-    public function getLiterally()
-    {
-        return view('backend.dashboard.literally-list');
-    }
-
-    public function getMeetings()
-    {
-        return view('backend.dashboard.meeting-list');
-    }
 
     public function getApprove()
     {
         return view('backend.dashboard.approve-list');
     }
 
-    public function getInvalid()
-    {
-        return view('backend.dashboard.invalid-list');
-    }
-
-
     //================================ student =========================
 
-    public function dashboard()
+    public function student()
     {
         $student = auth()->guard('student')->user();
         return view('backend.student.index', compact('student'));
+    }
+
+    public function college()
+    {
+        return view('backend.college.index');
     }
 }
