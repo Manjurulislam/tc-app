@@ -36,7 +36,7 @@
                 <table class="table table-bordered table-sm small text-nowrap">
                     <thead>
                     <tr class="thead-dark font-weight-light">
-                        <th></th>
+{{--                        <th></th>--}}
                         <th>SL</th>
                         <th>Name</th>
                         <th>Father Name</th>
@@ -55,9 +55,9 @@
                     @if(!blank($items))
                         @foreach($items as $item)
                             <tr>
-                                <td>
-                                    <input type="checkbox" wire:model="selectedStudents" value="{{ $item->id }}" style="margin-left: -16px">
-                                </td>
+{{--                                <td>--}}
+{{--                                    <input type="checkbox" wire:model="selectedStudents" value="{{ $item->id }}" style="margin-left: -16px">--}}
+{{--                                </td>--}}
                                 <td>{{$loop->index + 1}}</td>
                                 <td>{{$item->applications ? $item->applications->student->name : ''}}</td>
                                 <td>{{$item->applications ? $item->applications->student->father_name : ''}}</td>
