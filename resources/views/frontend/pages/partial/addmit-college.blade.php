@@ -51,10 +51,37 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12">
-            @if(!blank($subjects))
-                <p>Subjects : {{$subjects}}</p>
-            @endif
-        </div>
     </div>
 </div>
+
+@if(!blank($subjects) && $showDiv)
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">
+                Subjects
+            </h3>
+        </div>
+        <div class="card-body border border-2">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="post">Compulsory</label>
+                        <p> {{$subjects}}</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="upazila">Elective</label>
+                        <p> {{$subject_elec}}</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="district">Optional</label>
+                        <p> {{$subject_optn}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif

@@ -13,13 +13,13 @@ class AcademicInfo extends Model
     protected $fillable = [
         'student_id', 'eiin_no', 'college_name',
         'group', 'class', 'roll_no', 'session',
-        'district', 'upazila', 'post_office', 'subjects',
+        'district', 'upazila', 'post_office', 'subject_comp',
         'ssc_roll_no', 'ssc_reg_no', 'ssc_pass_year',
-        'ssc_cgpa', 'ssc_bord'
+        'ssc_cgpa', 'ssc_bord','subject_elec','subject_optn'
     ];
 
     protected $casts = [
-        'subjects' => 'array'
+        'subject_comp' => 'array'
     ];
 
     public function student(): BelongsTo

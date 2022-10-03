@@ -16,7 +16,10 @@ class InstInfo extends Authenticatable
 //    protected $with=['applications'];
 
     protected $fillable = [
-        'eiin', 'code', 'inst_Name', 'pass1', 'pass2', 'is_confirm', 'student_count'
+        'eiin_no', 'inst_name', 'thana', 'zilla',
+        'password', 'password2', 'password_raw',
+        'user_role','image_name','signature_image',
+        'remember_token'
     ];
 
     public function approves(): HasMany

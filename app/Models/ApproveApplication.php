@@ -14,7 +14,7 @@ class ApproveApplication extends Model
     protected $fillable = [
         'application_id', 'inst_id', 'user_id', 'comments',
         'sharok_no', 'is_approved', 'approve_at', 'is_parent',
-        'parent_inst_id','parent_user_id'
+        'parent_id',
     ];
 
     public function applications()

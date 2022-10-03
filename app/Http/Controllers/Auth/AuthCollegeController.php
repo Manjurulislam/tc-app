@@ -23,10 +23,12 @@ class AuthCollegeController extends Controller
             'password' => 'required'
         ]);
 
-        $user = InstInfo::where( ['eiin'  => $request->get('eiin'), 'pass1' => $request->get('password')])->first();
+        $attempt = auth()->guard('inst')->attempt(
+            ['eiin_no'  => $request->get('eiin'),
+             'password' => $request->get('password')]
+        );
 
-        if ($user){
-            auth()->guard('inst')->login($user);
+        if ($attempt) {
             $request->session()->regenerate();
             return redirect()->route('college.dashboard');
         }

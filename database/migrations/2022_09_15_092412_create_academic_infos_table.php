@@ -25,7 +25,9 @@ class CreateAcademicInfosTable extends Migration
             $table->string('district')->nullable();
             $table->string('upazila')->nullable();
             $table->string('post_office')->nullable();
-            $table->text('subjects')->nullable();
+            $table->text('subject_comp')->nullable();
+            $table->integer('subject_elec')->nullable();
+            $table->integer('subject_optn')->nullable();
             $table->integer('ssc_roll_no');
             $table->integer('ssc_reg_no');
             $table->string('ssc_pass_year', 50);

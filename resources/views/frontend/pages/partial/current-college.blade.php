@@ -20,26 +20,23 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="form-group required">
+                <div class="form-group">
                     <label for="post">Post office</label>
-                    <input type="text" class="form-control" id="post" wire:model="curPostOffice">
-                    @error('curPostOffice') <small class="form-text text-danger">{{ $message }}</small>@enderror
+                    <input type="text" class="form-control" id="post" wire:model="curPostOffice" readonly>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-4">
-                <div class="form-group required">
+                <div class="form-group">
                     <label for="upz">Upazila</label>
-                    <input type="text" class="form-control" id="upz" wire:model="curUpozilla">
-                    @error('curUpozilla') <small class="form-text text-danger">{{ $message }}</small>@enderror
+                    <input type="text" class="form-control" id="upz" wire:model="curUpozilla" readonly>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="form-group required">
+                <div class="form-group">
                     <label for="dis">District</label>
-                    <input type="text" class="form-control" id="dis" wire:model="curDistrict">
-                    @error('curDistrict') <small class="form-text text-danger">{{ $message }}</small>@enderror
+                    <input type="text" class="form-control" id="dis" wire:model="curDistrict" readonly>
                 </div>
             </div>
             <div class="col-md-4">

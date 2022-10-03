@@ -20,11 +20,11 @@ class StudentApplication extends Component
         $curCollegeEiin, $curCollegeName, $group, $class, $roll,
         $session, $curPostOffice, $curUpozilla, $curDistrict,
         $addColEiin, $addColCode, $addColName, $addColPost,
-        $addColUpozila, $addColDistrict, $instituteId;
+        $addColUpozila, $addColDistrict, $instituteId,
+        $subjects, $subject_elec, $subject_optn;
 
-    public $subjects = '';
-    public $hasSit   = false;
-    public $showDiv  = false;
+    public $hasSit  = false;
+    public $showDiv = false;
 
     protected $rules    = [
         'ssc_roll_no'    => 'required|numeric|unique:academic_infos',
@@ -32,9 +32,6 @@ class StudentApplication extends Component
         'sscPassYear'    => 'required|min:4',
         'phone'          => 'required|regex:/(01)[0-9]{9}/|unique:students',
         'curCollegeEiin' => 'required|numeric',
-        'curPostOffice'  => 'required',
-        'curUpozilla'    => 'required',
-        'curDistrict'    => 'required',
         'group'          => 'required',
         'class'          => 'required',
         'roll'           => 'required|numeric',
@@ -49,9 +46,6 @@ class StudentApplication extends Component
         'curCollegeEiin.required' => 'Eiin is required',
         'addColEiin.required'     => 'Eiin is required',
         'addColCode.required'     => 'College code is required',
-        'curPostOffice.required'  => 'Post office is required',
-        'curUpozilla.required'    => 'Upozila is required',
-        'curDistrict.required'    => 'District is required',
         'addColPost.required'     => 'Post office is required',
         'addColUpozila.required'  => 'Upozila is required',
         'addColDistrict.required' => 'District is required',
@@ -69,9 +63,13 @@ class StudentApplication extends Component
 
     public function updatedCurCollegeEiin($value)
     {
-        $institute            = InstInfo::where('eiin', $value)->first();
+        $institute            = InstInfo::where('eiin_no', $value)->first();
+        $thana                = DB::table('thanas')->where('code', data_get($institute, 'thana'))->first();
         $this->instituteId    = data_get($institute, 'id');
-        $this->curCollegeName = data_get($institute, 'inst_Name');
+        $this->curCollegeName = data_get($institute, 'inst_name');
+        $this->curPostOffice  = data_get($institute, 'thana');
+        $this->curUpozilla    = data_get($thana, 'name');
+        $this->curDistrict    = data_get($institute, 'zilla');
     }
 
     public function updatedAddColEiin($value)
@@ -81,7 +79,7 @@ class StudentApplication extends Component
             $this->addColName = data_get($institute, 'college_name', '');
             $this->showDiv    = $this->isSeatAvailable();
             $this->hasSit     = !$this->isSeatAvailable();
-            $this->subjects   = $this->subjects();
+            $this->subjects();
         }
     }
 
@@ -94,15 +92,15 @@ class StudentApplication extends Component
 
     public function subjects()
     {
-        $subjects = [];
-
         if ($this->ssc_roll_no && $this->sscReg) {
-            $query    = DB::table('hsc_registration')
-                ->where(['stu_ssc_roll' => $this->ssc_roll_no, 'stu_ssc_regi' => $this->sscReg])
-                ->first();
-            $subjects = data_get($query, 'sub_comp');
+            $query = DB::table('hsc_registration')->where(
+                ['stu_ssc_roll' => $this->ssc_roll_no, 'stu_ssc_regi' => $this->sscReg]
+            )->first();
+
+            $this->subjects     = data_get($query, 'sub_comp');
+            $this->subject_elec = data_get($query, 'sub_elec');
+            $this->subject_optn = data_get($query, 'sub_optn');
         }
-        return $subjects;
     }
 
 
@@ -172,7 +170,9 @@ class StudentApplication extends Component
             'post_office'   => $this->curPostOffice,
             'upazila'       => $this->curUpozilla,
             'district'      => $this->curDistrict,
-            'subjects'      => $this->subjects,
+            'subject_comp'  => $this->subjects,
+            'subject_elec'  => $this->subject_elec,
+            'subject_optn'  => $this->subject_optn,
             'ssc_roll_no'   => $this->ssc_roll_no,
             'ssc_reg_no'    => $this->sscReg,
             'ssc_pass_year' => $this->sscPassYear,

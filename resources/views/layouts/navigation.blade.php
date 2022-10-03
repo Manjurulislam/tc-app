@@ -44,7 +44,7 @@
                         @if(auth()->guard('student')->check())
                             {{auth()->guard('student')->user()->name}}
                         @elseif(auth()->guard('inst')->check())
-                            {{auth()->guard('inst')->user()->inst_Name}}
+                            {{auth()->guard('inst')->user()->inst_name}}
                         @else
                             {{auth()->user()->name }}
                         @endif
@@ -62,7 +62,7 @@
                                     {{ auth()->guard('student')->user()->created_at ? auth()->guard('student')->user()->created_at->format('M Y') : '' }}
                                 </small>
                             @elseif(auth()->guard('inst')->check())
-                                {{auth()->guard('inst')->user()->inst_Name}}
+                                {{auth()->guard('inst')->user()->inst_name}}
                             @else
                                 {{auth()->user()->name }}
                                 <small>Member

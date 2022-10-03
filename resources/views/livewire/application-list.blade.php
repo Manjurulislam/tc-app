@@ -46,7 +46,9 @@
                         <th>College admission</th>
                         <th>SSC Roll</th>
                         <th>SSC Reg</th>
-                        <th>Subjects</th>
+                        <th>Sub. Comp.</th>
+                        <th>Sub. Elec.</th>
+                        <th>Sub. Optn.</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -67,7 +69,9 @@
                                 <td>{{$item->applications->college_name}} ({{$item->applications->to_college_eiin}})</td>
                                 <td>{{$item->applications ? $item->applications->student->academicInfo->ssc_roll_no :''}}</td>
                                 <td>{{$item->applications ? $item->applications->student->academicInfo->ssc_reg_no :''}}</td>
-                                <td>{{$item->applications ? $item->applications->student->academicInfo->subjects :''}}</td>
+                                <td>{{$item->applications ? $item->applications->student->academicInfo->subject_comp :''}}</td>
+                                <td>{{$item->applications ? $item->applications->student->academicInfo->subject_elec :''}}</td>
+                                <td>{{$item->applications ? $item->applications->student->academicInfo->subject_optn :''}}</td>
                                 <td class="text-capitalize">
                                     <span class="badge bg-success">{{\App\Models\Application::$status[$item->applications->status]}}</span>
                                 </td>

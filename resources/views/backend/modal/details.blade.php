@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Details</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -69,8 +69,16 @@
                                         <td>{{$details->student->academicInfo ? $details->student->academicInfo->session :''}}</td>
                                     </tr>
                                     <tr>
-                                        <th>Subjects</th>
-                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->subjects :''}}</td>
+                                        <th>Compulsory Subjects</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->subject_comp :''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Elective Subject</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->subject_elec :''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Optional Subject</th>
+                                        <td>{{$details->student->academicInfo ? $details->student->academicInfo->subject_optn :''}}</td>
                                     </tr>
                                     <tr>
                                         <th>SSC Roll</th>
@@ -120,6 +128,10 @@
                                     <tr>
                                         <th>District</th>
                                         <td>{{$details->district}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td><span class="badge bg-success">{{\App\Models\Application::$status[$details->status]}}</span></td>
                                     </tr>
                                 </table>
                             </div>

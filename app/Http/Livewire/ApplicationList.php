@@ -75,11 +75,11 @@ class ApplicationList extends Component
 
                 if ($approve->is_parent) {
                     $toCollege = data_get($approve, 'applications.to_college_eiin');
-                    $nextInst  = InstInfo::where('eiin', $toCollege)->first();
+                    $nextInst  = InstInfo::where('eiin_no', $toCollege)->first();
                     $approve->update(['is_approved' => 1, 'comments' => $this->comments]);
                     $approve->create([
                         'application_id' => data_get($approve, 'applications.id'),
-                        'parent_inst_id' => data_get($approve, 'inst_id'),
+                        'parent_id'      => data_get($approve, 'id'),
                         'inst_id'        => data_get($nextInst, 'id'),
                     ]);
                 } else {
@@ -87,7 +87,7 @@ class ApplicationList extends Component
                     $approve->update(['is_approved' => 1, 'comments' => $this->comments]);
                     $approve->create([
                         'application_id' => data_get($approve, 'applications.id'),
-                        'parent_inst_id' => data_get($approve, 'inst_id'),
+                        'parent_id'      => data_get($approve, 'id'),
                         'user_id'        => data_get($user, 'id'),
                     ]);
                 }
@@ -101,14 +101,14 @@ class ApplicationList extends Component
                     $approve->update(['is_approved' => 1, 'comments' => $this->comments]);
                     $approve->create([
                         'application_id' => data_get($approve, 'applications.id'),
-                        'parent_user_id' => data_get($admin, 'id'),
+                        'parent_id'      => data_get($approve, 'id'),
                         'user_id'        => 3,
                     ]);
                 } elseif ($role == 3) {
                     $approve->update(['is_approved' => 1, 'comments' => $this->comments]);
                     $approve->create([
                         'application_id' => data_get($approve, 'applications.id'),
-                        'parent_user_id' => data_get($admin, 'id'),
+                        'parent_id'      => data_get($approve, 'id'),
                         'user_id'        => 4,
                     ]);
                 } else {
