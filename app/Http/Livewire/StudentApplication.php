@@ -127,7 +127,7 @@ class StudentApplication extends Component
             DB::commit();
             session()->flash('success', 'Application received Successfully.');
         } catch (\Throwable $e) {
-            Log::error('application save', [$e]);
+            Log::error('application save', [$e->getMessage()]);
             DB::rollBack();
             session()->flash('error', 'Server too many busy, Please try again');
         }
