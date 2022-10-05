@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\ApproveApplication;
+use App\Models\Comment;
 use App\Models\InstInfo;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,9 +18,15 @@ class ApplicationList extends Component
 
     protected $paginationTheme = 'bootstrap';
     protected $queryString     = ['search'];
-    public    $search, $details, $status, $comments, $sharok_no, $appId;
+    public    $search, $details, $status, $comments, $sharok_no, $appId, $commentId;
 
     public $selectedStudents = [];
+
+
+    public function mount()
+    {
+        $this->comments = Comment::latest()->get();
+    }
 
 
     public function render()
@@ -76,19 +83,21 @@ class ApplicationList extends Component
                 if ($approve->is_parent) {
                     $toCollege = data_get($approve, 'applications.to_college_eiin');
                     $nextInst  = InstInfo::where('eiin_no', $toCollege)->first();
-                    $approve->update(['is_approved' => 1, 'comments' => $this->comments]);
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
                     $approve->create([
                         'application_id' => data_get($approve, 'applications.id'),
                         'parent_id'      => data_get($approve, 'id'),
                         'inst_id'        => data_get($nextInst, 'id'),
+                        'approve_at'     => now()->toDateTimeString(),
                     ]);
                 } else {
                     $user = User::where('role', 2)->first();
-                    $approve->update(['is_approved' => 1, 'comments' => $this->comments]);
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
                     $approve->create([
                         'application_id' => data_get($approve, 'applications.id'),
                         'parent_id'      => data_get($approve, 'id'),
                         'user_id'        => data_get($user, 'id'),
+                        'approve_at'     => now()->toDateTimeString(),
                     ]);
                 }
             }
@@ -98,21 +107,28 @@ class ApplicationList extends Component
                 $role = data_get($admin, 'role');
 
                 if ($role == 2) {
-                    $approve->update(['is_approved' => 1, 'comments' => $this->comments]);
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
                     $approve->create([
                         'application_id' => data_get($approve, 'applications.id'),
                         'parent_id'      => data_get($approve, 'id'),
                         'user_id'        => 3,
+                        'approve_at'     => now()->toDateTimeString(),
                     ]);
                 } elseif ($role == 3) {
-                    $approve->update(['is_approved' => 1, 'comments' => $this->comments]);
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
                     $approve->create([
                         'application_id' => data_get($approve, 'applications.id'),
                         'parent_id'      => data_get($approve, 'id'),
                         'user_id'        => 4,
+                        'approve_at'     => now()->toDateTimeString(),
                     ]);
                 } else {
-                    $approve->update(['is_approved' => 1, 'comments' => $this->comments, 'sharok_no' => $this->sharok_no]);
+                    $approve->update([
+                        'is_approved' => 1,
+                        'comment_id'    => $this->commentId,
+                        'sharok_no'   => $this->sharok_no,
+                        'approve_at'  => now()->toDateTimeString(),
+                    ]);
                     $approve->applications->update(['status' => 2]);
                 }
             }

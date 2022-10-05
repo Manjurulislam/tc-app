@@ -88,7 +88,8 @@ class StudentApplication extends Component
     public function isSeatAvailable()
     {
         $clause = ['eiin' => $this->addColEiin, 'group_name' => $this->group];
-        return CollegeDetails::where($clause)->whereRaw('available_seats < total_seats')->exists();
+        return CollegeDetails::where($clause)->where('min_gpa', '<=', $this->sscGpa)
+            ->whereRaw('available_seats < total_seats')->exists();
     }
 
 

@@ -18,7 +18,8 @@ class CreateApproveApplicationsTable extends Migration
             $table->unsignedBigInteger('application_id');
             $table->unsignedBigInteger('inst_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->text('comments')->nullable();
+            $table->unsignedBigInteger('comment_id')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('sharok_no')->nullable();
             $table->boolean('is_parent')->default(0);
             $table->boolean('is_approved')->default(0);

@@ -12,8 +12,15 @@
                 <form>
                     <input type="hidden" wire:model="appId">
                     <div class="form-group">
-                        <label for="comments">Comments :</label>
-                        <textarea class="form-control" wire:model="comments" id="comments"></textarea>
+                        <label for="comment">Comment :</label>
+                        <select class="form-control custom-select" id="comment" wire:model="commentId">
+                            <option>Select</option>
+                            @if($comments)
+                                @foreach($comments as $item)
+                                    <option value="{{$item->id}}">{{$item->body}}</option>
+                                @endforeach
+                            @endif
+                        </select>
                         @error('comments') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
 
