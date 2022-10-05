@@ -63,18 +63,20 @@ class StudentApplication extends Component
 
     public function updatedCurCollegeEiin($value)
     {
-        $institute            = InstInfo::where('eiin_no', $value)->first();
-        $thana                = DB::table('thanas')->where('code', data_get($institute, 'thana'))->first();
-        $this->instituteId    = data_get($institute, 'id');
-        $this->curCollegeName = data_get($institute, 'inst_name');
-        $this->curPostOffice  = data_get($institute, 'thana');
-        $this->curUpozilla    = data_get($thana, 'name');
-        $this->curDistrict    = data_get($institute, 'zilla');
+        if ($this->ssc_roll_no && $this->sscReg) {
+            $institute            = InstInfo::where('eiin_no', $value)->first();
+            $thana                = DB::table('thanas')->where('code', data_get($institute, 'thana'))->first();
+            $this->instituteId    = data_get($institute, 'id');
+            $this->curCollegeName = data_get($institute, 'inst_name');
+            $this->curPostOffice  = data_get($institute, 'thana');
+            $this->curUpozilla    = data_get($thana, 'name');
+            $this->curDistrict    = data_get($institute, 'zilla');
+        }
     }
 
     public function updatedAddColEiin($value)
     {
-        if ($this->addColEiin && $this->group) {
+        if ($this->addColEiin && $this->group && $this->ssc_roll_no && $this->sscReg) {
             $institute        = CollegeDetails::where('eiin', $value)->first();
             $this->addColName = data_get($institute, 'college_name', '');
             $this->showDiv    = $this->isSeatAvailable();
@@ -150,13 +152,14 @@ class StudentApplication extends Component
     public function prepareData(): array
     {
         $password = Str::random(8) . 'db';
+        $username = $this->ssc_roll_no . 'DB';
 
         $student      = [
             'name'        => $this->stdName,
             'father_name' => $this->stdFatherName,
             'mother_name' => $this->stdMotherName,
             'phone'       => $this->phone,
-            'username'    => $this->ssc_roll_no . 'DB',
+            'username'    => $username,
             'password'    => bcrypt($password),
             'pwd_hint'    => $password,
         ];

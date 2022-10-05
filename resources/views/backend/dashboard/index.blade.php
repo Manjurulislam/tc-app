@@ -26,7 +26,7 @@
                 <div class="icon">
                     <i class="fas fa-list"></i>
                 </div>
-                <a href="{{route('approve')}}" class="small-box-footer">
+                <a href="#" class="small-box-footer">
                     More
                     <i class="fas fa-arrow-circle-right"></i>
                 </a>

@@ -46,10 +46,8 @@ Route::group(['middleware' => ['college'], 'prefix' => 'college'], function () {
 Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/application', [DashboardController::class, 'getPending'])->name('application');
-//    Route::get('/literally', [DashboardController::class, 'getLiterally'])->name('literally');
-//    Route::get('/meeting', [DashboardController::class, 'getMeetings'])->name('meeting');
-//    Route::get('/invalid', [DashboardController::class, 'getInvalid'])->name('invalid');
     Route::get('/approve', [DashboardController::class, 'getApprove'])->name('approve');
+    Route::get('/comments', [DashboardController::class, 'comments'])->name('comments');
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 

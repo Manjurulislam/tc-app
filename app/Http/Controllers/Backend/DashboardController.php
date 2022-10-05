@@ -34,6 +34,11 @@ class DashboardController extends Controller
         return view('backend.dashboard.approve-list');
     }
 
+    public function comments()
+    {
+        return view('backend.comment.index');
+    }
+
     //================================ student =========================
 
     public function student()

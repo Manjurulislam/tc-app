@@ -27,9 +27,7 @@
                     <li class="nav-item">
                         <a href="{{route('application')}}" class="nav-link">Application</a>
                     </li>
-                    {{--                    <li class="nav-item">--}}
-                    {{--                        <a href="{{route('approve')}}" class="nav-link">Approve</a>--}}
-                    {{--                    </li>--}}
+                    <li class="nav-item"> <a href="{{route('comments')}}" class="nav-link">Comments</a></li>
                 @endif
             </ul>
         </div>
