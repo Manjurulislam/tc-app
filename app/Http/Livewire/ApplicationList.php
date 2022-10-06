@@ -85,9 +85,11 @@ class ApplicationList extends Component
             if (!blank($college)) {
                 if ($approve->is_parent) {
                     $inst = InstInfo::where('eiin_no', data_get($approve, 'applications.to_college_eiin'))->first();
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
                     $this->approvedApp($approve, $inst->id, null, 0, 1);
                 } else {
                     $user = User::where('role', 2)->first(); //1
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
                     $this->approvedApp($approve, null, data_get($user, 'id'), 0, 1);
                 }
             }
@@ -99,12 +101,15 @@ class ApplicationList extends Component
                 $revert = 0;
                 if ($role == 2) {
                     $user = User::where('role', 3)->first(); // 2
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => $status]);
                 } elseif ($role == 3) {
                     $user = User::where('role', 4)->first(); // 3
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => $status]);
                 } elseif ($role == 4) {
                     $status = 1;
                     $revert = 1;
                     $user   = User::where('role', 3)->first(); //2 back
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => $status]);
                 }
                 $this->approvedApp($approve, null, data_get($user, 'id'), $revert, $status);
             }
@@ -119,7 +124,6 @@ class ApplicationList extends Component
 
     public function approvedApp($approve, $instId, $userId, $revert, $status)
     {
-        $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
         $approve->create([
             'application_id' => data_get($approve, 'applications.id'),
             'parent_id'      => data_get($approve, 'id'),
