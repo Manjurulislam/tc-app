@@ -86,11 +86,11 @@ class ApplicationList extends Component
                 if ($approve->is_parent) {
                     $inst = InstInfo::where('eiin_no', data_get($approve, 'applications.to_college_eiin'))->first();
                     $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
-                    $this->approvedApp($approve, $inst->id, null, 0, 1);
+                    $this->approvedApp($approve, $inst->id, null, 0);
                 } else {
                     $user = User::where('role', 2)->first(); //1
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
-                    $this->approvedApp($approve, null, data_get($user, 'id'), 0, 1);
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => 0]);
+                    $this->approvedApp($approve, null, data_get($user, 'id'), 0);
                 }
             }
 
@@ -101,17 +101,16 @@ class ApplicationList extends Component
                 $revert = 0;
                 if ($role == 2) {
                     $user = User::where('role', 3)->first(); // 2
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => $status]);
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => 0]);
                 } elseif ($role == 3) {
                     $user = User::where('role', 4)->first(); // 3
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => $status]);
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => 0]);
                 } elseif ($role == 4) {
-                    $status = 1;
                     $revert = 1;
                     $user   = User::where('role', 3)->first(); //2 back
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => $status]);
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
                 }
-                $this->approvedApp($approve, null, data_get($user, 'id'), $revert, $status);
+                $this->approvedApp($approve, null, data_get($user, 'id'), $revert);
             }
 
             DB::commit();
@@ -122,7 +121,7 @@ class ApplicationList extends Component
     }
 
 
-    public function approvedApp($approve, $instId, $userId, $revert, $status)
+    public function approvedApp($approve, $instId, $userId, $revert)
     {
         $approve->create([
             'application_id' => data_get($approve, 'applications.id'),
@@ -130,7 +129,6 @@ class ApplicationList extends Component
             'inst_id'        => $instId,
             'user_id'        => $userId,
             'is_revert'      => $revert,
-            'status'         => $status,
             'approve_at'     => now()->toDateTimeString(),
         ]);
     }
