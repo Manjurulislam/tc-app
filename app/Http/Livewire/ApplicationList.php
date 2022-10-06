@@ -85,10 +85,10 @@ class ApplicationList extends Component
             if (!blank($college)) {
                 if ($approve->is_parent) {
                     $inst = InstInfo::where('eiin_no', data_get($approve, 'applications.to_college_eiin'))->first();
-                    $this->approvedApp($approve, $inst->id, null);
+                    $this->approvedApp($approve, $inst->id, null, 0, 1);
                 } else {
                     $user = User::where('role', 2)->first(); //1
-                    $this->approvedApp($approve, null, data_get($user, 'id'));
+                    $this->approvedApp($approve, null, data_get($user, 'id'), 0, 1);
                 }
             }
 
