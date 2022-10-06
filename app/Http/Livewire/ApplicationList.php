@@ -20,6 +20,7 @@ class ApplicationList extends Component
     protected $queryString     = ['search'];
     public    $search, $details, $status, $comments, $sharok_no, $appId, $commentId;
 
+    public $isRevert;
     public $selectedStudents = [];
 
 
@@ -57,19 +58,21 @@ class ApplicationList extends Component
                 });
             });
         }
-        return $query->where($whereClaus)->paginate(20);
+        return $query->where($whereClaus)->where('status', 1)->paginate(20);
     }
 
     public function updateStatus($id)
     {
-        $this->appId = $id;
+        $approve        = ApproveApplication::find($id);
+        $this->appId    = $id;
+        $this->isRevert = data_get($approve, 'is_approved');
     }
 
 
     public function approved()
     {
         $this->validate([
-            'comments' => 'required',
+            'commentId' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -78,59 +81,32 @@ class ApplicationList extends Component
             $college = auth()->guard('inst')->user();
             $admin   = auth()->guard('web')->user();
 
+            //college approve
             if (!blank($college)) {
-
                 if ($approve->is_parent) {
-                    $toCollege = data_get($approve, 'applications.to_college_eiin');
-                    $nextInst  = InstInfo::where('eiin_no', $toCollege)->first();
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
-                    $approve->create([
-                        'application_id' => data_get($approve, 'applications.id'),
-                        'parent_id'      => data_get($approve, 'id'),
-                        'inst_id'        => data_get($nextInst, 'id'),
-                        'approve_at'     => now()->toDateTimeString(),
-                    ]);
+                    $inst = InstInfo::where('eiin_no', data_get($approve, 'applications.to_college_eiin'))->first();
+                    $this->approvedApp($approve, $inst->id, null);
                 } else {
-                    $user = User::where('role', 2)->first();
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
-                    $approve->create([
-                        'application_id' => data_get($approve, 'applications.id'),
-                        'parent_id'      => data_get($approve, 'id'),
-                        'user_id'        => data_get($user, 'id'),
-                        'approve_at'     => now()->toDateTimeString(),
-                    ]);
+                    $user = User::where('role', 2)->first(); //1
+                    $this->approvedApp($approve, null, data_get($user, 'id'));
                 }
             }
 
-
+            //admin approve
             if (!blank($admin)) {
-                $role = data_get($admin, 'role');
-
+                $role   = data_get($admin, 'role');
+                $status = 0;
+                $revert = 0;
                 if ($role == 2) {
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
-                    $approve->create([
-                        'application_id' => data_get($approve, 'applications.id'),
-                        'parent_id'      => data_get($approve, 'id'),
-                        'user_id'        => 3,
-                        'approve_at'     => now()->toDateTimeString(),
-                    ]);
+                    $user = User::where('role', 3)->first(); // 2
                 } elseif ($role == 3) {
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
-                    $approve->create([
-                        'application_id' => data_get($approve, 'applications.id'),
-                        'parent_id'      => data_get($approve, 'id'),
-                        'user_id'        => 4,
-                        'approve_at'     => now()->toDateTimeString(),
-                    ]);
-                } else {
-                    $approve->update([
-                        'is_approved' => 1,
-                        'comment_id'    => $this->commentId,
-                        'sharok_no'   => $this->sharok_no,
-                        'approve_at'  => now()->toDateTimeString(),
-                    ]);
-                    $approve->applications->update(['status' => 2]);
+                    $user = User::where('role', 4)->first(); // 3
+                } elseif ($role == 4) {
+                    $status = 1;
+                    $revert = 1;
+                    $user   = User::where('role', 3)->first(); //2 back
                 }
+                $this->approvedApp($approve, null, data_get($user, 'id'), $revert, $status);
             }
 
             DB::commit();
@@ -140,4 +116,59 @@ class ApplicationList extends Component
         }
     }
 
+
+    public function approvedApp($approve, $instId, $userId, $revert, $status)
+    {
+        $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
+        $approve->create([
+            'application_id' => data_get($approve, 'applications.id'),
+            'parent_id'      => data_get($approve, 'id'),
+            'inst_id'        => $instId,
+            'user_id'        => $userId,
+            'is_revert'      => $revert,
+            'status'         => $status,
+            'approve_at'     => now()->toDateTimeString(),
+        ]);
+    }
+
+
+    public function revertApproved()
+    {
+        $this->validate([
+            'commentId' => 'required',
+        ], ['commentId.required' => 'Comment is required']);
+
+        DB::beginTransaction();
+        try {
+            $approve = ApproveApplication::find($this->appId);
+            $admin   = auth()->guard('web')->user();
+
+            if (!blank($admin)) {
+
+                $role = data_get($admin, 'role');
+
+                if ($role == 3) { // 2
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'is_revert' => 1]);
+                    $approve->create([
+                        'application_id' => data_get($approve, 'applications.id'),
+                        'parent_id'      => data_get($approve, 'id'),
+                        'user_id'        => 2,
+                        'approve_at'     => now()->toDateTimeString(),
+                    ]);
+                } elseif ($role == 2) { // 1
+                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
+                    $approve->update([
+                        'is_approved' => 1,
+                        'comment_id'  => $this->commentId,
+                        'approve_at'  => now()->toDateTimeString(),
+                    ]);
+                    $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+                }
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollBack();
+        }
+    }
 }

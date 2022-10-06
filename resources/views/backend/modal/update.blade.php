@@ -33,9 +33,15 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" wire:click.prevent="approved()" data-dismiss="modal" class="btn btn-dark btn-sm">
+                @if($isRevert)
+                <button type="button" wire:click.prevent="revertApproved()" data-dismiss="modal" class="btn btn-dark btn-sm">
                     Save changes
                 </button>
+                @else
+                    <button type="button" wire:click.prevent="approved()" data-dismiss="modal" class="btn btn-dark btn-sm">
+                        Save changes
+                    </button>
+                @endif
             </div>
         </div>
     </div>

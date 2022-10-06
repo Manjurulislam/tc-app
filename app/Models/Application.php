@@ -16,7 +16,7 @@ class Application extends Model
     protected $fillable = [
         'student_id', 'from_college_eiin', 'detail_id', 'college_code',
         'college_name', 'post_office', 'district', 'upazila',
-        'sonali_sheba_no','to_college_eiin',
+        'sonali_sheba_no','to_college_eiin','sharok_no',
         'payment_date', 'payment_status', 'applied_at', 'status'
     ];
 
