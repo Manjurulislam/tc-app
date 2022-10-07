@@ -50,6 +50,7 @@
                         <th>Sub. Comp.</th>
                         <th>Sub. Elec.</th>
                         <th>Sub. Optn.</th>
+                        <th>Sharok No.</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -73,6 +74,7 @@
                                 <td>{{$item->applications ? $item->applications->student->academicInfo->subject_comp :''}}</td>
                                 <td>{{$item->applications ? $item->applications->student->academicInfo->subject_elec :''}}</td>
                                 <td>{{$item->applications ? $item->applications->student->academicInfo->subject_optn :''}}</td>
+                                <td>{{$item->applications ? $item->applications->sharok_no :''}}</td>
                                 <td class="text-capitalize">
                                     <span class="badge bg-success">{{\App\Models\Application::$status[$item->applications->status]}}</span>
                                 </td>
