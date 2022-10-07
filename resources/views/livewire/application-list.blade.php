@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-12">
         @include('backend.modal.update')
+        @include('backend.modal.approve-details')
         <div class="card card-outline card-primary">
             <div class="card-header">
                 <h3 class="card-title">Application List</h3>
@@ -76,6 +77,9 @@
                                     <span class="badge bg-success">{{\App\Models\Application::$status[$item->applications->status]}}</span>
                                 </td>
                                 <td>
+                                    <button data-toggle="modal" data-target="#detailsModal" type="button" wire:click="details({{ $item->application_id }})" class="btn btn-warning btn-xs">
+                                        Details
+                                    </button>
                                     @if(!$item->is_approved)
                                         <button data-toggle="modal" data-target="#updateModal" wire:click="updateStatus({{ $item->id }})" class="btn btn-primary btn-xs">
                                             Approve

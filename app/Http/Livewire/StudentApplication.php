@@ -77,10 +77,12 @@ class StudentApplication extends Component
     public function updatedAddColEiin($value)
     {
         if ($this->addColEiin && $this->group && $this->ssc_roll_no && $this->sscReg) {
-            $institute        = CollegeDetails::where('eiin', $value)->first();
-            $this->addColName = data_get($institute, 'college_name', '');
-            $this->showDiv    = $this->isSeatAvailable();
-            $this->hasSit     = !$this->isSeatAvailable();
+            $institute            = CollegeDetails::where('eiin', $value)->first();
+            $this->addColName     = data_get($institute, 'college_name', '');
+            $this->addColUpozila  = data_get($institute, 'thana');
+            $this->addColDistrict = data_get($institute, 'district');
+            $this->showDiv        = $this->isSeatAvailable();
+            $this->hasSit         = !$this->isSeatAvailable();
             $this->subjects();
         }
     }

@@ -39,14 +39,14 @@
             <div class="col-md-4">
                 <div class="form-group required">
                     <label for="upazila">Upazila</label>
-                    <input type="text" class="form-control" id="upazila" wire:model="addColUpozila">
+                    <input type="text" class="form-control" id="upazila" wire:model="addColUpozila" readonly>
                     @error('addColUpozila') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group required">
                     <label for="district">District</label>
-                    <input type="text" class="form-control" id="district" wire:model="addColDistrict">
+                    <input type="text" class="form-control" id="district" wire:model="addColDistrict" readonly>
                     @error('addColDistrict') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>

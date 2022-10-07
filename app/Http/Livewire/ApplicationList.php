@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Application;
 use App\Models\ApproveApplication;
 use App\Models\Comment;
 use App\Models\InstInfo;
@@ -20,8 +21,8 @@ class ApplicationList extends Component
     protected $queryString     = ['search'];
     public    $search, $details, $status, $comments, $sharok_no, $appId, $commentId;
 
-    public $isRevert;
-    public $selectedStudents = [];
+    public $isRevert, $detailsItems;
+    public            $selectedStudents = [];
 
 
     public function mount()
@@ -65,7 +66,12 @@ class ApplicationList extends Component
     {
         $approve        = ApproveApplication::find($id);
         $this->appId    = $id;
-        $this->isRevert = data_get($approve, 'is_approved');
+        $this->isRevert = data_get($approve, 'is_revert');
+    }
+
+    public function details($id)
+    {
+        $this->detailsItems = Application::find($id);
     }
 
 
@@ -73,44 +79,43 @@ class ApplicationList extends Component
     {
         $this->validate([
             'commentId' => 'required',
-        ]);
+        ], ['commentId.required' => 'Comment is required']);
 
         DB::beginTransaction();
         try {
             $approve = ApproveApplication::find($this->appId);
+            $nextCol = data_get($approve, 'applications.to_college_eiin');
             $college = auth()->guard('inst')->user();
             $admin   = auth()->guard('web')->user();
 
             //college approve
             if (!blank($college)) {
-                if ($approve->is_parent) {
-                    $inst = InstInfo::where('eiin_no', data_get($approve, 'applications.to_college_eiin'))->first();
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
-                    $this->approvedApp($approve, $inst->id, null, 0);
-                } else {
+
+                if ($approve->is_parent) { //pass 2nd college
+                    $inst = InstInfo::where('eiin_no', $nextCol)->first();
+                    $this->bypassApplication($approve, $inst->id, null);
+                } else { //pass first admin
                     $user = User::where('role', 2)->first(); //1
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => 0]);
-                    $this->approvedApp($approve, null, data_get($user, 'id'), 0);
+                    $this->bypassApplication($approve, null, data_get($user, 'id'));
                 }
             }
 
             //admin approve
             if (!blank($admin)) {
                 $role   = data_get($admin, 'role');
-                $status = 0;
                 $revert = 0;
-                if ($role == 2) {
+                $status = 0;
+
+                if ($role == 2) { // 1st admin pass to 2nd admin
                     $user = User::where('role', 3)->first(); // 2
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => 0]);
-                } elseif ($role == 3) {
+                } elseif ($role == 3) { // 2nd admin pass to 3d admin
                     $user = User::where('role', 4)->first(); // 3
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'status' => 0]);
-                } elseif ($role == 4) {
+                } elseif ($role == 4) { // 3d admin revert again to 2nd admin
                     $revert = 1;
+                    $status = 1;
                     $user   = User::where('role', 3)->first(); //2 back
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
                 }
-                $this->approvedApp($approve, null, data_get($user, 'id'), $revert);
+                $this->bypassApplication($approve, null, data_get($user, 'id'), $revert, $status);
             }
 
             DB::commit();
@@ -120,16 +125,22 @@ class ApplicationList extends Component
         }
     }
 
-
-    public function approvedApp($approve, $instId, $userId, $revert)
+    public function bypassApplication($approve, $instId, $userId, $revert = 0, $status = 1)
     {
+        $approve->update([
+            'is_approved' => 1,
+            'comment_id'  => $this->commentId,
+            'approve_at'  => now()->toDateTimeString(),
+            'is_revert'   => $revert,
+            'status'      => $status
+        ]);
+
         $approve->create([
             'application_id' => data_get($approve, 'applications.id'),
             'parent_id'      => data_get($approve, 'id'),
             'inst_id'        => $instId,
             'user_id'        => $userId,
             'is_revert'      => $revert,
-            'approve_at'     => now()->toDateTimeString(),
         ]);
     }
 
@@ -149,16 +160,20 @@ class ApplicationList extends Component
 
                 $role = data_get($admin, 'role');
 
-                if ($role == 3) { // 2
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId, 'is_revert' => 1]);
+                if ($role == 3) { // 2nd admin pass to 1st admin
+                    $approve->update([
+                        'is_approved' => 1,
+                        'comment_id'  => $this->commentId,
+                        'is_revert'   => 1,
+                        'approve_at'  => now()->toDateTimeString(),
+                    ]);
                     $approve->create([
                         'application_id' => data_get($approve, 'applications.id'),
                         'parent_id'      => data_get($approve, 'id'),
                         'user_id'        => 2,
-                        'approve_at'     => now()->toDateTimeString(),
+                        'is_revert'      => 1,
                     ]);
                 } elseif ($role == 2) { // 1
-                    $approve->update(['is_approved' => 1, 'comment_id' => $this->commentId]);
                     $approve->update([
                         'is_approved' => 1,
                         'comment_id'  => $this->commentId,

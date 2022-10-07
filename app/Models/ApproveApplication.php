@@ -15,7 +15,7 @@ class ApproveApplication extends Model
     protected $fillable = [
         'application_id', 'inst_id', 'user_id', 'comment_id',
         'sharok_no', 'is_approved', 'approve_at', 'is_parent',
-        'parent_id','status','is_revert'
+        'parent_id', 'status', 'is_revert'
     ];
 
 
@@ -36,5 +36,15 @@ class ApproveApplication extends Model
     public function institute(): BelongsTo
     {
         return $this->belongsTo(InstInfo::class, 'inst_id', 'id');
+    }
+
+    public function admin(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function comment(): BelongsTo
+    {
+        return $this->belongsTo(Comment::class);
     }
 }
