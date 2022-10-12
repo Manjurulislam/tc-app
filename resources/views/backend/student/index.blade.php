@@ -87,16 +87,16 @@
                         </thead>
                         <tbody>
                         @if(!blank($student->application))
-                                <tr>
-                                    <td>{{data_get($student,'application.to_college_eiin')}}</td>
-                                    <td>{{data_get($student,'application.college_code')}}</td>
-                                    <td>{{data_get($student,'application.college_name')}}</td>
-                                    <td>{{data_get($student,'application.post_office')}}</td>
-                                    <td>{{data_get($student,'application.upazila')}}</td>
-                                    <td>{{data_get($student,'application.district')}}</td>
-                                    <td>{{data_get($student,'application.sharok_no')}}</td>
-                                    <td class="text-danger">{{\App\Models\Application::$status[$student->application->status]}}</td>
-                                </tr>
+                            <tr>
+                                <td>{{data_get($student,'application.to_college_eiin')}}</td>
+                                <td>{{data_get($student,'application.college_code')}}</td>
+                                <td>{{data_get($student,'application.college_name')}}</td>
+                                <td>{{data_get($student,'application.post_office')}}</td>
+                                <td>{{data_get($student,'application.upazila')}}</td>
+                                <td>{{data_get($student,'application.district')}}</td>
+                                <td>{{data_get($student,'application.sharok_no')}}</td>
+                                <td class="text-danger">{{\App\Models\Application::$status[data_get($student,'application.status')]}}</td>
+                            </tr>
                         @endif
                         </tbody>
                     </table>

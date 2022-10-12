@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthCollegeController;
+
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AuthStudentController;
 use App\Http\Controllers\Backend\DashboardController;
-use App\Http\Controllers\Frontend\ApplicationController;
 use App\Http\Controllers\Frontend\StudentController;
 use Illuminate\Support\Facades\Route;
 
