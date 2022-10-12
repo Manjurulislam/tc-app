@@ -17,8 +17,8 @@
                                     <table class="table table-bordered table-sm text-nowrap">
                                         <thead>
                                         <tr>
-                                            <th>College</th>
-                                            <th>Admin</th>
+                                            <th>Name</th>
+                                            <th>Role</th>
                                             <th>Comment</th>
                                             <th>Status</th>
                                         </tr>
@@ -26,10 +26,14 @@
                                         <tbody>
                                         @foreach(data_get($detailsItems,'approves') as $item)
                                             <tr>
-                                                <td>{{data_get($item,'institute.inst_name')}}</td>
-                                                <td>{{data_get($item,'admin.name')}}</td>
+                                                <td>{{data_get($item,'admin.inst_name')}}</td>
+                                                <td>{{\App\Models\User::$role[data_get($item,'admin.user_role')]}}</td>
                                                 <td>{{data_get($item,'comment.body')}}</td>
-                                                <td class="text-primary text-uppercase">{{$item->is_approved ? 'Approved' : 'Pending'}}</td>
+                                                <td>
+                                                    <span class="badge bg-pink text-uppercase">
+                                                        {{$item->is_approved ? 'Approved' : 'Pending'}}
+                                                    </span>
+                                                </td>
                                             </tr>
                                         @endforeach
                                         </tbody>

@@ -19,23 +19,9 @@ class ApproveApplication extends Model
     ];
 
 
-    public static function boot()
-    {
-        parent::boot();
-        self::updated(function ($model) {
-            $model->approve_at = now()->toDateTimeString();
-        });
-    }
-
-
     public function applications(): BelongsTo
     {
         return $this->belongsTo(Application::class, 'application_id', 'id');
-    }
-
-    public function institute(): BelongsTo
-    {
-        return $this->belongsTo(InstInfo::class, 'inst_id', 'id');
     }
 
     public function admin(): BelongsTo
@@ -46,5 +32,10 @@ class ApproveApplication extends Model
     public function comment(): BelongsTo
     {
         return $this->belongsTo(Comment::class);
+    }
+
+    public function scopeActive($q)
+    {
+        $q->where('status', 1);
     }
 }

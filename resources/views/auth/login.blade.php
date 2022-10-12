@@ -23,9 +23,9 @@
                             <span class="fas fa-envelope"></span>
                         </div>
                     </div>
-                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                           placeholder="Email" value="{{old('email')}}">
-                    @error('email')
+                    <input type="text" name="eiin_no" class="form-control @error('eiin_no') is-invalid @enderror"
+                           placeholder="Eiin No" value="{{old('eiin_no')}}">
+                    @error('eiin_no')
                     <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
                     @enderror
                 </div>

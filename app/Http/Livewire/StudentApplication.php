@@ -3,14 +3,15 @@
 namespace App\Http\Livewire;
 
 use App\Models\CollegeDetails;
-use App\Models\InstInfo;
 use App\Models\Student;
+use App\Models\User;
 use App\Service\StudentDetails;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
+
 
 class StudentApplication extends Component
 {
@@ -39,16 +40,12 @@ class StudentApplication extends Component
         'addColEiin'     => 'required|numeric',
         'addColCode'     => 'required|numeric',
         'addColPost'     => 'required',
-        'addColUpozila'  => 'required',
-        'addColDistrict' => 'required',
     ];
     protected $messages = [
         'curCollegeEiin.required' => 'Eiin is required',
         'addColEiin.required'     => 'Eiin is required',
         'addColCode.required'     => 'College code is required',
         'addColPost.required'     => 'Post office is required',
-        'addColUpozila.required'  => 'Upozila is required',
-        'addColDistrict.required' => 'District is required',
     ];
 
 //    public function hydrate()
@@ -64,7 +61,7 @@ class StudentApplication extends Component
     public function updatedCurCollegeEiin($value)
     {
         if ($this->ssc_roll_no && $this->sscReg) {
-            $institute            = InstInfo::where('eiin_no', $value)->first();
+            $institute            = User::where('eiin_no', $value)->first();
             $thana                = DB::table('thanas')->where('code', data_get($institute, 'thana'))->first();
             $this->instituteId    = data_get($institute, 'id');
             $this->curCollegeName = data_get($institute, 'inst_name');
@@ -87,25 +84,23 @@ class StudentApplication extends Component
         }
     }
 
+
+    public function subjects()
+    {
+        if ($this->ssc_roll_no && $this->sscReg) {
+            $clause             = ['stu_ssc_roll' => $this->ssc_roll_no, 'stu_ssc_regi' => $this->sscReg];
+            $query              = DB::table('hsc_registration')->where($clause)->first();
+            $this->subjects     = data_get($query, 'sub_comp');
+            $this->subject_elec = data_get($query, 'sub_elec');
+            $this->subject_optn = data_get($query, 'sub_optn');
+        }
+    }
+
     public function isSeatAvailable()
     {
         $clause = ['eiin' => $this->addColEiin, 'group_name' => $this->group];
         return CollegeDetails::where($clause)->where('min_gpa', '<=', $this->sscGpa)
             ->whereRaw('available_seats < total_seats')->exists();
-    }
-
-
-    public function subjects()
-    {
-        if ($this->ssc_roll_no && $this->sscReg) {
-            $query = DB::table('hsc_registration')->where(
-                ['stu_ssc_roll' => $this->ssc_roll_no, 'stu_ssc_regi' => $this->sscReg]
-            )->first();
-
-            $this->subjects     = data_get($query, 'sub_comp');
-            $this->subject_elec = data_get($query, 'sub_elec');
-            $this->subject_optn = data_get($query, 'sub_optn');
-        }
     }
 
 
@@ -121,9 +116,9 @@ class StudentApplication extends Component
             [$studentData, $academicInfo, $application] = $this->prepareData();
             $student = Student::create($studentData);
             $student->academicInfo()->create($academicInfo);
-            $applicationData = $student->application()->create($application);
-            $applicationData->approves()->create([
-                'inst_id'   => $this->instituteId,
+            $application = $student->application()->create($application);
+            $application->approves()->create([
+                'user_id'   => $this->instituteId,
                 'is_parent' => 1,
             ]);
             DB::commit();

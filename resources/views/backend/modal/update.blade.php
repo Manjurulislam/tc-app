@@ -24,7 +24,7 @@
                         @error('comments') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
 
-                    @if(auth()->check() && auth()->user()->role == 2 && $isRevert)
+                    @if(auth()->check() && auth()->user()->user_role == 3 && $isRevert)
                         <div class="form-group">
                             <label for="sharok_no">Sharok No :</label>
                             <input type="text" class="form-control" wire:model="sharok_no" id="sharok_no">
@@ -33,15 +33,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                @if($isRevert)
-                <button type="button" wire:click.prevent="revertApproved()" data-dismiss="modal" class="btn btn-dark btn-sm">
+                <button type="button" wire:click.prevent="approved()" data-dismiss="modal" class="btn btn-dark btn-sm">
                     Save changes
                 </button>
-                @else
-                    <button type="button" wire:click.prevent="approved()" data-dismiss="modal" class="btn btn-dark btn-sm">
-                        Save changes
-                    </button>
-                @endif
             </div>
         </div>
     </div>
