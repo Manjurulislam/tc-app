@@ -21,7 +21,7 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
 
-        if (data_get($user, 'role') == 1) {
+        if (data_get($user, 'user_role') == 1) {
             return view('backend.dashboard.pending-list');
         }
 

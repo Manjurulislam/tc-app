@@ -138,6 +138,34 @@
                             <!-- /.card-body -->
                         </div>
                     </div>
+
+
+
+                    <div class="col-12">
+                        <div class="card card-outline card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Approval Process</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive p-0">
+                                <table class="table table-bordered table-sm text-nowrap">
+                                    @foreach(data_get($details,'approves') as $item)
+                                        <tr>
+                                            <td>{{data_get($item,'admin.inst_name')}}</td>
+                                            <td>{{\App\Models\User::$role[data_get($item,'admin.user_role')]}}</td>
+                                            <td>{{data_get($item,'comment.body')}}</td>
+                                            <td>
+                                                    <span class="badge bg-pink text-uppercase">
+                                                        {{$item->is_approved ? 'Approved' : 'Pending'}}
+                                                    </span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
                 </div>
                 @endif
             </div>

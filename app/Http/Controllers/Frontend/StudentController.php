@@ -22,18 +22,12 @@ class StudentController extends Controller
 
     public function index()
     {
-//        $exams       = Exam::active()->get();
-//        $passingYear = app(CommonService::class)->generateYears() ?? [];
         return view('frontend.pages.index');
     }
 
     public function getDetails(Request $request)
     {
         $response = app(StudentDetails::class)->post(data_get($request,'roll'), data_get($request,'year'));
-
-
-
-
         dd($response);
     }
 

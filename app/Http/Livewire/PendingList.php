@@ -17,7 +17,7 @@ class PendingList extends Component
     protected $paginationTheme = 'bootstrap';
     protected $queryString     = ['search'];
     public    $updateMode      = false;
-    public    $search, $details, $status, $appId, $meetingNo, $meetingDate;
+    public    $search, $details, $status, $appId;
 
     public $selectedStudents = [];
 
@@ -32,7 +32,7 @@ class PendingList extends Component
                         ->orWhere('mother_name', 'like', '%' . $this->search . '%')
                         ->orWhere('phone', 'like', '%' . $this->search . '%');
                 });
-        })->pending()->latest()->paginate(20)];
+        })->latest()->paginate(20)];
 
         return view('livewire.pending-list', $data);
     }

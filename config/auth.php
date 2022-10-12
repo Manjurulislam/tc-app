@@ -44,10 +44,6 @@ return [
             'driver'   => 'session',
             'provider' => 'students',
         ],
-        'inst' => [
-            'driver'   => 'session',
-            'provider' => 'colleges',
-        ],
     ],
 
     /*
@@ -76,11 +72,6 @@ return [
         'students' => [
             'driver' => 'eloquent',
             'model'  => App\Models\Student::class,
-        ],
-
-        'colleges' => [
-            'driver' => 'eloquent',
-            'model'  => App\Models\InstInfo::class,
         ],
 
         // 'users' => [

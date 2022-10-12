@@ -11,11 +11,12 @@
                             <th>Father Name</th>
                             <th>Mother Name</th>
                             <th>Phone</th>
-                            <th>Religion</th>
-                            <th>DOB</th>
-                            <th>Gender</th>
-                            <th>Present Address</th>
-                            <th>Permanent Address</th>
+                            <th>Current College</th>
+                            <th>Group</th>
+                            <th>Class</th>
+                            <th>Roll</th>
+                            <th>Session</th>
+                            <th>Subjects</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -25,11 +26,38 @@
                                 <td>{{$student->father_name}}</td>
                                 <td>{{$student->mother_name}}</td>
                                 <td>{{$student->phone}}</td>
-                                <td>{{$student->religion}}</td>
-                                <td>{{$student->dob}}</td>
-                                <td>{{$student->gender}}</td>
-                                <td>{{$student->present_address}}</td>
-                                <td>{{$student->permanent_address}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->college_name : ''}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->group : ''}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->class : ''}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->roll_no : ''}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->session : ''}}</td>
+                            </tr>
+                        @endif
+                        </tbody>
+                    </table>
+                    <br>
+                    <table class="table table-bordered table-sm" style="text-align: center">
+                        <thead>
+                        <tr>
+                            <th>Subject Compulsory</th>
+                            <th>Subject Elective</th>
+                            <th>Subject Optional</th>
+                            <th>SSC Roll</th>
+                            <th>SSC Reg. No.</th>
+                            <th>SSC Passing Year</th>
+                            <th>SSC CGPA</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if(!blank($student))
+                            <tr>
+                                <td>{{$student->academicInfo ? $student->academicInfo->subject_comp : ''}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->subject_elec : ''}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->subject_optn : ''}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->ssc_roll_no : ''}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->ssc_reg_no : ''}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->ssc_pass_year : ''}}</td>
+                                <td>{{$student->academicInfo ? $student->academicInfo->ssc_cgpa : ''}}</td>
                             </tr>
                         @endif
                         </tbody>
@@ -41,68 +69,34 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title text-uppercase">Applied for correction</h3>
+                    <h3 class="card-title text-uppercase">Application</h3>
                 </div>
                 <div class="card-body p-2">
                     <table class="table table-bordered table-sm small text-nowrap" style="text-align: center">
                         <thead>
                         <tr>
-                            <th>SL</th>
-                            <th>Exam</th>
-                            <th>Roll No.</th>
-                            <th>Reg No.</th>
-                            <th>Name</th>
-                            <th>Father Name</th>
-                            <th>Mother Name</th>
-                            <th>Religion</th>
-                            <th>DOB</th>
-                            <th>Gender</th>
-                            <th>So. No.</th>
-                            <th>Meeting At</th>
-                            <th>Applied At</th>
+                            <th>EIIN NO.</th>
+                            <th>College Code</th>
+                            <th>College Name</th>
+                            <th>Post Office</th>
+                            <th>upazila</th>
+                            <th>district</th>
+                            <th>district</th>
                             <th>Status</th>
-                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         @if(!blank($student->application))
-                            @foreach($student->application as $key=>$app)
                                 <tr>
-                                    <td>{{($key+1)}}</td>
-                                    <td>
-                                        {{$app->exams ? $app->exams->map(function ($item){ return $item->exam->title;   })->implode(',') : ''}}
-                                    </td>
-                                    <td>
-                                        {{$app->exams ? $app->exams->map(function ($item){ return $item->roll_no;   })->implode(',') : ''}}
-                                    </td>
-                                    <td>
-                                        {{$app->exams ? $app->exams->map(function ($item){ return $item->reg_no;   })->implode(',') : ''}}
-                                    </td>
-                                    <td>{{$app->cor_name ?? 'N/A'}}</td>
-                                    <td>{{$app->cor_father_name ?? 'N/A'}}</td>
-                                    <td>{{$app->cor_mother_name ?? 'N/A'}}</td>
-                                    <td>{{$app->cor_religion ?? 'N/A'}}</td>
-                                    <td>{{$app->cor_dob ?? 'N/A'}}</td>
-                                    <td>{{$app->cor_gender ?? 'N/A'}}</td>
-                                    <td>{{$app->sonali_sheba_no ?? 'N/A'}}</td>
-                                    <td>
-                                        {{$app->meeting_date ? $app->meeting_date->format('d-m-Y, h:i:s') :  'N/A'}}
-                                    </td>
-                                    <td>{{$app->created_at->format('d-m-Y')}}</td>
-                                    <td>
-                                        <span class="badge badge-primary">
-                                            {{\App\Models\Application::$status[$app->status]}}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        @if($app->status == 4)
-                                            <a href="{{route('student.download')}}" class="btn btn-sm btn-success">
-                                                <i class="fas fa-download"></i>
-                                            </a>
-                                        @endif
-                                    </td>
+                                    <td>{{data_get($student,'application.to_college_eiin')}}</td>
+                                    <td>{{data_get($student,'application.college_code')}}</td>
+                                    <td>{{data_get($student,'application.college_name')}}</td>
+                                    <td>{{data_get($student,'application.post_office')}}</td>
+                                    <td>{{data_get($student,'application.upazila')}}</td>
+                                    <td>{{data_get($student,'application.district')}}</td>
+                                    <td>{{data_get($student,'application.sharok_no')}}</td>
+                                    <td class="text-danger">{{\App\Models\Application::$status[$student->application->status]}}</td>
                                 </tr>
-                            @endforeach
                         @endif
                         </tbody>
                     </table>

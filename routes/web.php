@@ -22,23 +22,14 @@ use Illuminate\Support\Facades\Route;
 
 //============ student ====================================
 Route::get('/', [StudentController::class, 'index'])->name('index');
+Route::get('student/login', [AuthStudentController::class, 'index'])->name('create-login');
+Route::post('/login/student', [AuthStudentController::class, 'store'])->name('student.login');
 
-//Route::group(['middleware' => ['student'], 'prefix' => 'student'], function () {
-//    Route::get('/', [DashboardController::class, 'dashboard'])->name('student.dashboard');
-//    Route::get('/download', [StudentController::class, 'downloadPdf'])->name('student.download');
-//    Route::post('/logout', [AuthStudentController::class, 'destroy'])->name('student.logout');
-//});
-
-
-//==================== college ===============================
-Route::get('college-login', [AuthCollegeController::class, 'index'])->name('college-login');
-Route::post('login/college', [AuthCollegeController::class, 'store'])->name('college.login');
-
-Route::group(['middleware' => ['college'], 'prefix' => 'college'], function () {
-    Route::get('/', [DashboardController::class, 'college'])->name('college.dashboard');
-    Route::post('/logout', [AuthCollegeController::class, 'destroy'])->name('college.logout');
+Route::group(['middleware' => ['student'], 'prefix' => 'student'], function () {
+    Route::get('/', [DashboardController::class, 'student'])->name('student.dashboard');
+    Route::get('/download', [StudentController::class, 'downloadPdf'])->name('student.download');
+    Route::post('/logout', [AuthStudentController::class, 'destroy'])->name('student.logout');
 });
-
 
 //=========================================================
 
