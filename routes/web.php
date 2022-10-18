@@ -4,6 +4,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AuthStudentController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Frontend\ApplicationController;
 use App\Http\Controllers\Frontend\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 //============ student ====================================
 Route::get('/', [StudentController::class, 'index'])->name('index');
+Route::get('/test-api', [ApplicationController::class, 'testSms'])->name('test-api');
 Route::get('student/login', [AuthStudentController::class, 'index'])->name('create-login');
 Route::post('/login/student', [AuthStudentController::class, 'store'])->name('student.login');
 

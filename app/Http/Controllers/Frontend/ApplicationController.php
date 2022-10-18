@@ -15,16 +15,6 @@ use Illuminate\Support\Facades\Log;
 class ApplicationController extends Controller
 {
 
-    public function store(ApplicationRequest $request): JsonResponse
-    {
-        try {
-            $store = app(CommonService::class)->create($request);
-            return response()->json(['status' => 200, 'message' => MessageEnum::SUCCESS]);
-        } catch (\Exception $e) {
-            return response()->json(['status' => 400, 'message' => MessageEnum::EXCEPTION], 500);
-        }
-    }
-
 
     public function testSms()
     {
