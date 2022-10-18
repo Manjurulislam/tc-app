@@ -16,7 +16,9 @@
     <!--- header -->
     <div class="p-4 mb-2 text-white rounded bg-info">
         <div class="row">
-            <div class="col-2"></div>
+            <div class="col-2">
+                <img src="{{asset('assets/images/logo.png')}}" alt="logo" class="img-fluid">
+            </div>
             <div class="col-10 px-0">
                 <h3 class="fw-light fs-3 text-center">Board of Intermediate and Secondary Education, Dinajpur</h3>
                 <p class="lead my-3 fs-3 text-center text-uppercase">Online tc application</p>
