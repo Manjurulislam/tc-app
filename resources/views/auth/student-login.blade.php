@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Online tc application</title>
     @include('layouts.header')
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="card card-outline card-indigo">
         <div class="card-header text-center">
-            <a href="" class="h1">E-Office</a>
+            <a href="" class="h1">Online tc app</a>
         </div>
         <div class="card-body">
             <p class="login-box-msg">Sign in your account</p>
