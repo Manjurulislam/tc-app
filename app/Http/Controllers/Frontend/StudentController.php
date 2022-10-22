@@ -23,4 +23,10 @@ class StudentController extends Controller
         return view('frontend.pages.index');
     }
 
+
+    public function downloadPdf()
+    {
+        return view('document.student-pdf');
+    }
+
 }

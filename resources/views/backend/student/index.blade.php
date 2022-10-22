@@ -83,6 +83,7 @@
                             <th>district</th>
                             <th>district</th>
                             <th>Status</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -95,7 +96,16 @@
                                 <td>{{data_get($student,'application.upazila')}}</td>
                                 <td>{{data_get($student,'application.district')}}</td>
                                 <td>{{data_get($student,'application.sharok_no')}}</td>
-                                <td class="text-danger">{{\App\Models\Application::$status[data_get($student,'application.status')]}}</td>
+                                <td class="text-uppercase">
+                                    <span class="badge bg-success">
+                                    {{\App\Models\Application::$status[data_get($student,'application.status')]}}
+                                    </span>
+                                </td>
+                                <td>
+{{--                                    <a href="{{route('student.download')}}" class="btn btn-sm btn-success">--}}
+{{--                                        <i class="fas fa-download"></i>--}}
+{{--                                    </a>--}}
+                                </td>
                             </tr>
                         @endif
                         </tbody>

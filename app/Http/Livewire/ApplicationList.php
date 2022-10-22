@@ -23,7 +23,7 @@ class ApplicationList extends Component
     public    $search, $details, $status, $comments, $sharok_no, $appId, $commentId;
 
     public $isRevert, $detailsItems;
-    public            $selectedStudents = [];
+    public            $multipleSelect = [];
 
 
     public function mount()
@@ -184,6 +184,70 @@ class ApplicationList extends Component
     public function getUserByRole($role)
     {
         return User::where('user_role', $role)->first();
+    }
+
+
+    public function bulkApproved()
+    {
+        $this->validate([
+            'commentId' => 'required',
+        ], ['commentId.required' => 'Comment is required']);
+
+        DB::beginTransaction();
+
+        try {
+
+            $user         = '';
+            $revert       = 0;
+            $status       = 0;
+            $applications = ApproveApplication::whereIn('id', $this->multipleSelect)->get();
+
+            if (!blank($applications)) {
+
+                foreach ($applications as $approve) {
+
+                    $eiinNo = data_get($approve, 'applications.to_college_eiin');
+                    $admin  = auth()->user();
+                    $role   = data_get($admin, 'user_role');
+
+                    if (!$approve->is_revert) {
+                        // college approve
+                        if ($approve->is_parent && $role == 2) { //first college pass 2nd college
+                            $user = User::where('eiin_no', $eiinNo)->first();
+                        } else { //2nd college pass to first admin
+                            $user = $this->getUserByRole(3); //1
+                        }
+
+                        // admin approve process
+                        if ($role == 3) { // 1st admin pass to 2nd admin
+                            $user = $this->getUserByRole(4); // 2nd admin
+                        } elseif ($role == 4) { // 2nd admin pass to 3d admin
+                            $user = $this->getUserByRole(5); // 3rd admin
+                        } elseif ($role == 5) { // 3d admin revert again to 2nd admin
+                            $revert = 1;
+                            $status = 1;
+                            $user   = $this->getUserByRole(4); //back 2nd admin
+                        }
+
+                    } else {
+                        $revert = 1;
+                        $status = 1;
+
+                        if ($role == 4) {
+                            $user = $this->getUserByRole(3);
+                        } elseif ($role == 3) {
+                            $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+                        }
+                    }
+                    $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
+                }
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::error($e);
+            $this->alert('error', 'Something went wrong');
+            DB::rollBack();
+        }
     }
 
 }
