@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\CollegeDetails;
 use App\Models\Student;
 use App\Models\User;
+use App\Service\SmsService;
 use App\Service\StudentDetails;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -121,6 +122,11 @@ class StudentApplication extends Component
                 'user_id'   => $this->instituteId,
                 'is_parent' => 1,
             ]);
+
+//            if ($student){
+//                app(SmsService::class)->send($student);
+//            }
+
             DB::commit();
             $redirect = env('APP_REDIRECT_URL');
             return redirect()->away($redirect);

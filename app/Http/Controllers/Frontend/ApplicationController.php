@@ -18,7 +18,7 @@ class ApplicationController extends Controller
 
     public function testSms()
     {
-        $response = app(SmsService::class)->post('01773329719', 'Hello world');
+        $response = app(SmsService::class)->send();
 
         dd($response);
     }
