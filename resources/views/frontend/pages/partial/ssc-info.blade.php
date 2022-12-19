@@ -39,8 +39,8 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group required">
-                    <label for="phone">Marksheet</label>
-                    <input type="file" class="form-control" id="phone" wire:model="attachment">
+                    <label for="attachment">Marksheet</label>
+                    <input type="file" class="form-control" id="attachment" wire:model="attachment">
                     @error('attachment') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>

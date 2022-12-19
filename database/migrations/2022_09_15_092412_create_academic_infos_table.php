@@ -33,6 +33,7 @@ class CreateAcademicInfosTable extends Migration
             $table->string('ssc_pass_year', 50);
             $table->double('ssc_cgpa', 8, 2);
             $table->string('ssc_bord', 100);
+            $table->string('attachment')->nullable();
             $table->timestamps();
         });
     }

@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Component;
-
+use Livewire\WithFileUploads;
 
 class StudentApplication extends Component
 {
+    use WithFileUploads;
 
     public $ssc_roll_no, $sscReg, $sscPassYear, $sscGpa, $sscBoard,
         $stdName, $phone, $stdFatherName, $stdMotherName,
@@ -29,6 +30,7 @@ class StudentApplication extends Component
     public $showDiv = false;
 
     protected $rules    = [
+        'attachment'     => 'required|mimes:png,jpg,jpeg,pdf|max:2048',
         'ssc_roll_no'    => 'required|numeric|unique:academic_infos',
         'sscReg'         => 'required|numeric',
         'sscPassYear'    => 'required|min:4',
@@ -133,7 +135,6 @@ class StudentApplication extends Component
         }
     }
 
-
     private function sendSms($student)
     {
         $phone = data_get($student, 'phone');
@@ -167,10 +168,13 @@ class StudentApplication extends Component
         }
     }
 
+
     public function prepareData(): array
     {
-        $password = Str::random(8) . 'db';
-        $username = $this->ssc_roll_no . 'DB';
+        $fileName  = Str::random(4) . '_' . $this->attachment->getClientOriginalName();
+        $marksheet = $this->attachment->storeAs('uploads', $fileName);
+        $password  = Str::random(8) . 'db';
+        $username  = $this->ssc_roll_no . 'DB';
 
         $student      = [
             'name'        => $this->stdName,
@@ -199,6 +203,7 @@ class StudentApplication extends Component
             'ssc_pass_year' => $this->sscPassYear,
             'ssc_cgpa'      => $this->sscGpa,
             'ssc_bord'      => $this->sscBoard,
+            'attachment'    => !blank($marksheet) ? $marksheet : null,
         ];
         $application  = [
             'from_college_eiin' => $this->curCollegeEiin,
@@ -212,4 +217,11 @@ class StudentApplication extends Component
         ];
         return [$student, $academicInfo, $application];
     }
+
+    public function uploadFile()
+    {
+
+
+    }
+
 }

@@ -23,8 +23,12 @@
         </div>
         <div class="card-footer">
             <div class="text-center">
-                <button type="button" wire:click.prevent="submit"
-                        {{ $showDiv  ? '' : 'disabled' }} class="btn btn-primary">
+{{--                <button type="button" wire:click.prevent="submit"--}}
+{{--                        {{ $showDiv  ? '' : 'disabled' }} class="btn btn-primary">--}}
+{{--                    Submit--}}
+{{--                </button>--}}
+
+                <button type="button" wire:click.prevent="submit" class="btn btn-primary">
                     Submit
                 </button>
             </div>
