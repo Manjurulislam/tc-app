@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Models\Student;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -14,23 +13,6 @@ class SmsService
     {
         $this->apiUrl = 'https://gpcmp.grameenphone.com/ecmapigw/webresources/ecmapigw.v2';
     }
-
-
-    public function send()
-    {
-        $student  = Student::find(1);
-        $name     = data_get($student, 'name');
-        $phone    = data_get($student, 'phone');
-        $username = data_get($student, 'username');
-        $password = data_get($student, 'pwd_hint');
-        $rollNo   = data_get($student, 'academicInfo.ssc_roll_no');
-        $regNo    = data_get($student, 'academicInfo.ssc_reg_no');
-        $message  = "$name \nRole No. - $rollNo \nReg. No. - $regNo \nUsername - $username \nPassword - $password\nYour application submitted successfully";
-
-        $sms      = $this->post($phone, $message);
-        return $sms;
-    }
-
 
     public function post($phone, $message): bool
     {

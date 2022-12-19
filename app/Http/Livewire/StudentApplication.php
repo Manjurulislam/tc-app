@@ -23,7 +23,7 @@ class StudentApplication extends Component
         $session, $curPostOffice, $curUpozilla, $curDistrict,
         $addColEiin, $addColCode, $addColName, $addColPost,
         $addColUpozila, $addColDistrict, $instituteId,
-        $subjects, $subject_elec, $subject_optn;
+        $subjects, $subject_elec, $subject_optn, $attachment;
 
     public $hasSit  = false;
     public $showDiv = false;
@@ -111,7 +111,6 @@ class StudentApplication extends Component
     public function submit()
     {
         $this->validate();
-
         DB::beginTransaction();
         try {
             [$studentData, $academicInfo, $application] = $this->prepareData();
@@ -122,11 +121,7 @@ class StudentApplication extends Component
                 'user_id'   => $this->instituteId,
                 'is_parent' => 1,
             ]);
-
-//            if ($student){
-//                app(SmsService::class)->send($student);
-//            }
-
+            $this->sendSms($student);
             DB::commit();
             $redirect = env('APP_REDIRECT_URL');
             return redirect()->away($redirect);
@@ -137,6 +132,23 @@ class StudentApplication extends Component
             session()->flash('error', 'Server too many busy, Please try again');
         }
     }
+
+
+    private function sendSms($student)
+    {
+        $phone = data_get($student, 'phone');
+
+        if (!blank($student) && $phone) {
+            $name     = data_get($student, 'name');
+            $username = data_get($student, 'username');
+            $password = data_get($student, 'pwd_hint');
+            $rollNo   = data_get($student, 'academicInfo.ssc_roll_no');
+            $regNo    = data_get($student, 'academicInfo.ssc_reg_no');
+            $message  = "$name \nRoll No. - $rollNo \nReg. No. - $regNo \nUsername - $username \nPassword - $password\nYour application submitted successfully";
+            app(SmsService::class)->post($phone, $message);
+        }
+    }
+
 
 //======================== ssc data from api ======================================
     public function details()
