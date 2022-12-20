@@ -91,11 +91,12 @@
                                     <span class="badge bg-success">{{$item->status}}</span>
                                 </td>
                                 <td>
-                                    <button data-toggle="modal" data-target="#detailsModal" type="button"
-                                            wire:click="details({{ $item->application_id }})"
-                                            class="btn btn-warning btn-xs">
-                                        Details
-                                    </button>
+                                    <a href="{{route('details', $item->application_id)}}" class="btn btn-warning btn-xs">Details</a>
+{{--                                    <button data-toggle="modal" data-target="#detailsModal" type="button"--}}
+{{--                                            wire:click="details({{ $item->application_id }})"--}}
+{{--                                            class="btn btn-warning btn-xs">--}}
+{{--                                        Details--}}
+{{--                                    </button>--}}
                                     @if(!$item->approved && $item->payment_status)
                                         <button data-toggle="modal" data-target="#updateModal"
                                                 wire:click="updateStatus({{ $item->id }})"

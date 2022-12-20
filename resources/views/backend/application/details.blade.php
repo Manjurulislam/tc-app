@@ -1,169 +1,147 @@
 @extends('layouts.app')
-
 @section('content')
     <div class="row">
         <div class="col-12">
             <div class="card card-outline card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Required to Correction</h3>
+                    <h3 class="card-title">Details</h3>
+                    <div class="card-tools">
+                        <button type="button" onclick="printDiv('printableArea')" class="btn btn-primary btn-sm">
+                            <i class="fas fa-print"></i> Print
+                        </button>
+                        @if(data_get($data,'is_file'))
+                            <a href="{{route('download', data_get($data,'id'))}}" class="btn btn-success btn-sm">
+                                <i class="fas fa-download"></i> Marksheet
+                            </a>
+                        @endif
+                    </div>
                 </div>
                 <!-- /.card-header -->
-                <div class="card-body table-responsive p-0">
+                <div class="card-body" id="printableArea">
                     <table class="table table-bordered table-sm text-nowrap">
                         <tr>
                             <th style="width: 8%">Name</th>
-                            <td>{{$application->corr_name}}</td>
+                            <td>{{data_get($data,'name')}}</td>
                         </tr>
                         <tr>
                             <th>Father Name</th>
-                            <td>{{$application->cor_father_name}}</td>
+                            <td>{{data_get($data,'father_name')}}</td>
                         </tr>
                         <tr>
                             <th>Mother Name</th>
-                            <td>{{$application->cor_mother_name}}</td>
+                            <td>{{data_get($data,'mother_name')}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Phone</th>
+                            <td>{{data_get($data,'phone')}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>SSC Roll</th>
+                            <td>{{data_get($data,'roll_no')}}</td>
                         </tr>
                         <tr>
-                            <th>Religion</th>
-                            <td>{{$application->cor_religion}}</td>
+                            <th>SSC Reg. No.</th>
+                            <td>{{data_get($data,'reg_no')}}</td>
                         </tr>
                         <tr>
-                            <th>Gender</th>
-                            <td>{{$application->cor_gender}}</td>
+                            <th>SSC Passing Year</th>
+                            <td>{{data_get($data,'pass_year')}}</td>
                         </tr>
                         <tr>
-                            <th>DOB</th>
-                            <td>{{$application->cor_dob}}</td>
-                        </tr>
-                        <tr>
-                            <th>Remarks</th>
-                            <td>{{$application->remarks}}</td>
+                            <th>CGPA</th>
+                            <td>{{data_get($data,'cgpa')}}</td>
                         </tr>
                     </table>
+                    <div class="pt-2">
+                        <h6 class="text-center text-uppercase">Current College</h6>
+                        <table class="table table-bordered table-sm text-nowrap">
+                            <tr>
+                                <th style="width: 12%">EIIN</th>
+                                <td>{{data_get($data,'current_col.eiin_no')}}</td>
+                            </tr>
+                            <tr>
+                                <th>College</th>
+                                <td>{{data_get($data,'current_col.name')}}</td>
+                            </tr>
+                            <tr>
+                                <th>Group</th>
+                                <td>{{data_get($data,'current_col.group')}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Class</th>
+                                <td>{{data_get($data,'current_col.class')}}</td>
+                            </tr>
+                            <tr>
+                                <th>Session</th>
+                                <td>{{data_get($data,'current_col.session')}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pt-0">
+                        <h6 class="text-center text-uppercase">Admission College</h6>
+                        <table class="table table-bordered table-sm text-nowrap">
+                            <tr>
+                                <th style="width: 12%">EIIN</th>
+                                <td>{{data_get($data,'admission_col.eiin_no')}}</td>
+                            </tr>
+                            <tr>
+                                <th>College</th>
+                                <td>{{data_get($data,'admission_col.name')}}</td>
+                            </tr>
+                            <tr>
+                                <th>Subject Com.</th>
+                                <td>{{data_get($data,'admission_col.subject_comp')}}</td>
+                            </tr>
+                            <tr>
+                                <th>Subject Elec.</th>
+                                <td>{{data_get($data,'admission_col.subject_elec')}}</td>
+                            </tr>
+                            <tr>
+                                <th>Subject Optn.</th>
+                                <td>{{data_get($data,'admission_col.subject_optn')}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pt-2 table-responsive">
+                        <table class="table table-bordered table-sm text-nowrap">
+                            <thead>
+                            <tr>
+                                <th style="width: 15%">Name</th>
+                                <th style="width: 5%">Role</th>
+                                <th style="width: 10%">Comment</th>
+                                <th style="width: 4%">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @if(!blank(data_get($data,'approves')))
+                                @foreach(data_get($data,'approves') as $item)
+                                    <tr>
+                                        <td>{{data_get($item,'admin.inst_name')}}</td>
+                                        <td>{{\App\Models\User::$role[data_get($item,'admin.user_role')]}}</td>
+                                        <td>{{data_get($item,'comment.body')}}</td>
+                                        <td>{{$item->is_approved ? 'Approved' : 'Pending'}}</td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- /.card-body -->
             </div>
-        </div>
-        <div class="col-12">
-            <div class="card card-outline card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Correction for exam</h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-bordered table-sm text-nowrap">
-                        <thead>
-                        <tr>
-                            <th>Exam</th>
-                            <th>EIIN NO</th>
-                            <th>Roll NO.</th>
-                            <th>Registration NO.</th>
-                            <th>Passing Year</th>
-                            <th>Session</th>
-                            <th>Center</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @if(!blank($application->exams))
-                            @foreach($application->exams as $item)
-                                <tr>
-                                    <td>{{data_get($item,'exam.title','')}}</td>
-                                    <td>{{data_get($item,'eiin_no')}}</td>
-                                    <td>{{data_get($item,'roll_no')}}</td>
-                                    <td>{{data_get($item,'reg_no')}}</td>
-                                    <td>{{data_get($item,'passing_year')}}</td>
-                                    <td>{{data_get($item,'session')}}</td>
-                                    <td>{{data_get($item,'center')}}</td>
-                                </tr>
-                            @endforeach
-                        @endif
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-        </div>
-        <div class="col-12">
-            <div class="card card-outline card-primary">
-                <div class="card-header">
-                    <h3 class="card-title">Attachments</h3>
-                </div>
-                <!-- /.card-header -->
-                <div class="card-body table-responsive p-0">
-                    <table class="table table-bordered table-sm text-nowrap">
-                        @if($application->birthCertificate)
-                        <tr>
-                            <th style="width: 15%">Birth Certificate</th>
-                            <td>
-                                <a href="{{$application->birthCertificate}}" target="_blank" class="btn btn-success btn-xs">
-                                    <i class="fas fa-file-download"></i> Download
-                                </a>
-                            </td>
-                        </tr>
-                        @endif
-
-                        @if($application->schoolCertificate)
-                            <tr>
-                                <th style="width: 15%">Primary School Certificate</th>
-                                <td>
-                                    <a href="{{$application->schoolCertificate}}" target="_blank" class="btn btn-success btn-xs">
-                                        <i class="fas fa-file-download"></i> Download
-                                    </a>
-                                </td>
-                            </tr>
-                        @endif
-
-                        @if($application->testimonial)
-                            <tr>
-                                <th style="width: 15%">Testimonial</th>
-                                <td>
-                                    <a href="{{$application->testimonial}}" target="_blank" class="btn btn-success btn-xs">
-                                        <i class="fas fa-file-download"></i> Download
-                                    </a>
-                                </td>
-                            </tr>
-                        @endif
-
-                        @if($application->nid)
-                            <tr>
-                                <th style="width: 15%">NID</th>
-                                <td>
-                                    <a href="{{$application->nid}}" target="_blank" class="btn btn-success btn-xs">
-                                        <i class="fas fa-file-download"></i> Download
-                                    </a>
-                                </td>
-                            </tr>
-                        @endif
-
-                        @if($application->affidavit)
-                            <tr>
-                                <th style="width: 15%">Affidavit</th>
-                                <td>
-                                    <a href="{{$application->affidavit}}" target="_blank" class="btn btn-success btn-xs">
-                                        <i class="fas fa-file-download"></i> Download
-                                    </a>
-                                </td>
-                            </tr>
-                        @endif
-
-                        @if($application->nidGurd)
-                            <tr>
-                                <th style="width: 15%">Nid Extra</th>
-                                <td>
-                                    <a href="{{$application->nidGurd}}" target="_blank" class="btn btn-success btn-xs">
-                                        <i class="fas fa-file-download"></i> Download
-                                    </a>
-                                </td>
-                            </tr>
-                        @endif
-
-                    </table>
-                </div>
-                <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
         </div>
     </div>
-
 @endsection
 
+<script>
+    function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+</script>

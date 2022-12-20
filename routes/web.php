@@ -38,6 +38,8 @@ Route::group(['middleware' => ['student'], 'prefix' => 'student'], function () {
 Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/application', [DashboardController::class, 'getPending'])->name('application');
+    Route::get('/application/{application}/details', [DashboardController::class, 'details'])->name('details');
+    Route::get('/application/{application}/download', [DashboardController::class, 'downloadMarksheet'])->name('download');
     Route::get('/approve', [DashboardController::class, 'getApprove'])->name('approve');
     Route::get('/signature', [DashboardController::class, 'signatures'])->name('signature');
     Route::get('/comments', [DashboardController::class, 'comments'])->name('comments');

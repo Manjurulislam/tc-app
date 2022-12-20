@@ -45,6 +45,8 @@ class StudentApplication extends Component
         'addColPost'     => 'required',
     ];
     protected $messages = [
+        'attachment.required'     => 'Marksheet is required',
+        'attachment.mimes'        => 'Marksheet format is png,jpg,jpeg,pdf',
         'curCollegeEiin.required' => 'Eiin is required',
         'addColEiin.required'     => 'Eiin is required',
         'addColCode.required'     => 'College code is required',
@@ -172,7 +174,7 @@ class StudentApplication extends Component
     public function prepareData(): array
     {
         $fileName  = Str::random(4) . '_' . $this->attachment->getClientOriginalName();
-        $marksheet = $this->attachment->storeAs('marksheet', $fileName,'public');
+        $marksheet = $this->attachment->storeAs('marksheet', $fileName, 'public');
         $password  = Str::random(8) . 'db';
         $username  = $this->ssc_roll_no . 'DB';
 
