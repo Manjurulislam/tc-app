@@ -5,10 +5,7 @@ namespace App\Http\Livewire;
 use App\Models\Application;
 use App\Models\ApproveApplication;
 use App\Models\Comment;
-use App\Models\InstInfo;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -82,6 +79,7 @@ class ApplicationList extends Component
             $item->subject_optn      = data_get($item, 'applications.student.academicInfo.subject_optn', '');
             $item->sharok_no         = data_get($item, 'applications.sharok_no', '');
             $item->approved          = data_get($item, 'is_approved', '');
+            $item->payment_status    = data_get($item, 'applications.payment_status', '');
             $item->status            = Application::$status[$appStatus];
             return $item;
         });
@@ -118,41 +116,44 @@ class ApplicationList extends Component
             $status  = 0;
             $approve = ApproveApplication::find($this->appId);
             $eiinNo  = data_get($approve, 'applications.to_college_eiin');
+            $isPaid  = data_get($approve, 'applications.payment_status');
             $admin   = auth()->user();
             $role    = data_get($admin, 'user_role');
 
 
-            if (!$approve->is_revert) {
-                // college approve
-                if ($approve->is_parent && $role == 2) { //first college pass 2nd college
-                    $user = User::where('eiin_no', $eiinNo)->first();
-                } else { //2nd college pass to first admin
-                    $user = $this->getUserByRole(3); //1
-                }
+            if ($isPaid) {
 
-                // admin approve process
-                if ($role == 3) { // 1st admin pass to 2nd admin
-                    $user = $this->getUserByRole(4); // 2nd admin
-                } elseif ($role == 4) { // 2nd admin pass to 3d admin
-                    $user = $this->getUserByRole(5); // 3rd admin
-                } elseif ($role == 5) { // 3d admin revert again to 2nd admin
+                if (!$approve->is_revert) {
+                    // college approve
+                    if ($approve->is_parent && $role == 2) { //first college pass 2nd college
+                        $user = User::where('eiin_no', $eiinNo)->first();
+                    } else { //2nd college pass to first admin
+                        $user = $this->getUserByRole(3); //1
+                    }
+
+                    // admin approve process
+                    if ($role == 3) { // 1st admin pass to 2nd admin
+                        $user = $this->getUserByRole(4); // 2nd admin
+                    } elseif ($role == 4) { // 2nd admin pass to 3d admin
+                        $user = $this->getUserByRole(5); // 3rd admin
+                    } elseif ($role == 5) { // 3d admin revert again to 2nd admin
+                        $revert = 1;
+                        $status = 1;
+                        $user   = $this->getUserByRole(4); //back 2nd admin
+                    }
+
+                } else {
                     $revert = 1;
                     $status = 1;
-                    $user   = $this->getUserByRole(4); //back 2nd admin
-                }
 
-            } else {
-                $revert = 1;
-                $status = 1;
-
-                if ($role == 4) {
-                    $user = $this->getUserByRole(3);
-                } elseif ($role == 3) {
-                    $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+                    if ($role == 4) {
+                        $user = $this->getUserByRole(3);
+                    } elseif ($role == 3) {
+                        $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+                    }
                 }
+                $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
             }
-
-            $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
             DB::commit();
         } catch (\Exception $e) {
             Log::error($e);
@@ -196,7 +197,6 @@ class ApplicationList extends Component
         DB::beginTransaction();
 
         try {
-
             $user         = '';
             $revert       = 0;
             $status       = 0;
@@ -207,39 +207,43 @@ class ApplicationList extends Component
                 foreach ($applications as $approve) {
 
                     $eiinNo = data_get($approve, 'applications.to_college_eiin');
+                    $isPaid = data_get($approve, 'applications.payment_status');
                     $admin  = auth()->user();
                     $role   = data_get($admin, 'user_role');
 
-                    if (!$approve->is_revert) {
-                        // college approve
-                        if ($approve->is_parent && $role == 2) { //first college pass 2nd college
-                            $user = User::where('eiin_no', $eiinNo)->first();
-                        } else { //2nd college pass to first admin
-                            $user = $this->getUserByRole(3); //1
-                        }
+                    if ($isPaid) {
 
-                        // admin approve process
-                        if ($role == 3) { // 1st admin pass to 2nd admin
-                            $user = $this->getUserByRole(4); // 2nd admin
-                        } elseif ($role == 4) { // 2nd admin pass to 3d admin
-                            $user = $this->getUserByRole(5); // 3rd admin
-                        } elseif ($role == 5) { // 3d admin revert again to 2nd admin
+                        if (!$approve->is_revert) {
+                            // college approve
+                            if ($approve->is_parent && $role == 2) { //first college pass 2nd college
+                                $user = User::where('eiin_no', $eiinNo)->first();
+                            } else { //2nd college pass to first admin
+                                $user = $this->getUserByRole(3); //1
+                            }
+
+                            // admin approve process
+                            if ($role == 3) { // 1st admin pass to 2nd admin
+                                $user = $this->getUserByRole(4); // 2nd admin
+                            } elseif ($role == 4) { // 2nd admin pass to 3d admin
+                                $user = $this->getUserByRole(5); // 3rd admin
+                            } elseif ($role == 5) { // 3d admin revert again to 2nd admin
+                                $revert = 1;
+                                $status = 1;
+                                $user   = $this->getUserByRole(4); //back 2nd admin
+                            }
+
+                        } else {
                             $revert = 1;
                             $status = 1;
-                            $user   = $this->getUserByRole(4); //back 2nd admin
-                        }
 
-                    } else {
-                        $revert = 1;
-                        $status = 1;
-
-                        if ($role == 4) {
-                            $user = $this->getUserByRole(3);
-                        } elseif ($role == 3) {
-                            $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+                            if ($role == 4) {
+                                $user = $this->getUserByRole(3);
+                            } elseif ($role == 3) {
+                                $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+                            }
                         }
+                        $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
                     }
-                    $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
                 }
             }
             DB::commit();

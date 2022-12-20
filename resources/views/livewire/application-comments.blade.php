@@ -33,7 +33,7 @@
                 <table class="table table-bordered table-sm small text-nowrap">
                     <thead>
                     <tr class="thead-dark font-weight-light">
-                        <th>SL</th>
+                        <th width="10%">SL</th>
                         <th>Title</th>
                         <th>Comment</th>
                         <th>Status</th>

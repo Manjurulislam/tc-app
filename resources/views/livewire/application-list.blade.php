@@ -50,6 +50,7 @@
                         <th>SSC Reg</th>
                         <th>Subjects</th>
                         <th>Sharok No.</th>
+                        <th>Payment</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -80,6 +81,13 @@
                                 </td>
                                 <td>{{$item->sharok_no}}</td>
                                 <td class="text-capitalize">
+                                    @if($item->payment_status)
+                                    <span class="badge bg-success">Success</span>
+                                    @else
+                                        <span class="badge bg-danger">Pending</span>
+                                    @endif
+                                </td>
+                                <td class="text-capitalize">
                                     <span class="badge bg-success">{{$item->status}}</span>
                                 </td>
                                 <td>
@@ -88,7 +96,7 @@
                                             class="btn btn-warning btn-xs">
                                         Details
                                     </button>
-                                    @if(!$item->approved)
+                                    @if(!$item->approved && $item->payment_status)
                                         <button data-toggle="modal" data-target="#updateModal"
                                                 wire:click="updateStatus({{ $item->id }})"
                                                 class="btn btn-primary btn-xs">

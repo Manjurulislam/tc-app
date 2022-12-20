@@ -39,6 +39,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard'], function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/application', [DashboardController::class, 'getPending'])->name('application');
     Route::get('/approve', [DashboardController::class, 'getApprove'])->name('approve');
+    Route::get('/signature', [DashboardController::class, 'signatures'])->name('signature');
     Route::get('/comments', [DashboardController::class, 'comments'])->name('comments');
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });

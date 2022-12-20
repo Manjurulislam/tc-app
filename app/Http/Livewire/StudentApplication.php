@@ -172,7 +172,7 @@ class StudentApplication extends Component
     public function prepareData(): array
     {
         $fileName  = Str::random(4) . '_' . $this->attachment->getClientOriginalName();
-        $marksheet = $this->attachment->storeAs('uploads', $fileName);
+        $marksheet = $this->attachment->storeAs('marksheet', $fileName,'public');
         $password  = Str::random(8) . 'db';
         $username  = $this->ssc_roll_no . 'DB';
 

@@ -9,11 +9,11 @@
                 @include('frontend.pages.partial.ssc-info')
                 @include('frontend.pages.partial.current-college')
                 @include('frontend.pages.partial.addmit-college')
-{{--                @if($hasSit)--}}
-{{--                    <div class="jumbotron">--}}
-{{--                        <h1 class="text-center text-danger text-uppercase">Seat Not available at {{$addColName}}</h1>--}}
-{{--                    </div>--}}
-{{--                @endif--}}
+                {{--                @if($hasSit)--}}
+                {{--                    <div class="jumbotron">--}}
+                {{--                        <h1 class="text-center text-danger text-uppercase">Seat Not available at {{$addColName}}</h1>--}}
+                {{--                    </div>--}}
+                {{--                @endif--}}
             </form>
             @if (session()->has('error'))
                 <div class="alert alert-danger text-center">
@@ -23,12 +23,8 @@
         </div>
         <div class="card-footer">
             <div class="text-center">
-{{--                <button type="button" wire:click.prevent="submit"--}}
-{{--                        {{ $showDiv  ? '' : 'disabled' }} class="btn btn-primary">--}}
-{{--                    Submit--}}
-{{--                </button>--}}
-
-                <button type="button" wire:click.prevent="submit" class="btn btn-primary">
+                <button type="button" wire:click.prevent="submit"
+                        {{ $showDiv  ? '' : 'disabled' }} class="btn btn-primary">
                     Submit
                 </button>
             </div>

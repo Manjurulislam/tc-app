@@ -17,7 +17,9 @@
                             <option>Select</option>
                             @if($comments)
                                 @foreach($comments as $item)
-                                    <option value="{{$item->id}}">{{$item->body}}</option>
+                                    <option value="{{$item->id}}">
+                                        {{ Str::limit($item->body, 80) }}
+                                    </option>
                                 @endforeach
                             @endif
                         </select>

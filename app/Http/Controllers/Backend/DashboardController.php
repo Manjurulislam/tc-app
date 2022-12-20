@@ -39,6 +39,11 @@ class DashboardController extends Controller
         return view('backend.comment.index');
     }
 
+    public function signatures()
+    {
+        return view('backend.signature.index');
+    }
+
     //================================ student =========================
 
     public function student()
