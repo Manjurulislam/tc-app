@@ -6,7 +6,8 @@
     <meta name="description" content="Online tc application">
     <meta name="author" content="Online tc application">
     <title>Online tc application</title>
-    <link rel="stylesheet"  href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="{{asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
     <link href="{{asset('assets/dist/css/adminlte.css')}}" rel="stylesheet">
     <link href="{{asset('assets/custom/front-style.css')}}" rel="stylesheet">
@@ -22,6 +23,14 @@
             <div class="col-10 px-0">
                 <h3 class="fw-light fs-3 text-center">Board of Intermediate and Secondary Education, Dinajpur</h3>
                 <p class="lead my-3 fs-3 text-center text-uppercase">Online tc application</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="text-right">
+                    <a href="{{route('secure-login')}}" class="btn btn-default">College Login</a>
+                    <a href="{{route('create-login')}}" class="btn btn-warning">Student Login</a>
+                </div>
             </div>
         </div>
     </div>
