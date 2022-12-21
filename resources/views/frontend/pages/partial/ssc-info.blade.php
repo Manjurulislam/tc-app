@@ -39,7 +39,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group required">
-                    <label for="attachment">Marksheet</label>
+                    <label for="attachment">Marksheet <span style="font-size: 10px">( এসএসসি/সমমানের পরীক্ষার নম্বরপত্র/একাডেমিক ট্রান্সক্রিপ্ট এর কপি সংযুক্ত )</span></label>
                     <input type="file" class="form-control" id="attachment" wire:model="attachment">
                     @error('attachment') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
