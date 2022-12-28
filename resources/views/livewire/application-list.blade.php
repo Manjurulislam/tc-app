@@ -97,7 +97,7 @@
 {{--                                            class="btn btn-warning btn-xs">--}}
 {{--                                        Details--}}
 {{--                                    </button>--}}
-                                    @if(!$item->approved && $item->payment_status)
+                                    @if($item->showApproveBtn)
                                         <button data-toggle="modal" data-target="#updateModal"
                                                 wire:click="updateStatus({{ $item->id }})"
                                                 class="btn btn-primary btn-xs">

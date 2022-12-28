@@ -6,6 +6,7 @@ use App\Models\Application;
 use App\Models\ApproveApplication;
 use App\Models\Comment;
 use App\Models\User;
+use App\Service\DataService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -56,35 +57,9 @@ class ApplicationList extends Component
             });
         }
         $data = $query->where($whereClaus)->active()->paginate(20);
-        return $this->transformApplications($data);
+        return app(DataService::class)->transformApplicationList($data);
     }
 
-
-    public function transformApplications($applications)
-    {
-        $applications->getCollection()->transform(function ($item) {
-            $appStatus               = data_get($item, 'applications.status');
-            $item->id                = data_get($item, 'id');
-            $item->application_id    = data_get($item, 'application_id');
-            $item->name              = data_get($item, 'applications.student.name');
-            $item->father_name       = data_get($item, 'applications.student.father_name');
-            $item->mother_name       = data_get($item, 'applications.student.mother_name');
-            $item->phone             = data_get($item, 'applications.student.phone');
-            $item->current_college   = data_get($item, 'applications.student.academicInfo.college_name') . '-' . (data_get($item, 'applications.student.academicInfo.eiin_no'));
-            $item->admission_college = data_get($item, 'applications.college_name') . '-' . data_get($item, 'applications.to_college_eiin', '');
-            $item->ssc_roll_no       = data_get($item, 'applications.student.academicInfo.ssc_roll_no', '');
-            $item->ssc_reg_no        = data_get($item, 'applications.student.academicInfo.ssc_reg_no', '');
-            $item->subject_comp      = data_get($item, 'applications.student.academicInfo.subject_comp', '');
-            $item->subject_elec      = data_get($item, 'applications.student.academicInfo.subject_elec', '');
-            $item->subject_optn      = data_get($item, 'applications.student.academicInfo.subject_optn', '');
-            $item->sharok_no         = data_get($item, 'applications.sharok_no', '');
-            $item->approved          = data_get($item, 'is_approved', '');
-            $item->payment_status    = data_get($item, 'applications.payment_status', '');
-            $item->status            = Application::$status[$appStatus];
-            return $item;
-        });
-        return $applications;
-    }
 
     public function updateStatus($id)
     {
@@ -97,7 +72,6 @@ class ApplicationList extends Component
     {
         $this->detailsItems = Application::find($id);
     }
-
 
     /**
      * @throws \Throwable
