@@ -14,8 +14,8 @@ class StudentDetails
     public function post($rollNo, $year)
     {
         try {
-            $key = 'dn_' . $rollNo . '_' . $year;
-            return Cache::remember($key, 300, function () use ($rollNo, $year) {
+            $key      = 'dn_' . $rollNo . '_' . $year;
+            $response = Cache::remember($key, 300, function () use ($rollNo, $year) {
                 $apiUrl   = 'http://172.104.51.235:9999/api/student.php';
                 $response = Http::timeout(25)->withOptions(['debug' => false, 'verify' => false,])->get($apiUrl, $this->setBodyParam($rollNo, $year));
                 $content  = json_decode($response);
@@ -30,6 +30,8 @@ class StudentDetails
                     'gpa'         => data_get($content, 'data.gpa', ''),
                 ];
             });
+            Log::info('student details', [$response]);
+            return $response;
         } catch (\Exception $e) {
             Log::debug($e);
             return [];
