@@ -7,6 +7,7 @@ use App\Models\ApproveApplication;
 use App\Models\Comment;
 use App\Models\User;
 use App\Service\DataService;
+use App\Service\SmsService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
@@ -99,32 +100,41 @@ class ApplicationList extends Component
 
                 if (!$approve->is_revert) {
                     // college approve
-                    if ($approve->is_parent && $role == 2) { //first college pass 2nd college
+
+                    if ($approve->is_parent && $role == 2) {
+                        //first college pass 2nd college
                         $user = User::where('eiin_no', $eiinNo)->first();
-                    } else { //2nd college pass to first admin
+
+                    } else {
+                        //2nd college pass to first admin
                         $user = $this->getUserByRole(3); //1
+                        //sms send student
+                        $phone   = data_get($approve, 'applications.student.phone');
+                        $message = "Both college approved your application now you can pay through sonali seba below link \nhttp://sonali-e-sheba.dinajpurboard.gov.bd";
+                        app(SmsService::class)->post($phone, $message);
                     }
 
                     // admin approve process
                     if ($role == 3) { // 1st admin pass to 2nd admin
                         $user = $this->getUserByRole(4); // 2nd admin
-                    } elseif ($role == 4) { // 2nd admin pass to 3d admin
-                        $user = $this->getUserByRole(5); // 3rd admin
-                    } elseif ($role == 5) { // 3d admin revert again to 2nd admin
+                    } elseif ($role == 4) { // 2nd admin pass to 1st admin
                         $revert = 1;
                         $status = 1;
-                        $user   = $this->getUserByRole(4); //back 2nd admin
+                        $user   = $this->getUserByRole(3);
                     }
 
                 } else {
                     $revert = 1;
                     $status = 1;
 
-                    if ($role == 4) {
-                        $user = $this->getUserByRole(3);
-                    } elseif ($role == 3) {
+                    if ($role == 3) {
                         $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
                     }
+//                    if ($role == 4) {
+//                        $user = $this->getUserByRole(3);
+//                    } elseif ($role == 3) {
+//                        $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+//                    }
                 }
                 $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
             }
@@ -162,6 +172,9 @@ class ApplicationList extends Component
     }
 
 
+    /**
+     * @throws \Throwable
+     */
     public function bulkApproved()
     {
         $this->validate([
@@ -189,30 +202,33 @@ class ApplicationList extends Component
 
                         if (!$approve->is_revert) {
                             // college approve
-                            if ($approve->is_parent && $role == 2) { //first college pass 2nd college
+                            if ($approve->is_parent && $role == 2) {
+                                //first college pass 2nd college
                                 $user = User::where('eiin_no', $eiinNo)->first();
-                            } else { //2nd college pass to first admin
+                            } else {
+                                //2nd college pass to first admin
                                 $user = $this->getUserByRole(3); //1
+
+                                //sms send student
+                                $phone   = data_get($approve, 'applications.student.phone');
+                                $message = "Both college approved your application now you can pay through sonali seba below link \nhttp://sonali-e-sheba.dinajpurboard.gov.bd";
+                                app(SmsService::class)->post($phone, $message);
                             }
 
                             // admin approve process
                             if ($role == 3) { // 1st admin pass to 2nd admin
                                 $user = $this->getUserByRole(4); // 2nd admin
-                            } elseif ($role == 4) { // 2nd admin pass to 3d admin
-                                $user = $this->getUserByRole(5); // 3rd admin
-                            } elseif ($role == 5) { // 3d admin revert again to 2nd admin
+                            } elseif ($role == 4) { // 3d admin revert again to 2nd admin
                                 $revert = 1;
                                 $status = 1;
-                                $user   = $this->getUserByRole(4); //back 2nd admin
+                                $user   = $this->getUserByRole(3); //back 2nd admin
                             }
 
                         } else {
                             $revert = 1;
                             $status = 1;
 
-                            if ($role == 4) {
-                                $user = $this->getUserByRole(3);
-                            } elseif ($role == 3) {
+                            if ($role == 3) {
                                 $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
                             }
                         }

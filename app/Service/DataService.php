@@ -50,6 +50,7 @@ class DataService
     {
 
         $applications->getCollection()->transform(function ($item) {
+
             $userRole      = data_get(auth()->user(), 'user_role');
             $appStatus     = data_get($item, 'applications.status');
             $paymentStatus = data_get($item, 'applications.payment_status');
@@ -73,7 +74,9 @@ class DataService
             $item->status            = Application::$status[$appStatus];
 
 
-            if (($userRole == 2 || $userRole == 3) && !$item->is_approved && !$paymentStatus) {
+            if (($userRole == 2) && !$item->is_approved && !$paymentStatus) {
+                $item->showApproveBtn = true;
+            } elseif ($userRole != 2 && $paymentStatus) {
                 $item->showApproveBtn = true;
             } else {
                 $item->showApproveBtn = false;
