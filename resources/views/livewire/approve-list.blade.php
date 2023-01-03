@@ -1,14 +1,14 @@
 <div class="row">
     <div class="col-12">
-        @include('backend.modal.details')
         <div class="card card-outline card-primary">
             <div class="card-header">
-                <h3 class="card-title">Approve List</h3>
+                <h3 class="card-title">Approved List</h3>
                 <div class="card-tools">
                     <div class="row">
                         <div class="col-6">
                             <div class="input-group input-group-sm" style="width: 300px;">
-                                <input wire:model="search" type="search" name="table_search" class="form-control float-right"
+                                <input wire:model="search" type="search" name="table_search"
+                                       class="form-control float-right"
                                        placeholder="Search">
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-default">
@@ -18,9 +18,9 @@
                             </div>
                         </div>
                         <div class="col-6 text-right">
-                            <button class="btn btn-success btn-sm" wire:click="export">
-                                Export
-                            </button>
+                            {{--                            <button class="btn btn-success btn-sm" wire:click="export">--}}
+                            {{--                                Export--}}
+                            {{--                            </button>--}}
                         </div>
                     </div>
                 </div>
@@ -35,7 +35,15 @@
                         <th>Father Name</th>
                         <th>Mother Name</th>
                         <th>Phone</th>
-                        <th>Action</th>
+                        <th>Current College</th>
+                        <th>College admission</th>
+                        <th>SSC Roll</th>
+                        <th>SSC Reg</th>
+                        <th>Subjects</th>
+                        <th>Sharok No.</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                        {{--                        <th>Action</th>--}}
                     </tr>
                     </thead>
                     <tbody>
@@ -43,24 +51,42 @@
                         @foreach($items as $item)
                             <tr>
                                 <td>{{$loop->index + 1}}</td>
-                                <td>{{$item->student ? $item->student->name : ''}}</td>
-                                <td>{{$item->student ? $item->student->father_name : ''}}</td>
-                                <td>{{$item->student ? $item->student->mother_name : ''}}</td>
-                                <td>{{$item->student ? $item->student->phone :''}}</td>
+                                <td>{{$item->name}}</td>
+                                <td>{{$item->father_name}}</td>
+                                <td>{{$item->mother_name}}</td>
+                                <td>{{$item->phone}}</td>
+                                <td>{{$item->current_college}}</td>
+                                <td>{{$item->admission_college}}</td>
+                                <td>{{$item->ssc_roll_no}}</td>
+                                <td>{{$item->ssc_reg_no}}</td>
                                 <td>
-                                    <button data-toggle="modal" data-target="#detailModal"
-                                            wire:click="show({{ $item->id }})" class="btn btn-warning btn-xs">Details
-                                    </button>
+                                    <div class="text-bold">
+                                        Comp. - {{$item->subject_comp}}
+                                    </div>
+                                    <div class="text-bold">
+                                        Elec. - {{$item->subject_elec}} ,
+                                        Optn. - {{$item->subject_optn}}
+                                    </div>
                                 </td>
+                                <td>{{$item->sharok_no}}</td>
+                                <td class="text-capitalize">
+                                    <span class="badge bg-success">Success</span>
+                                </td>
+                                <td class="text-capitalize">
+                                    <span class="badge bg-success">{{$item->status}}</span>
+                                </td>
+                                {{--                                <td>--}}
+                                {{--                                    <a href="{{route('details', $item->application_id)}}" class="btn btn-warning btn-xs">--}}
+                                {{--                                        Details--}}
+                                {{--                                    </a>--}}
+                                {{--                                </td>--}}
                             </tr>
                         @endforeach
                     @endif
-
                     </tbody>
                 </table>
             </div>
             <!-- /.card-body -->
-
             <div class="card-footer p-1 clearfix">
                 <div class="d-flex">
                     <div class="mx-auto">
@@ -69,6 +95,5 @@
                 </div>
             </div>
         </div>
-        <!-- /.card -->
     </div>
 </div>

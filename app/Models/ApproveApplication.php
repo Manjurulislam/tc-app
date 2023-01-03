@@ -38,4 +38,9 @@ class ApproveApplication extends Model
     {
         $q->where('status', 1);
     }
+
+    public function scopeApproved($q)
+    {
+        $q->where('is_approved', 1)->where('status', 1);
+    }
 }

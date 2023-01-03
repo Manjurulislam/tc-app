@@ -25,41 +25,65 @@
                 </li>
 
                 @if(auth()->check())
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{route('application')}}" class="nav-link">--}}
+{{--                            <i class="nav-icon fas fa-list"></i>--}}
+{{--                            <p>Application</p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+
                     <li class="nav-item">
-                        <a href="{{route('application')}}" class="nav-link">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-list"></i>
-                            <p>Application</p>
+                            <p>
+                                Application
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{route('application')}}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    Pending
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('approved')}}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    Approved
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 @endif
 
                 @if(auth()->check())
-                <li class="nav-header">Settings</li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-cogs"></i>
-                        <p>
-                            Settings
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('signature')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                Signature
-                            </a>
-                        </li>
-                        @if(auth()->user()->user_role !=2)
+                    <li class="nav-header">Settings</li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-cogs"></i>
+                            <p>
+                                Settings
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="{{route('comments')}}" class="nav-link">
+                                <a href="{{route('signature')}}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    Comments
+                                    Signature
                                 </a>
                             </li>
-                        @endif
-                    </ul>
-                </li>
+                            @if(auth()->user()->user_role !=2)
+                                <li class="nav-item">
+                                    <a href="{{route('comments')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        Comments
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
                 @endif
             </ul>
         </nav>

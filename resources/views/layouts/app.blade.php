@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="{{asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
     <link rel="stylesheet" href="{{asset('assets/dist/css/adminlte.min.css')}}">
+    <style>
+        .nav-sidebar>.nav-item .nav-icon.fas , .nav-sidebar>.nav-item .nav-icon.far{
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body class="sidebar-mini layout-fixed control-sidebar-slide-open layout-navbar-fixed layout-footer-fixed sidebar-collapse">
 <div class="wrapper">
