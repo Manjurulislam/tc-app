@@ -16,7 +16,7 @@ class Application extends Model
     protected $fillable = [
         'student_id', 'from_college_eiin', 'detail_id', 'college_code',
         'college_name', 'post_office', 'district', 'upazila',
-        'sonali_sheba_no','to_college_eiin','sharok_no',
+        'sonali_sheba_no', 'to_college_eiin', 'sharok_no',
         'payment_date', 'payment_status', 'applied_at', 'status'
     ];
 
@@ -36,7 +36,8 @@ class Application extends Model
 
     public function scopePending($query)
     {
-        $query->where('status', ApplicationStatus::PENDING);
+        $eiinNo = data_get(auth()->user(), 'eiin_no');
+        $query->where('status', ApplicationStatus::PENDING)->where('from_college_eiin', $eiinNo)->orWhere('to_college_eiin');
     }
 
     public function scopeApprove($query)

@@ -39,11 +39,13 @@ class ApplicationList extends Component
 
     public function applications()
     {
-        $admin      = auth()->guard('web')->user();
-        $whereClaus = ['user_id' => data_get($admin, 'id')];
+        $user       = auth()->guard('web')->user();
+        $userRole   = data_get($user, 'user_role');
+        $whereClaus = ['user_id' => data_get($user, 'id')];
         $query      = ApproveApplication::with('applications');
 
         if ($this->search) {
+
             $query->where(function ($query) {
                 $query->whereHas('applications', function ($q) {
                     $q->where('from_college_eiin', 'like', '%' . $this->search . '%')
@@ -57,7 +59,12 @@ class ApplicationList extends Component
                 });
             });
         }
-        $data = $query->where($whereClaus)->active()->paginate(20);
+
+        if ($userRole != 3 && $userRole != 4) {
+            $query->where($whereClaus);
+        }
+
+        $data = $query->active()->paginate(20);
         return app(DataService::class)->transformApplicationList($data);
     }
 
