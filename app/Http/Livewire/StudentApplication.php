@@ -117,19 +117,21 @@ class StudentApplication extends Component
         $this->validate();
         DB::beginTransaction();
         try {
-            [$studentData, $academicInfo, $application] = $this->prepareData();
-            $student = Student::create($studentData);
-            $student->academicInfo()->create($academicInfo);
-            $application = $student->application()->create($application);
-            $application->approves()->create([
-                'user_id'   => $this->instituteId,
-                'is_parent' => 1,
-            ]);
-            $this->sendSms($student);
-            DB::commit();
-//            $redirect = env('APP_REDIRECT_URL');
-//            return redirect()->away($redirect);
-            session()->flash('success', 'Application received Successfully.');
+            if ($this->isSeatAvailable()) {
+                [$studentData, $academicInfo, $application] = $this->prepareData();
+                $student = Student::create($studentData);
+                $student->academicInfo()->create($academicInfo);
+                $application = $student->application()->create($application);
+                $application->approves()->create([
+                    'user_id'   => $this->instituteId,
+                    'is_parent' => 1,
+                ]);
+                $this->sendSms($student);
+                DB::commit();
+                session()->flash('success', 'Application received Successfully.');
+            } else {
+                session()->flash('error', 'SEAT NOT AVAILABLE');
+            }
         } catch (\Throwable $e) {
             Log::error('application save', [$e->getMessage()]);
             DB::rollBack();
