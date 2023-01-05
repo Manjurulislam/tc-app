@@ -42,12 +42,13 @@
             <div class="col-md-4">
                 <div class="form-group required">
                     <label for="group">Group</label>
-                    <select class="form-control" id="group" wire:model="group" readonly>
-                        <option value="">Select</option>
-                        <option value="SCIENCE">Science</option>
-                        <option value="BUSI. STUDIES">Business Studies</option>
-                        <option value="HUMANITIES">Humanities</option>
-                    </select>
+                    <input type="text" class="form-control" id="group" wire:model="group" readonly>
+{{--                    <select class="form-control" id="group" wire:model="group" disabled>--}}
+{{--                        <option value="">Select</option>--}}
+{{--                        <option value="SCIENCE">Science</option>--}}
+{{--                        <option value="BUSI. STUDIES">Business Studies</option>--}}
+{{--                        <option value="HUMANITIES">Humanities</option>--}}
+{{--                    </select>--}}
                     @error('group') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>
