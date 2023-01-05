@@ -229,6 +229,7 @@ class StudentApplication extends Component
         $this->curPostOffice  = data_get($institute, 'thana');
         $this->curUpozilla    = data_get($thana, 'name');
         $this->curDistrict    = data_get($institute, 'zilla');
+        $this->group          = data_get($query, 'stu_img_url');
     }
 
 }

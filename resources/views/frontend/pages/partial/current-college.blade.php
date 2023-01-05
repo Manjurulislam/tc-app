@@ -44,9 +44,9 @@
                     <label for="group">Group</label>
                     <select class="form-control" id="group" wire:model="group">
                         <option value="">Select</option>
-                        <option value="Science">Science</option>
-                        <option value="Business Studies">Business Studies</option>
-                        <option value="Humanities">Humanities</option>
+                        <option value="SCIENCE">Science</option>
+                        <option value="BUSI. STUDIES">Business Studies</option>
+                        <option value="HUMANITIES">Humanities</option>
                     </select>
                     @error('group') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
