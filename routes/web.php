@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 //============ student ====================================
 Route::get('/', [StudentController::class, 'index'])->name('index');
-Route::get('/test-api', [ApplicationController::class, 'testSms'])->name('test-api');
+//Route::get('/test-api', [ApplicationController::class, 'testSms'])->name('test-api');
 Route::get('student/login', [AuthStudentController::class, 'index'])->name('create-login');
 Route::post('/login/student', [AuthStudentController::class, 'store'])->name('student.login');
 

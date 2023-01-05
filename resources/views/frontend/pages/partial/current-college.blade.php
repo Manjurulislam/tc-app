@@ -9,7 +9,7 @@
             <div class="col-md-4">
                 <div class="form-group required">
                     <label for="eiin">Eiin</label>
-                    <input type="text" class="form-control" id="eiin" wire:model="curCollegeEiin">
+                    <input type="text" class="form-control" id="eiin" wire:model="curCollegeEiin" readonly>
                     @error('curCollegeEiin') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>

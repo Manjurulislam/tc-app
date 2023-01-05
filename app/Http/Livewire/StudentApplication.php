@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
+
 class StudentApplication extends Component
 {
     use WithFileUploads;
@@ -63,18 +64,6 @@ class StudentApplication extends Component
         return view('livewire.student-application');
     }
 
-    public function updatedCurCollegeEiin($value)
-    {
-        if ($this->ssc_roll_no && $this->sscReg) {
-            $institute            = User::where('eiin_no', $value)->first();
-            $thana                = DB::table('thanas')->where('code', data_get($institute, 'thana'))->first();
-            $this->instituteId    = data_get($institute, 'id');
-            $this->curCollegeName = data_get($institute, 'inst_name');
-            $this->curPostOffice  = data_get($institute, 'thana');
-            $this->curUpozilla    = data_get($thana, 'name');
-            $this->curDistrict    = data_get($institute, 'zilla');
-        }
-    }
 
     public function updatedAddColEiin($value)
     {
@@ -139,39 +128,7 @@ class StudentApplication extends Component
         }
     }
 
-    private function sendSms($student)
-    {
-        $phone = data_get($student, 'phone');
-
-        if (!blank($student) && $phone) {
-            $name     = data_get($student, 'name');
-            $username = data_get($student, 'username');
-            $password = data_get($student, 'pwd_hint');
-            $rollNo   = data_get($student, 'academicInfo.ssc_roll_no');
-            $regNo    = data_get($student, 'academicInfo.ssc_reg_no');
-            $message  = "$name \nRoll No. - $rollNo \nReg. No. - $regNo \nUsername - $username \nPassword - $password\nYour application submitted successfully";
-            app(SmsService::class)->post($phone, $message);
-        }
-    }
-
-
-//======================== ssc data from api ======================================
-    public function details()
-    {
-        if ($this->ssc_roll_no && $this->sscPassYear) {
-            $response = app(StudentDetails::class)->post($this->ssc_roll_no, $this->sscPassYear);
-
-            $this->stdName       = data_get($response, 'name');
-            $this->stdFatherName = data_get($response, 'father_name');
-            $this->stdMotherName = data_get($response, 'mother_name');
-            $this->ssc_roll_no   = data_get($response, 'roll_no');
-            $this->sscReg        = data_get($response, 'reg_no');
-            $this->sscPassYear   = data_get($response, 'pass_year');
-            $this->sscBoard      = data_get($response, 'board');
-            $this->sscGpa        = data_get($response, 'gpa');
-        }
-    }
-
+//======================== prepare data ======================================
 
     public function prepareData(): array
     {
@@ -222,10 +179,54 @@ class StudentApplication extends Component
         return [$student, $academicInfo, $application];
     }
 
-    public function uploadFile()
+
+//==================================================================
+    protected function sendSms($student)
     {
+        $phone = data_get($student, 'phone');
+
+        if (!blank($student) && $phone) {
+            $name     = data_get($student, 'name');
+            $username = data_get($student, 'username');
+            $password = data_get($student, 'pwd_hint');
+            $rollNo   = data_get($student, 'academicInfo.ssc_roll_no');
+            $regNo    = data_get($student, 'academicInfo.ssc_reg_no');
+            $message  = "$name \nRoll No. - $rollNo \nReg. No. - $regNo \nUsername - $username \nPassword - $password\nYour application submitted successfully";
+            app(SmsService::class)->post($phone, $message);
+        }
+    }
+
+    protected function details()
+    {
+        if ($this->ssc_roll_no && $this->sscPassYear) {
+            $response            = app(StudentDetails::class)->post($this->ssc_roll_no, $this->sscPassYear);
+            $this->stdName       = data_get($response, 'name');
+            $this->stdFatherName = data_get($response, 'father_name');
+            $this->stdMotherName = data_get($response, 'mother_name');
+            $this->ssc_roll_no   = data_get($response, 'roll_no');
+            $this->sscReg        = data_get($response, 'reg_no');
+            $this->sscPassYear   = data_get($response, 'pass_year');
+            $this->sscBoard      = data_get($response, 'board');
+            $this->sscGpa        = data_get($response, 'gpa');
+
+            if ($this->stdName) {
+                $this->currentCollege();
+            }
+        }
+    }
 
 
+    protected function currentCollege()
+    {
+        $query                = DB::table('hsc_registration')->where(['stu_ssc_roll' => $this->ssc_roll_no, 'stu_ssc_regi' => $this->sscReg])->first();
+        $institute            = User::where('eiin_no', data_get($query, 'eiin'))->first();
+        $thana                = DB::table('thanas')->where('code', data_get($institute, 'thana'))->first();
+        $this->instituteId    = data_get($institute, 'id');
+        $this->curCollegeEiin = data_get($institute, 'eiin_no');
+        $this->curCollegeName = data_get($institute, 'inst_name');
+        $this->curPostOffice  = data_get($institute, 'thana');
+        $this->curUpozilla    = data_get($thana, 'name');
+        $this->curDistrict    = data_get($institute, 'zilla');
     }
 
 }
