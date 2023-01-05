@@ -65,6 +65,7 @@ class DataService
             $item->admission_college = data_get($item, 'applications.college_name') . '-' . data_get($item, 'applications.to_college_eiin', '');
             $item->ssc_roll_no       = data_get($item, 'applications.student.academicInfo.ssc_roll_no', '');
             $item->ssc_reg_no        = data_get($item, 'applications.student.academicInfo.ssc_reg_no', '');
+            $item->group             = data_get($item, 'applications.student.academicInfo.group', '');
             $item->subject_comp      = data_get($item, 'applications.student.academicInfo.subject_comp', '');
             $item->subject_elec      = data_get($item, 'applications.student.academicInfo.subject_elec', '');
             $item->subject_optn      = data_get($item, 'applications.student.academicInfo.subject_optn', '');

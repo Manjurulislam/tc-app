@@ -48,6 +48,7 @@
                         <th>College admission</th>
                         <th>SSC Roll</th>
                         <th>SSC Reg</th>
+                        <th>Group</th>
                         <th>Subjects</th>
                         <th>Sharok No.</th>
                         <th>Payment</th>
@@ -74,6 +75,7 @@
                                 <td>{{$item->admission_college}}</td>
                                 <td>{{$item->ssc_roll_no}}</td>
                                 <td>{{$item->ssc_reg_no}}</td>
+                                <td>{{$item->group}}</td>
                                 <td>
                                     <div class="text-bold">Comp. - {{$item->subject_comp}}</div>
                                     <div class="text-bold">Elec. - {{$item->subject_elec}} , Optn.
