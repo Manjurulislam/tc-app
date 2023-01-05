@@ -213,7 +213,7 @@ class StudentApplication extends Component
         $details      = CollegeDetails::where($clause)->where('min_gpa', '<=', $this->sscGpa)->first();
         $totalSit     = data_get($details, 'total_seats');
         $availableSit = data_get($details, 'available_seats');
-        return $availableSit > 1 && $availableSit < $totalSit;
+        return $availableSit >= 1 && $availableSit < $totalSit;
     }
 
     protected function sendSms($student)
