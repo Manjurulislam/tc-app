@@ -130,7 +130,7 @@ class StudentApplication extends Component
 
 //======================== prepare data ======================================
 
-    public function prepareData(): array
+    protected function prepareData(): array
     {
         $fileName  = Str::random(4) . '_' . $this->attachment->getClientOriginalName();
         $marksheet = $this->attachment->storeAs('marksheet', $fileName, 'public');
@@ -196,7 +196,7 @@ class StudentApplication extends Component
         }
     }
 
-    protected function details()
+    public function details()
     {
         if ($this->ssc_roll_no && $this->sscPassYear) {
             $response            = app(StudentDetails::class)->post($this->ssc_roll_no, $this->sscPassYear);
