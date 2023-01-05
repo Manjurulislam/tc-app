@@ -102,49 +102,45 @@ class ApplicationList extends Component
             $admin   = auth()->user();
             $role    = data_get($admin, 'user_role');
 
+            if (!$approve->is_revert) {
+                // college approve
 
-            if ($isPaid) {
-
-                if (!$approve->is_revert) {
-                    // college approve
-
-                    if ($approve->is_parent && $role == 2) {
-                        //first college pass 2nd college
-                        $user = User::where('eiin_no', $eiinNo)->first();
-
-                    } else {
-                        //2nd college pass to first admin
-                        $user = $this->getUserByRole(3); //1
-                        //sms send student
-                        $phone   = data_get($approve, 'applications.student.phone');
-                        $message = "Both college approved your application now you can pay through sonali seba below link \nhttp://sonali-e-sheba.dinajpurboard.gov.bd";
-                        app(SmsService::class)->post($phone, $message);
-                    }
-
-                    // admin approve process
-                    if ($role == 3) { // 1st admin pass to 2nd admin
-                        $user = $this->getUserByRole(4); // 2nd admin
-                    } elseif ($role == 4) { // 2nd admin pass to 1st admin
-                        $revert = 1;
-                        $status = 1;
-                        $user   = $this->getUserByRole(3);
-                    }
+                if ($approve->is_parent && $role == 2) {
+                    //first college pass 2nd college
+                    $user = User::where('eiin_no', $eiinNo)->first();
 
                 } else {
+                    //2nd college pass to first admin
+                    $user = $this->getUserByRole(3); //1
+                    //sms send student
+                    $phone   = data_get($approve, 'applications.student.phone');
+                    $message = "Both college approved your application now you can pay through sonali seba below link \nhttp://sonali-e-sheba.dinajpurboard.gov.bd";
+                    app(SmsService::class)->post($phone, $message);
+                }
+
+                // admin approve process
+                if ($role == 3) { // 1st admin pass to 2nd admin
+                    $user = $this->getUserByRole(4); // 2nd admin
+                } elseif ($role == 4) { // 2nd admin pass to 1st admin
                     $revert = 1;
                     $status = 1;
+                    $user   = $this->getUserByRole(3);
+                }
 
-                    if ($role == 3) {
-                        $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
-                    }
+            } else {
+                $revert = 1;
+                $status = 1;
+
+                if ($role == 3) {
+                    $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+                }
 //                    if ($role == 4) {
 //                        $user = $this->getUserByRole(3);
 //                    } elseif ($role == 3) {
 //                        $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
 //                    }
-                }
-                $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
             }
+            $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
             DB::commit();
         } catch (\Exception $e) {
             Log::error($e);
@@ -196,6 +192,7 @@ class ApplicationList extends Component
             $status       = 0;
             $applications = ApproveApplication::whereIn('id', $this->multipleSelect)->get();
 
+
             if (!blank($applications)) {
 
                 foreach ($applications as $approve) {
@@ -205,42 +202,39 @@ class ApplicationList extends Component
                     $admin  = auth()->user();
                     $role   = data_get($admin, 'user_role');
 
-                    if ($isPaid) {
-
-                        if (!$approve->is_revert) {
-                            // college approve
-                            if ($approve->is_parent && $role == 2) {
-                                //first college pass 2nd college
-                                $user = User::where('eiin_no', $eiinNo)->first();
-                            } else {
-                                //2nd college pass to first admin
-                                $user = $this->getUserByRole(3); //1
-
-                                //sms send student
-                                $phone   = data_get($approve, 'applications.student.phone');
-                                $message = "Both college approved your application now you can pay through sonali seba below link \nhttp://sonali-e-sheba.dinajpurboard.gov.bd";
-                                app(SmsService::class)->post($phone, $message);
-                            }
-
-                            // admin approve process
-                            if ($role == 3) { // 1st admin pass to 2nd admin
-                                $user = $this->getUserByRole(4); // 2nd admin
-                            } elseif ($role == 4) { // 3d admin revert again to 2nd admin
-                                $revert = 1;
-                                $status = 1;
-                                $user   = $this->getUserByRole(3); //back 2nd admin
-                            }
-
+                    if (!$approve->is_revert) {
+                        // college approve
+                        if ($approve->is_parent && $role == 2) {
+                            //first college pass 2nd college
+                            $user = User::where('eiin_no', $eiinNo)->first();
                         } else {
+                            //2nd college pass to first admin
+                            $user = $this->getUserByRole(3); //1
+
+                            //sms send student
+                            $phone   = data_get($approve, 'applications.student.phone');
+                            $message = "Both college approved your application now you can pay through sonali seba below link \nhttp://sonali-e-sheba.dinajpurboard.gov.bd";
+                            app(SmsService::class)->post($phone, $message);
+                        }
+
+                        // admin approve process
+                        if ($role == 3) { // 1st admin pass to 2nd admin
+                            $user = $this->getUserByRole(4); // 2nd admin
+                        } elseif ($role == 4) { // 3d admin revert again to 2nd admin
                             $revert = 1;
                             $status = 1;
-
-                            if ($role == 3) {
-                                $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
-                            }
+                            $user   = $this->getUserByRole(3); //back 2nd admin
                         }
-                        $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
+
+                    } else {
+                        $revert = 1;
+                        $status = 1;
+
+                        if ($role == 3) {
+                            $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+                        }
                     }
+                    $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
                 }
             }
             DB::commit();
