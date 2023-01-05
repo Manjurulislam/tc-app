@@ -78,7 +78,6 @@ class StudentApplication extends Component
         }
     }
 
-
     public function subjects()
     {
         if ($this->ssc_roll_no && $this->sscReg) {
@@ -89,16 +88,6 @@ class StudentApplication extends Component
             $this->subject_optn = data_get($query, 'sub_optn');
         }
     }
-
-    public function isSeatAvailable(): bool
-    {
-        $clause       = ['eiin' => $this->addColEiin, 'group_name' => $this->group];
-        $details      = CollegeDetails::where($clause)->where('min_gpa', '<=', $this->sscGpa)->first();
-        $totalSit     = data_get($details, 'total_seats');
-        $availableSit = data_get($details, 'available_seats');
-        return $availableSit > 1 && $availableSit < $totalSit;
-    }
-
 
     /**
      * @throws \Throwable
@@ -183,21 +172,6 @@ class StudentApplication extends Component
 
 
 //==================================================================
-    protected function sendSms($student)
-    {
-        $phone = data_get($student, 'phone');
-
-        if (!blank($student) && $phone) {
-            $name     = data_get($student, 'name');
-            $username = data_get($student, 'username');
-            $password = data_get($student, 'pwd_hint');
-            $rollNo   = data_get($student, 'academicInfo.ssc_roll_no');
-            $regNo    = data_get($student, 'academicInfo.ssc_reg_no');
-            $message  = "$name \nRoll No. - $rollNo \nReg. No. - $regNo \nUsername - $username \nPassword - $password\nYour application submitted successfully";
-            app(SmsService::class)->post($phone, $message);
-        }
-    }
-
     public function details()
     {
         if ($this->ssc_roll_no && $this->sscPassYear) {
@@ -220,7 +194,8 @@ class StudentApplication extends Component
 
     protected function currentCollege()
     {
-        $query                = DB::table('hsc_registration')->where(['stu_ssc_roll' => $this->ssc_roll_no, 'stu_ssc_regi' => $this->sscReg])->first();
+        $clauseArr            = ['stu_ssc_roll' => $this->ssc_roll_no, 'stu_ssc_regi' => $this->sscReg];
+        $query                = DB::table('hsc_registration')->where($clauseArr)->first();
         $institute            = User::where('eiin_no', data_get($query, 'eiin'))->first();
         $thana                = DB::table('thanas')->where('code', data_get($institute, 'thana'))->first();
         $this->instituteId    = data_get($institute, 'id');
@@ -230,6 +205,30 @@ class StudentApplication extends Component
         $this->curUpozilla    = data_get($thana, 'name');
         $this->curDistrict    = data_get($institute, 'zilla');
         $this->group          = data_get($query, 'stu_img_url');
+    }
+
+    protected function isSeatAvailable(): bool
+    {
+        $clause       = ['eiin' => $this->addColEiin, 'group_name' => $this->group];
+        $details      = CollegeDetails::where($clause)->where('min_gpa', '<=', $this->sscGpa)->first();
+        $totalSit     = data_get($details, 'total_seats');
+        $availableSit = data_get($details, 'available_seats');
+        return $availableSit > 1 && $availableSit < $totalSit;
+    }
+
+    protected function sendSms($student)
+    {
+        $phone = data_get($student, 'phone');
+
+        if (!blank($student) && $phone) {
+            $name     = data_get($student, 'name');
+            $username = data_get($student, 'username');
+            $password = data_get($student, 'pwd_hint');
+            $rollNo   = data_get($student, 'academicInfo.ssc_roll_no');
+            $regNo    = data_get($student, 'academicInfo.ssc_reg_no');
+            $message  = "$name \nRoll No. - $rollNo \nReg. No. - $regNo \nUsername - $username \nPassword - $password\nYour application submitted successfully";
+            app(SmsService::class)->post($phone, $message);
+        }
     }
 
 }

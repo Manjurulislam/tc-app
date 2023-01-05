@@ -28,7 +28,6 @@ class DashboardController extends Controller
         if (data_get($user, 'user_role') == 1) {
             return view('backend.dashboard.pending-list');
         }
-
         return view('backend.college.index');
     }
 
