@@ -90,11 +90,13 @@ class StudentApplication extends Component
         }
     }
 
-    public function isSeatAvailable()
+    public function isSeatAvailable(): bool
     {
-        $clause = ['eiin' => $this->addColEiin, 'group_name' => $this->group];
-        return CollegeDetails::where($clause)->where('min_gpa', '<=', $this->sscGpa)
-            ->whereRaw('available_seats < total_seats')->exists();
+        $clause       = ['eiin' => $this->addColEiin, 'group_name' => $this->group];
+        $details      = CollegeDetails::where($clause)->where('min_gpa', '<=', $this->sscGpa)->first();
+        $totalSit     = data_get($details, 'total_seats');
+        $availableSit = data_get($details, 'available_seats');
+        return $availableSit > 1 && $availableSit < $totalSit;
     }
 
 
