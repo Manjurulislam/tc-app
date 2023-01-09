@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Service\DataService;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Support\Facades\Storage;
+use Mpdf\Mpdf;
 
 
 class DashboardController extends Controller
@@ -44,6 +45,26 @@ class DashboardController extends Controller
     {
         $attachment = data_get($application, 'student.academicInfo.attachment');
         return Storage::disk('public')->download($attachment);
+    }
+
+    public function downloadApproveList()
+    {
+//        $sharok = Application::approve()->get();
+//        $data   = $sharok->groupBy('sharok_no');
+
+
+
+
+        $mpdf = new Mpdf([
+            'mode'   => 'utf-8',
+            'format' => 'A4',
+        ]);
+
+        $view = view('pdf.approve');
+        $mpdf->WriteHTML($view->render());
+//        $mpdf->Output('invoice.pdf', 'D');
+        $mpdf->Output('filename.pdf', 'I');
+//        dd($data);
     }
 
     //===============================================
