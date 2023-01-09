@@ -23,11 +23,12 @@ class DashboardController extends Controller
 
     public function getPending()
     {
-        $user = auth()->user();
+        $user     = auth()->user();
+        $userRole = data_get($user, 'user_role');
 
-        if (data_get($user, 'user_role') == 1) {
-            return view('backend.dashboard.pending-list');
-        }
+//        if ($userRole == 3 || $userRole == 4) {
+//            return view('backend.dashboard.pending-list');
+//        }
         return view('backend.college.index');
     }
 
@@ -44,6 +45,7 @@ class DashboardController extends Controller
         $attachment = data_get($application, 'student.academicInfo.attachment');
         return Storage::disk('public')->download($attachment);
     }
+
     //===============================================
 
     public function getApprove()

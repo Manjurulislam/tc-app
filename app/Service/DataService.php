@@ -79,11 +79,38 @@ class DataService
                 $item->showApproveBtn = true;
             } elseif ($userRole != 2 && $paymentStatus) {
                 $item->showApproveBtn = true;
-            } else {
-                $item->showApproveBtn = false;
             }
 
-//            $item->showApproveBtn = $item->is_approved
+            return $item;
+        });
+        return $applications;
+    }
+
+
+    public function transformApproveList($applications)
+    {
+
+        $applications->getCollection()->transform(function ($item) {
+
+            $appStatus     = data_get($item, 'status');
+            $paymentStatus = data_get($item, 'payment_status');
+
+            $item->name              = data_get($item, 'student.name');
+            $item->father_name       = data_get($item, 'student.father_name');
+            $item->mother_name       = data_get($item, 'student.mother_name');
+            $item->phone             = data_get($item, 'student.phone');
+            $item->current_college   = data_get($item, 'student.academicInfo.college_name') . '-' . (data_get($item, 'student.academicInfo.eiin_no'));
+            $item->admission_college = data_get($item, 'college_name') . '-' . data_get($item, 'to_college_eiin', '');
+            $item->ssc_roll_no       = data_get($item, 'student.academicInfo.ssc_roll_no', '');
+            $item->ssc_reg_no        = data_get($item, 'student.academicInfo.ssc_reg_no', '');
+            $item->group             = data_get($item, 'student.academicInfo.group', '');
+            $item->subject_comp      = data_get($item, 'student.academicInfo.subject_comp', '');
+            $item->subject_elec      = data_get($item, 'student.academicInfo.subject_elec', '');
+            $item->subject_optn      = data_get($item, 'student.academicInfo.subject_optn', '');
+            $item->sharok_no         = data_get($item, 'sharok_no', '');
+            $item->approved          = data_get($item, 'is_approved', '');
+            $item->payment_status    = $paymentStatus;
+            $item->status            = Application::$status[$appStatus];
 
             return $item;
         });

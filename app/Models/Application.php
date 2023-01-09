@@ -36,26 +36,12 @@ class Application extends Model
 
     public function scopePending($query)
     {
-        $userRole = data_get(auth()->user(), 'user_role');
-        $eiinNo   = data_get(auth()->user(), 'eiin_no');
-
-        if ($userRole != 3 && $userRole != 4) {
-            $query->where('status', ApplicationStatus::PENDING)->where('from_college_eiin', $eiinNo)->orWhere('to_college_eiin');
-        } else {
-            $query->where('status', ApplicationStatus::PENDING);
-        }
+        $query->where('status', ApplicationStatus::PENDING);
     }
 
     public function scopeApprove($query)
     {
-        $userRole = data_get(auth()->user(), 'user_role');
-        $eiinNo   = data_get(auth()->user(), 'eiin_no');
-
-        if ($userRole != 3 && $userRole != 4) {
-            $query->where('status', ApplicationStatus::APPROVED)->where('from_college_eiin', $eiinNo)->orWhere('to_college_eiin');
-        } else {
-            $query->where('status', ApplicationStatus::APPROVED);
-        }
+        $query->where('payment_status', 1)->where('status', ApplicationStatus::APPROVED);
     }
 
     public function approves(): HasMany

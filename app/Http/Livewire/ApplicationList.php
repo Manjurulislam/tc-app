@@ -40,12 +40,10 @@ class ApplicationList extends Component
     public function applications()
     {
         $user       = auth()->guard('web')->user();
-        $userRole   = data_get($user, 'user_role');
         $whereClaus = ['user_id' => data_get($user, 'id')];
-        $query      = ApproveApplication::with('applications');
+        $query      = ApproveApplication::with('applications')->where($whereClaus);
 
         if ($this->search) {
-
             $query->where(function ($query) {
                 $query->whereHas('applications', function ($q) {
                     $q->where('from_college_eiin', 'like', '%' . $this->search . '%')
@@ -53,18 +51,12 @@ class ApplicationList extends Component
                         ->orWhereHas('student', function ($q) {
                             $q->where('name', 'like', '%' . $this->search . '%')
                                 ->orWhere('father_name', 'like', '%' . $this->search . '%')
-                                ->orWhere('mother_name', 'like', '%' . $this->search . '%')
                                 ->orWhere('phone', 'like', '%' . $this->search . '%');
                         });
                 });
             });
         }
-
-        if ($userRole != 3 && $userRole != 4) {
-            $query->where($whereClaus);
-        }
-
-        $data = $query->active()->paginate(20);
+        $data = $query->active()->paginate(30);
         return app(DataService::class)->transformApplicationList($data);
     }
 

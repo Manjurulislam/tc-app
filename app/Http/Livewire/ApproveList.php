@@ -26,27 +26,19 @@ class ApproveList extends Component
 
     public function approved()
     {
-        $query = ApproveApplication::with('applications')->approved()
-            ->whereHas('applications', function ($q) {
-                $q->where('payment_status', 1)->where('status', 2);
-            });
+        $query = Application::approve();
 
         if ($this->search) {
             $query->where(function ($query) {
-                $query->whereHas('applications', function ($q) {
-                    $q->where('from_college_eiin', 'like', '%' . $this->search . '%')
-                        ->orWhere('to_college_eiin', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('student', function ($q) {
-                            $q->where('name', 'like', '%' . $this->search . '%')
-                                ->orWhere('father_name', 'like', '%' . $this->search . '%')
-                                ->orWhere('mother_name', 'like', '%' . $this->search . '%')
-                                ->orWhere('phone', 'like', '%' . $this->search . '%');
-                        });
+                $query->whereHas('student', function ($q) {
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('father_name', 'like', '%' . $this->search . '%')
+                        ->orWhere('phone', 'like', '%' . $this->search . '%');
                 });
             });
         }
         $data = $query->paginate(20);
-        return app(DataService::class)->transformApplicationList($data);
+        return app(DataService::class)->transformApproveList($data);
     }
 
 

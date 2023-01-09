@@ -32,7 +32,7 @@ class PendingList extends Component
                         ->orWhere('mother_name', 'like', '%' . $this->search . '%')
                         ->orWhere('phone', 'like', '%' . $this->search . '%');
                 });
-        })->latest()->paginate(20)];
+        })->latest()->paginate(30)];
 
         return view('livewire.pending-list', $data);
     }
