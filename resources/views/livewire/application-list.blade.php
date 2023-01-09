@@ -61,7 +61,7 @@
                         @foreach($items as $item)
                             <tr>
                                 <td>
-                                    @if(!$item->approved)
+                                    @if($item->showApproveBtn)
                                         <input type="checkbox" wire:model="multipleSelect" value="{{ $item->id }}"
                                                style="margin-left: -16px">
                                     @endif
