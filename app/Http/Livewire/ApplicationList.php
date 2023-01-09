@@ -41,7 +41,11 @@ class ApplicationList extends Component
     {
         $user       = auth()->guard('web')->user();
         $whereClaus = ['user_id' => data_get($user, 'id')];
-        $query      = ApproveApplication::with('applications')->where($whereClaus);
+        $query      = ApproveApplication::with('applications')
+            ->where($whereClaus)
+            ->whereHas('applications', function ($q) {
+                $q->where('status', 1);
+            });
 
         if ($this->search) {
             $query->where(function ($query) {
