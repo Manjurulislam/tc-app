@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Enum\ApplicationStatus;
 use App\Models\Application;
 use App\Models\ApproveApplication;
 use App\Models\Comment;
@@ -10,6 +11,7 @@ use App\Service\DataService;
 use App\Service\SmsService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -39,30 +41,58 @@ class ApplicationList extends Component
 
     public function applications()
     {
-        $user       = auth()->guard('web')->user();
-        $whereClaus = ['user_id' => data_get($user, 'id')];
-        $query      = ApproveApplication::with('applications')
-            ->where($whereClaus)
-            ->whereHas('applications', function ($q) {
-                $q->where('status', 1);
-            });
+        $user      = auth()->guard('web')->user();
+        $isCollege = Str::contains(data_get(auth()->guard('web')->user(), 'user_role'), 2);
+        $query     = Application::latest();
 
         if ($this->search) {
             $query->where(function ($query) {
-                $query->whereHas('applications', function ($q) {
-                    $q->where('from_college_eiin', 'like', '%' . $this->search . '%')
-                        ->orWhere('to_college_eiin', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('student', function ($q) {
-                            $q->where('name', 'like', '%' . $this->search . '%')
-                                ->orWhere('father_name', 'like', '%' . $this->search . '%')
-                                ->orWhere('phone', 'like', '%' . $this->search . '%');
-                        });
-                });
+                $query->where('from_college_eiin', 'like', '%' . $this->search . '%')
+                    ->orWhere('to_college_eiin', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('student', function ($q) {
+                        $q->where('name', 'like', '%' . $this->search . '%')
+                            ->orWhere('father_name', 'like', '%' . $this->search . '%')
+                            ->orWhere('phone', 'like', '%' . $this->search . '%');
+                    });
             });
         }
-        $data = $query->active()->paginate(30);
+
+        if ($isCollege) {
+            $query->whereHas('approves', function ($q) use ($user) {
+                $q->where(['user_id' => data_get($user, 'id'), 'is_approved' => 0]);
+            });
+        }
+        $data = $query->pending()->paginate(30);
         return app(DataService::class)->transformApplicationList($data);
     }
+
+
+
+//    public function applications()
+//    {
+//        $user       = auth()->guard('web')->user();
+//        $whereClaus = ['user_id' => data_get($user, 'id')];
+//        $query      = ApproveApplication::with('applications')->where($whereClaus)
+//            ->whereHas('applications', function ($q) {
+//                $q->where('status', ApplicationStatus::PENDING);
+//            });
+//
+//        if ($this->search) {
+//            $query->where(function ($query) {
+//                $query->whereHas('applications', function ($q) {
+//                    $q->where('from_college_eiin', 'like', '%' . $this->search . '%')
+//                        ->orWhere('to_college_eiin', 'like', '%' . $this->search . '%')
+//                        ->orWhereHas('student', function ($q) {
+//                            $q->where('name', 'like', '%' . $this->search . '%')
+//                                ->orWhere('father_name', 'like', '%' . $this->search . '%')
+//                                ->orWhere('phone', 'like', '%' . $this->search . '%');
+//                        });
+//                });
+//            });
+//        }
+//        $data = $query->active()->paginate(30);
+//        return app(DataService::class)->transformApplicationList($data);
+//    }
 
 
     public function updateStatus($id)
