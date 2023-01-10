@@ -9,6 +9,9 @@ use App\Models\User;
 use App\Service\DataService;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Support\Facades\Storage;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
+use Mpdf\Mpdf;
 
 
 class DashboardController extends Controller
@@ -44,6 +47,49 @@ class DashboardController extends Controller
     {
         $attachment = data_get($application, 'student.academicInfo.attachment');
         return Storage::disk('public')->download($attachment);
+    }
+
+    public function downloadApproveList()
+    {
+//        $sharok = Application::approve()->get();
+//        $data   = $sharok->groupBy('sharok_no');
+
+
+        $defaultConfig = (new ConfigVariables())->getDefaults();
+        $fontDirs      = $defaultConfig['fontDir'];
+
+        $defaultFontConfig = (new FontVariables())->getDefaults();
+        $fontData          = $defaultFontConfig['fontdata'];
+
+        $mpdf = new Mpdf([
+            'tempDir'  => public_path('assets'),
+            'fontDir'  => array_merge($fontDirs, [
+                public_path('assets/fonts'),
+            ]),
+            'fontdata' => $fontData + [
+                    'nikosh'  => [
+                        'R'      => "Nikosh.ttf",
+                        'useOTL' => 0xFF,
+                    ],
+                    'dm-sans' => [
+                        'R'      => "DMSans-Regular.ttf",
+                        'B'      => "DMSans-Bold.ttf",
+                        'useOTL' => 0xFF,
+                    ],
+                ],
+
+            'default_font'     => 'dm-sans',
+            'mode'             => 'utf-8',
+            'autoScriptToLang' => true,
+            'autoLangToFont'   => true,
+            'format'           => 'A4',
+        ]);
+
+        $view = view('pdf.approve');
+        $mpdf->WriteHTML($view->render());
+//        $mpdf->Output('invoice.pdf', 'D');
+        $mpdf->Output('filename.pdf', 'I');
+//        dd($data);
     }
 
     //===============================================

@@ -18,9 +18,9 @@
                             </div>
                         </div>
                         <div class="col-6 text-right">
-                            {{--                            <button class="btn btn-success btn-sm" wire:click="export">--}}
-                            {{--                                Export--}}
-                            {{--                            </button>--}}
+{{--                            <a href="{{route('export-pdf')}}" class="btn btn-success btn-sm" >--}}
+{{--                                Export--}}
+{{--                            </a>--}}
                         </div>
                     </div>
                 </div>

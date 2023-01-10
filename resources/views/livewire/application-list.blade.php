@@ -66,8 +66,7 @@
                                                style="margin-left: -16px">
                                     @endif
                                 </td>
-                                <td>{{$loop->index + 1}} => {{$item->application_id}}</td>
-{{--                                <td>{{$item->application_id}}</td>--}}
+                                <td>{{$loop->index + 1}}</td>
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->father_name}}</td>
                                 <td>{{$item->mother_name}}</td>

@@ -48,14 +48,13 @@ class DataService
     public function transformApplicationList($applications)
     {
         $applications->getCollection()->transform(function ($item) {
-
             $userRole      = data_get(auth()->user(), 'user_role');
             $appStatus     = data_get($item, 'status');
             $paymentStatus = data_get($item, 'payment_status');
             $approveApp    = $item->approves->first();
-            $approveUserId = data_get($approveApp, 'user_id');
             $authUserId    = data_get(auth()->user(), 'id');
             $isApproved    = data_get($approveApp, 'is_approved');
+            $hasApproved   = $item->approves()->where('user_id', $authUserId)->exists();
 
             $item->id                = data_get($approveApp, 'id');
             $item->application_id    = data_get($approveApp, 'application_id');
@@ -79,7 +78,7 @@ class DataService
             if (($userRole == 2) && !$isApproved && !$paymentStatus) {
                 $item->showApproveBtn = true;
             } elseif (($userRole != 2) && $paymentStatus) {
-                $item->showApproveBtn = true;
+                $item->showApproveBtn = $hasApproved;
             }
             return $item;
         });
