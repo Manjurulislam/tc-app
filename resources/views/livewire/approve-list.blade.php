@@ -18,9 +18,9 @@
                             </div>
                         </div>
                         <div class="col-6 text-right">
-{{--                            <a href="{{route('export-pdf')}}" class="btn btn-success btn-sm" >--}}
-{{--                                Export--}}
-{{--                            </a>--}}
+                            <a href="{{route('export-pdf')}}" class="btn btn-success btn-sm" >
+                                Export
+                            </a>
                         </div>
                     </div>
                 </div>

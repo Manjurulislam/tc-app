@@ -25,13 +25,6 @@
                 </li>
 
                 @if(auth()->check())
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{route('application')}}" class="nav-link">--}}
-{{--                            <i class="nav-icon fas fa-list"></i>--}}
-{{--                            <p>Application</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-list"></i>

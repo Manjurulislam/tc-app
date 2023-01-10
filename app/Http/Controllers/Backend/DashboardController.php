@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\Student;
+use App\Models\Subject;
 use App\Models\User;
 use App\Service\DataService;
 use Dflydev\DotAccessData\Data;
@@ -51,15 +52,12 @@ class DashboardController extends Controller
 
     public function downloadApproveList()
     {
-//        $sharok = Application::approve()->get();
-//        $data   = $sharok->groupBy('sharok_no');
-
-
-        $defaultConfig = (new ConfigVariables())->getDefaults();
-        $fontDirs      = $defaultConfig['fontDir'];
-
+        $defaultConfig     = (new ConfigVariables())->getDefaults();
+        $fontDirs          = $defaultConfig['fontDir'];
         $defaultFontConfig = (new FontVariables())->getDefaults();
         $fontData          = $defaultFontConfig['fontdata'];
+        $sharok            = Application::approve()->with('student.academicInfo')->get();
+        $applications      = $sharok->groupBy('sharok_no')->toArray();
 
         $mpdf = new Mpdf([
             'tempDir'  => public_path('assets'),
@@ -85,11 +83,34 @@ class DashboardController extends Controller
             'format'           => 'A4',
         ]);
 
-        $view = view('pdf.approve');
-        $mpdf->WriteHTML($view->render());
-//        $mpdf->Output('invoice.pdf', 'D');
-        $mpdf->Output('filename.pdf', 'I');
-//        dd($data);
+        if (!blank($applications)) {
+
+            foreach ($applications as $sharok => $items) {
+
+                $item = collect($items)->map(function ($item) {
+                    $curCollege = data_get($item, 'student.academic_info.college_name') .
+                        ' (' . data_get($item, 'student.academic_info.eiin_no') . ')';
+                    $adCollege  = data_get($item, 'college_name') .
+                        ' (' . data_get($item, 'to_college_eiin') . ')';
+
+                    return [
+                        'name'          => data_get($item, 'student.name'),
+                        'current_col'   => $curCollege,
+                        'admission_col' => $adCollege,
+                        'subject_comp'  => data_get($item, 'student.academic_info.subject_comp'),
+                        'subject_optn'  => data_get($item, 'student.academic_info.subject_optn'),
+                        'ssc_info'      => data_get($item, 'student.academic_info.ssc_roll_no') . ', ' . data_get($item, 'student.academic_info.ssc_reg_no') . ', ' .
+                            data_get($item, 'student.academic_info.ssc_pass_year') . ', ' .
+                            data_get($item, 'student.academic_info.ssc_bord'),
+                    ];
+                });
+                $view = view('pdf.approve-pdf', compact('sharok', 'item'));
+                $mpdf->WriteHTML($view->render());
+            }
+        }
+
+        $fileName = 'tc-'.now()->format('d-m-Y') . '.pdf';
+        $mpdf->Output($fileName, 'D');
     }
 
     //===============================================

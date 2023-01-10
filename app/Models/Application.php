@@ -57,4 +57,5 @@ class Application extends Model
         return $this->hasMany(ApproveApplication::class);
     }
 
+
 }
