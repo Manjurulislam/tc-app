@@ -18,9 +18,9 @@
                             </div>
                         </div>
                         <div class="col-6 text-right">
-                            <a href="{{route('export-pdf')}}" class="btn btn-success btn-sm" >
-                                Export
-                            </a>
+                            {{--                            <a href="{{route('export-pdf')}}" class="btn btn-success btn-sm" >--}}
+                            {{--                                Export--}}
+                            {{--                            </a>--}}
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                         <th>Sharok No.</th>
                         <th>Payment</th>
                         <th>Status</th>
-                        {{--                        <th>Action</th>--}}
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -75,11 +75,11 @@
                                 <td class="text-capitalize">
                                     <span class="badge bg-success">{{$item->status}}</span>
                                 </td>
-                                {{--                                <td>--}}
-                                {{--                                    <a href="{{route('details', $item->application_id)}}" class="btn btn-warning btn-xs">--}}
-                                {{--                                        Details--}}
-                                {{--                                    </a>--}}
-                                {{--                                </td>--}}
+                               <td>
+                                   <a href="{{route('export-pdf')}}" class="btn btn-success btn-sm" >
+                                       Download
+                                   </a>
+                               </td>
                             </tr>
                         @endforeach
                     @endif
