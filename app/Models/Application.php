@@ -36,6 +36,14 @@ class Application extends Model
 
     public function scopePending($query)
     {
+        $userRole = data_get(auth()->user(), 'user_role');
+        $eiin     = data_get(auth()->user(), 'eiin_no');
+
+        if ($userRole == 2) {
+            $query->where('status', ApplicationStatus::PENDING)
+                ->where('from_college_eiin', $eiin)->orWhere('to_college_eiin', $eiin);
+        }
+
         $query->where('status', ApplicationStatus::PENDING);
     }
 

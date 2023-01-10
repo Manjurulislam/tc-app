@@ -66,35 +66,6 @@ class ApplicationList extends Component
         return app(DataService::class)->transformApplicationList($data);
     }
 
-
-
-//    public function applications()
-//    {
-//        $user       = auth()->guard('web')->user();
-//        $whereClaus = ['user_id' => data_get($user, 'id')];
-//        $query      = ApproveApplication::with('applications')->where($whereClaus)
-//            ->whereHas('applications', function ($q) {
-//                $q->where('status', ApplicationStatus::PENDING);
-//            });
-//
-//        if ($this->search) {
-//            $query->where(function ($query) {
-//                $query->whereHas('applications', function ($q) {
-//                    $q->where('from_college_eiin', 'like', '%' . $this->search . '%')
-//                        ->orWhere('to_college_eiin', 'like', '%' . $this->search . '%')
-//                        ->orWhereHas('student', function ($q) {
-//                            $q->where('name', 'like', '%' . $this->search . '%')
-//                                ->orWhere('father_name', 'like', '%' . $this->search . '%')
-//                                ->orWhere('phone', 'like', '%' . $this->search . '%');
-//                        });
-//                });
-//            });
-//        }
-//        $data = $query->active()->paginate(30);
-//        return app(DataService::class)->transformApplicationList($data);
-//    }
-
-
     public function updateStatus($id)
     {
         $approve        = ApproveApplication::find($id);
