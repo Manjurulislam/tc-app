@@ -75,7 +75,7 @@ class DataService
             $item->payment_status    = $paymentStatus;
             $item->status            = Application::$status[$appStatus];
 
-            if (($userRole == 2) && !$isApproved && !$paymentStatus) {
+            if (($userRole == 2) && !$isApproved) {
                 $item->showApproveBtn = true;
             } elseif (($userRole != 2) && $paymentStatus) {
                 $item->showApproveBtn = $hasApproved;
