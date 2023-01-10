@@ -60,7 +60,7 @@ class DashboardController extends Controller
         $applications      = $sharok->groupBy('sharok_no')->toArray();
 
         $mpdf = new Mpdf([
-            'tempDir'  => public_path('assets'),
+            'tempDir'  => storage_path('tempdir'),
             'fontDir'  => array_merge($fontDirs, [
                 public_path('assets/fonts'),
             ]),
@@ -109,7 +109,7 @@ class DashboardController extends Controller
             }
         }
 
-        $fileName = 'tc-'.now()->format('d-m-Y') . '.pdf';
+        $fileName = 'tc-' . now()->format('d-m-Y') . '.pdf';
         $mpdf->Output($fileName, 'D');
     }
 
