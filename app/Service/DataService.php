@@ -54,7 +54,7 @@ class DataService
             $authUserId    = data_get(auth()->user(), 'id');
             $hasApproved   = $item->approves()->where(['user_id' => $authUserId, 'is_approved' => 0])->exists();
 
-            $item->id                = data_get($approveApp, 'id');
+            $item->id                = data_get($item, 'id');
             $item->application_id    = data_get($approveApp, 'application_id');
             $item->name              = data_get($item, 'student.name');
             $item->father_name       = data_get($item, 'student.father_name');
