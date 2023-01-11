@@ -58,6 +58,7 @@ class DashboardController extends Controller
         $fontData          = $defaultFontConfig['fontdata'];
         $sharok            = Application::approve()->with('student.academicInfo')->get();
         $applications      = $sharok->groupBy('sharok_no')->toArray();
+        $user              = User::where('eiin_no', 444444)->first();
 
         $mpdf = new Mpdf([
             'tempDir'  => storage_path('tempdir'),
@@ -104,13 +105,13 @@ class DashboardController extends Controller
                             data_get($item, 'student.academic_info.ssc_bord'),
                     ];
                 });
-                $view = view('pdf.approve-pdf', compact('sharok', 'item'));
+                $view = view('pdf.approve-pdf', compact('sharok', 'item','user'));
                 $mpdf->WriteHTML($view->render());
             }
         }
 
         $fileName = 'tc-' . now()->format('d-m-Y') . '.pdf';
-        $mpdf->Output($fileName, 'D');
+        $mpdf->Output($fileName, 'I');
     }
 
     //===============================================
