@@ -29,7 +29,14 @@ class ApplicationList extends Component
 
     public function mount()
     {
-        $this->comments = Comment::latest()->get();
+        $admin = auth()->user();
+        $role  = data_get($admin, 'user_role');
+
+        if ($role == 2) {
+            $this->comments = Comment::whereIn('id', [9, 10])->get();
+        } else {
+            $this->comments = Comment::latest()->get();
+        }
     }
 
 
