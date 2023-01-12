@@ -69,7 +69,7 @@ class ApplicationList extends Component
                 $q->where(['user_id' => data_get($user, 'id'), 'is_approved' => 0]);
             });
         }
-        $data = $query->pending()->paginate(30);
+        $data = $query->pending()->paginate(100);
         return app(DataService::class)->transformApplicationList($data);
     }
 
