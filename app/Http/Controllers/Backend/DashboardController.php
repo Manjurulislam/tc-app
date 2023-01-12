@@ -111,7 +111,7 @@ class DashboardController extends Controller
         }
 
         $fileName = 'tc-' . now()->format('d-m-Y') . '.pdf';
-        $mpdf->Output($fileName, 'I');
+        $mpdf->Output($fileName, 'D');
     }
 
     //===============================================
