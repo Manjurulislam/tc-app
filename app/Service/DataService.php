@@ -47,12 +47,19 @@ class DataService
     public function transformApplicationList($applications)
     {
         $applications->getCollection()->transform(function ($item) {
+
             $userRole      = data_get(auth()->user(), 'user_role');
             $appStatus     = data_get($item, 'status');
             $paymentStatus = data_get($item, 'payment_status');
             $approveApp    = $item->approves->first();
             $authUserId    = data_get(auth()->user(), 'id');
-            $hasApproved   = $item->approves()->where(['user_id' => $authUserId, 'is_approved' => 0])->exists();
+
+            //==============
+            $iscollege   = $item->approves()->where(['user_id' => $authUserId, 'is_approved' => 0])->exists();
+            $isAdmin     = $item->approves()->where(['user_id' => $authUserId, 'status' => 0])->exists();
+            $hasApproved = $userRole == 2 ? $iscollege : $isAdmin;
+//            dd($hasApproved);
+//            $hasApproved = $item->approves()->where(['user_id' => $authUserId, 'is_approved' => 0])->exists();
 
             $item->id                = data_get($item, 'id');
             $item->application_id    = data_get($approveApp, 'application_id');

@@ -24,7 +24,7 @@
                         @error('comments') <span class="text-danger">{{ $message }}</span>@enderror
                     </div>
 
-                    @if(auth()->check() && auth()->user()->user_role == 3 && $isRevert)
+                    @if(auth()->check() && auth()->user()->user_role == 3)
                         <div class="form-group">
                             <label for="sharok_no">Sharok No :</label>
                             <input type="text" class="form-control" wire:model="sharok_no" id="sharok_no">

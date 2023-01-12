@@ -21,7 +21,7 @@
             </td>
 
             <td width="10%" style="text-align: right">
-                <img class="mojib" src="{{asset('assets/pdf/Mujib_100_Logo.png')}}" alt=""/>
+{{--                <img class="mojib" src="{{asset('assets/pdf/Mujib_100_Logo.png')}}" alt=""/>--}}
             </td>
         </tr>
     </table>
@@ -77,7 +77,10 @@
     <br>
     <table>
         <tr>
-            <td width="72%"></td>
+            <td width="72%" style="font-size: 18px">
+                অধ্যক্ষ <br>
+                সংশ্লিষ্ট কলেজ সমূহ।
+            </td>
             <td style="text-align: center; font-size: 18px">
                 @if($user->signature_image)
                     <div>
