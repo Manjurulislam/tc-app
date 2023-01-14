@@ -88,6 +88,8 @@ class DashboardController extends Controller
 
             foreach ($applications as $sharok => $items) {
 
+                $mpdf->AddPage();
+
                 $item = collect($items)->map(function ($item) {
                     $curCollege = data_get($item, 'student.academic_info.college_name') .
                         ' (' . data_get($item, 'student.academic_info.eiin_no') . ')';
