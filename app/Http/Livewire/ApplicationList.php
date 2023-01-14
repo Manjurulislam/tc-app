@@ -75,9 +75,9 @@ class ApplicationList extends Component
 
     public function updateStatus($id)
     {
-        $approve        = ApproveApplication::find($id);
-        $this->appId    = $id;
-        $this->isRevert = data_get($approve, 'is_revert');
+        //$approve     = ApproveApplication::find($id);
+        $this->appId = $id;
+        $this->isRevert = ApproveApplication::where('is_revert', 1)->exists();
     }
 
     public function details($id)
