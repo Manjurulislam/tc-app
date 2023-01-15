@@ -94,6 +94,8 @@
         </tr>
     </table>
 
+    <br>
+    <br>
     <table>
         <tr>
             <td width="50%">স্মারক নং - <span class="subject">{{$sharok}}</span></td>
