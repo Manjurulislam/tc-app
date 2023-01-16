@@ -55,10 +55,8 @@ class DataService
             $authUserId    = data_get(auth()->user(), 'id');
 
             //==============
-            $isCollege   = $item->approves()->where(['user_id' => $authUserId, 'application_id' => data_get($item, 'id'), 'is_approved' => 0])->exists();
-            $isAdmin     = $item->approves()->where(['user_id' => $authUserId, 'application_id' => data_get($item, 'id'), 'status' => 0])->exists();
-            $hasApproved = $isCollege ?: $isAdmin;
-//          $hasApproved = $item->approves()->where(['user_id' => $authUserId, 'is_approved' => 0])->exists();
+            $isApproved  = $item->approves()->where(['user_id' => $authUserId, 'application_id' => data_get($item, 'id')])->orWhere('status', 0)->exists();
+            $hasApproved = $isApproved;
 
             $item->id                = data_get($item, 'id');
             $item->application_id    = data_get($approveApp, 'application_id');
@@ -113,7 +111,6 @@ class DataService
             $item->approved          = data_get($item, 'is_approved', '');
             $item->payment_status    = $paymentStatus;
             $item->status            = Application::$status[$appStatus];
-
             return $item;
         });
         return $applications;

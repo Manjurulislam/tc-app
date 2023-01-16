@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+use App\Models\ApproveApplication;
 use App\Models\Student;
 use App\Models\Subject;
 use App\Models\User;
@@ -88,6 +89,9 @@ class DashboardController extends Controller
 
             foreach ($applications as $sharok => $items) {
 
+                $itemData    = collect($items)->first();
+                $approveDate = ApproveApplication::where('application_id', data_get($itemData, 'id'))->where('user_id', 668)->first();
+
                 $mpdf->AddPage();
 
                 $item = collect($items)->map(function ($item) {
@@ -107,7 +111,7 @@ class DashboardController extends Controller
                             data_get($item, 'student.academic_info.ssc_bord'),
                     ];
                 });
-                $view = view('pdf.approve-pdf', compact('sharok', 'item','user'));
+                $view = view('pdf.approve-pdf', compact('sharok', 'item', 'user','approveDate'));
                 $mpdf->WriteHTML($view->render());
             }
         }

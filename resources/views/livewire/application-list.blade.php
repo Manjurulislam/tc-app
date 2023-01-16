@@ -50,7 +50,7 @@
                         <th>SSC Reg</th>
                         <th>Group</th>
                         <th>Subjects</th>
-                        <th>Sharok No.</th>
+{{--                        <th>Sharok No.</th>--}}
                         <th>Payment</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -82,7 +82,7 @@
                                     <div class="text-bold">Elec. - {{$item->subject_elec}} , Optn.
                                         - {{$item->subject_optn}}</div>
                                 </td>
-                                <td>{{$item->sharok_no}}</td>
+{{--                                <td>{{$item->sharok_no}}</td>--}}
                                 <td class="text-capitalize">
                                     @if($item->payment_status)
                                     <span class="badge bg-success">Success</span>
@@ -95,11 +95,6 @@
                                 </td>
                                 <td>
                                     <a href="{{route('details', $item->application_id)}}" class="btn btn-warning btn-xs">Details</a>
-{{--                                    <button data-toggle="modal" data-target="#detailsModal" type="button"--}}
-{{--                                            wire:click="details({{ $item->application_id }})"--}}
-{{--                                            class="btn btn-warning btn-xs">--}}
-{{--                                        Details--}}
-{{--                                    </button>--}}
                                     @if($item->showApproveBtn)
                                         <button data-toggle="modal" data-target="#updateModal"
                                                 wire:click="updateStatus({{ $item->id }})"

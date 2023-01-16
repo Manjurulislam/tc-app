@@ -18,6 +18,9 @@ class ApproveApplication extends Model
         'parent_id', 'status', 'is_revert'
     ];
 
+    protected $dates = [
+        'created_at', 'approve_at'
+    ];
 
     public function applications(): BelongsTo
     {

@@ -21,7 +21,7 @@
             </td>
 
             <td width="10%" style="text-align: right">
-{{--                <img class="mojib" src="{{asset('assets/pdf/Mujib_100_Logo.png')}}" alt=""/>--}}
+                {{--                <img class="mojib" src="{{asset('assets/pdf/Mujib_100_Logo.png')}}" alt=""/>--}}
             </td>
         </tr>
     </table>
@@ -31,7 +31,7 @@
             <td width="84%">
                 <div>স্মারক নং - <span class="subject">{{$sharok}}</span></div>
             </td>
-            <td width="16%" style="text-align: right">তারিখঃ {{now()->format('d-m-Y')}}</td>
+            <td width="16%" style="text-align: right">তারিখঃ {{data_get($approveDate,'approve_at') ? data_get($approveDate,'approve_at')->format('d-m-Y') : ''}}</td>
         </tr>
     </table>
     <br>
@@ -100,7 +100,9 @@
         <tr>
             <td width="50%">স্মারক নং - <span class="subject">{{$sharok}}</span></td>
             <td width="34%"></td>
-            <td width="16%"><span>তারিখঃ {{now()->format('d-m-Y')}}</span></td>
+            <td width="16%">
+                <span>তারিখঃ {{data_get($approveDate,'approve_at') ? data_get($approveDate,'approve_at')->format('d-m-Y') : ''}}</span>
+            </td>
         </tr>
     </table>
     <br>
