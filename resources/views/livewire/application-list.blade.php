@@ -29,7 +29,7 @@
                 </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
+            <div class="card-body table-responsive p-0" style="height: 550px;">
                 @if(!blank($multipleSelect))
                     <button data-toggle="modal" data-target="#bulkUpdateModal" class="btn btn-success btn-sm">
                         Approves
@@ -50,7 +50,7 @@
                         <th>SSC Reg</th>
                         <th>Group</th>
                         <th>Subjects</th>
-{{--                        <th>Sharok No.</th>--}}
+                        {{--                        <th>Sharok No.</th>--}}
                         <th>Payment</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -67,7 +67,7 @@
                                     @endif
                                 </td>
                                 <td>{{$loop->index + 1}}</td>
-{{--                                <td>{{$loop->index + 1}} => {{$item->id}}</td>--}}
+                                {{--                                <td>{{$loop->index + 1}} => {{$item->id}}</td>--}}
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->father_name}}</td>
                                 <td>{{$item->mother_name}}</td>
@@ -82,19 +82,30 @@
                                     <div class="text-bold">Elec. - {{$item->subject_elec}} , Optn.
                                         - {{$item->subject_optn}}</div>
                                 </td>
-{{--                                <td>{{$item->sharok_no}}</td>--}}
+                                {{--                                <td>{{$item->sharok_no}}</td>--}}
                                 <td class="text-capitalize">
                                     @if($item->payment_status)
-                                    <span class="badge bg-success">Success</span>
+                                        <span class="badge bg-success">Success</span>
                                     @else
                                         <span class="badge bg-danger">Pending</span>
                                     @endif
                                 </td>
                                 <td class="text-capitalize">
                                     <span class="badge bg-success">{{$item->status}}</span>
+
+                                    @if($item->userRole == 3 && $item->showApproveBtn)
+                                        <span class="badge bg-primary">
+                                            @if(!$item->btnUpDown)
+                                                <i class="fas fa-arrow-down"></i>
+                                            @else
+                                                <i class="fas fa-arrow-up"></i>
+                                            @endif
+                                        </span>
+                                    @endif
                                 </td>
                                 <td>
-                                    <a href="{{route('details', $item->application_id)}}" class="btn btn-warning btn-xs">Details</a>
+                                    <a href="{{route('details', $item->application_id)}}"
+                                       class="btn btn-warning btn-xs">Details</a>
                                     @if($item->showApproveBtn)
                                         <button data-toggle="modal" data-target="#updateModal"
                                                 wire:click="updateStatus({{ $item->id }})"
