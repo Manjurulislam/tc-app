@@ -75,9 +75,8 @@ class ApplicationList extends Component
 
     public function updateStatus($id)
     {
-        //$approve     = ApproveApplication::find($id);
         $this->appId    = $id;
-        $this->isRevert = ApproveApplication::where('is_revert', 1)->exists();
+        $this->isRevert = ApproveApplication::where('is_revert', $this->appId)->exists();
     }
 
     public function details($id)
@@ -221,15 +220,15 @@ class ApplicationList extends Component
                 'user_id'        => $userId,
                 'is_revert'      => $revert,
             ]);
-        } else {
-            $approve->update([
-                'is_approved' => 1,
-                'comment_id'  => $this->commentId,
-                'approve_at'  => now()->toDateTimeString(),
-                'is_revert'   => $revert,
-                'status'      => $status
-            ]);
         }
+        $approve->update([
+            'is_approved' => 1,
+            'comment_id'  => $this->commentId,
+            'approve_at'  => now()->toDateTimeString(),
+            'is_revert'   => $revert,
+            'status'      => $status
+        ]);
+
         return $approve;
     }
 
