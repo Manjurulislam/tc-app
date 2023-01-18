@@ -119,7 +119,7 @@ class ApplicationList extends Component
             } else {
                 $status = 1;
                 if ($role == 3) {
-                    $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+                    $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no]);
                 }
             }
 
@@ -162,7 +162,7 @@ class ApplicationList extends Component
                     if ($isRevert) {
                         $status = 1;
                         if ($role == 3) {
-                            $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
+                            $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no]);
                         }
                     } else {
                         //data approve from both college
