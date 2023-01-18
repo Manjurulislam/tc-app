@@ -33,7 +33,7 @@ class ApplicationList extends Component
         $role  = data_get($admin, 'user_role');
 
         if ($role == 2) {
-            $this->comments = Comment::whereIn('id', [9, 10])->get();
+            $this->comments = Comment::whereIn('id', [2, 3])->get();
         } else {
             $this->comments = Comment::latest()->get();
         }
