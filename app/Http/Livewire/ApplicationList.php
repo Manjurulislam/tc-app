@@ -103,28 +103,32 @@ class ApplicationList extends Component
             $role     = data_get($admin, 'user_role');
             $userId   = data_get($admin, 'id');
             $approve  = ApproveApplication::where(['application_id' => $this->appId, 'user_id' => $userId])->first();
-            $isRevert = (bool)data_get($approve, 'is_revert');
+            $isRevert = ApproveApplication::where(['application_id' => $this->appId, 'is_revert' => 1])->exists();
 
-            if (!$isRevert) {
-                //data approve from both college
+            if (!blank($approve)) {
+
+                $isApproved = data_get($approve, 'is_approved');
+
+                //approve both college
                 if ($role == 2) {
                     $user = $this->approveCollege($approve);
-                } elseif ($role == 3) { // 1st admin pass to 2nd admin
-                    $user = $this->getUserByRole(4); // 2nd admin
-                } else { // 2nd admin pass to 1st admin
-                    $revert = 1;
-                    $status = 1;
-                    $user   = $this->getUserByRole(3);
                 }
-            } else {
-                $status = 1;
-                if ($role == 3) {
-                    $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no]);
-                }
-            }
 
-            $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
-            $this->alert('success', 'Approved successfully');
+                if ($role == 3 && $isRevert) {
+                    $status = 1;
+                    $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no]);
+                } else {
+                    if ($role == 3 && !$isApproved) { // 1st admin pass to 2nd admin
+                        $user = $this->getUserByRole(4); // 2nd admin
+                    } elseif ($role == 4 && !$isApproved) { // 2nd admin pass to 1st admin
+                        $revert = 1;
+                        $status = 1;
+                        //   $user   = $this->getUserByRole(3);
+                    }
+                }
+                $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
+                $this->alert('success', 'Approved successfully');
+            }
             DB::commit();
         } catch (\Exception $e) {
             Log::error($e);
@@ -190,15 +194,13 @@ class ApplicationList extends Component
 
     public function approveCollege($approve)
     {
-        $admin        = auth()->user();
-        $role         = data_get($admin, 'user_role');
         $admissionCol = data_get($approve, 'applications.to_college_eiin');
         $collegeUser  = '';
 
-        if ($approve->is_parent && $role == 2) {
+        if ($approve->is_parent) {
             //first college pass 2nd college
             $collegeUser = User::where('eiin_no', $admissionCol)->first();
-        } elseif (!$approve->is_parent && $role == 2) {  //2nd college pass to first admin
+        } else {  //2nd college pass to first admin
             $collegeUser = $this->getUserByRole(3); //1
             //sms send student
             $this->sendSms($approve);
@@ -213,7 +215,7 @@ class ApplicationList extends Component
 
     protected function bypassApplication($approve, $userId, $revert = 0, $status = 1)
     {
-        if ($userId && !$revert) {
+        if ($userId) {
             $approve->create([
                 'application_id' => data_get($approve, 'applications.id'),
                 'parent_id'      => data_get($approve, 'id'),
