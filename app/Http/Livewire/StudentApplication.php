@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Application;
 use App\Models\CollegeDetails;
 use App\Models\Student;
 use App\Models\User;
@@ -213,7 +214,8 @@ class StudentApplication extends Component
         $details      = CollegeDetails::where($clause)->where('min_gpa', '<=', $this->sscGpa)->first();
         $totalSit     = data_get($details, 'total_seats');
         $availableSit = data_get($details, 'available_seats');
-        return $availableSit >= 1 && $availableSit < $totalSit;
+        $countApplied = Application::where('to_college_eiin', $details->eiin)->count();
+        return $availableSit >= 1 && $availableSit < $totalSit && $availableSit < $countApplied;
     }
 
     protected function sendSms($student)

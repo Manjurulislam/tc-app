@@ -157,7 +157,7 @@ class ApplicationList extends Component
             if (!blank($applications)) {
 
                 foreach ($applications as $approve) {
-                    $isRevert = (bool)data_get($approve, 'is_revert');
+                    $isRevert = data_get($approve, 'is_revert');
 
                     if ($isRevert) {
                         $status = 1;
