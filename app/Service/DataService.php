@@ -55,10 +55,10 @@ class DataService
             $authUserId    = data_get(auth()->user(), 'id');
 
             //==============
-            $isApproved  = $item->approves()->where(['user_id' => $authUserId, 'application_id' => data_get($item, 'id')])
-                ->where('status', 0)->orWhere('is_approved', 0)->exists();
-            $hasApproved = $isApproved;
-            $isRevert    = $item->approves()->where(['application_id' => data_get($item, 'id'), 'is_revert' => 1])->exists();
+            $isApproved = $item->approves()->where(['user_id' => $authUserId, 'application_id' => data_get($item, 'id')])
+                ->where('is_approved', 0)->exists();
+
+            $isRevert = $item->approves()->where(['application_id' => data_get($item, 'id'), 'is_revert' => 1])->exists();
 
             $item->id                = data_get($item, 'id');
             $item->application_id    = data_get($approveApp, 'application_id');
@@ -82,9 +82,13 @@ class DataService
             $item->btnUpDown         = $isRevert;
 
             if (($userRole == 2) && !$paymentStatus) {
-                $item->showApproveBtn = $hasApproved;
+                $item->showApproveBtn = $isApproved;
             } elseif (($userRole != 2) && $paymentStatus) {
-                $item->showApproveBtn = $hasApproved;
+                if ($userRole == 3 && $isRevert) {
+                    $item->showApproveBtn = $isRevert;
+                } else {
+                    $item->showApproveBtn = $isApproved;
+                }
             }
             return $item;
         });
