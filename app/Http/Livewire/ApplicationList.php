@@ -161,23 +161,21 @@ class ApplicationList extends Component
 
                 foreach ($applications as $approve) {
 
-                    $isRevert = data_get($approve, 'is_revert');
+                    $isApproved = data_get($approve, 'is_approved');
+                    $isRevert   = ApproveApplication::where(['is_revert' => 1])->exists();
 
-                    if ($isRevert) {
+                    if ($role == 2) {
+                        $user = $this->approveCollege($approve);
+                    } elseif ($role == 3 && $isRevert && $isApproved) {
                         $status = 1;
-                        if ($role == 3) {
-                            $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no]);
-                        }
+                        $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no]);
                     } else {
-                        //data approve from both college
-                        if ($role == 2) {
-                            $user = $this->approveCollege($approve);
-                        } elseif ($role == 3) { // 1st admin pass to 2nd admin
+                        if ($role == 3 && !$isApproved) { // 1st admin pass to 2nd admin
                             $user = $this->getUserByRole(4); // 2nd admin
                         } else { // 2nd admin pass to 1st admin
                             $revert = 1;
                             $status = 1;
-                            $user   = $this->getUserByRole(3);
+                            // $user   = $this->getUserByRole(3);
                         }
                     }
                     $this->bypassApplication($approve, data_get($user, 'id'), $revert, $status);
