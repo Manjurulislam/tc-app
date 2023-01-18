@@ -106,20 +106,18 @@ class ApplicationList extends Component
             $approve  = ApproveApplication::where(['application_id' => $this->appId, 'user_id' => $userId])->first();
             $isRevert = (bool)data_get($approve, 'is_revert');
 
-            if ($isRevert) {
+            if (!$isRevert) {
                 //data approve from both college
                 if ($role == 2) {
                     $user = $this->approveCollege($approve);
                 } elseif ($role == 3) { // 1st admin pass to 2nd admin
                     $user = $this->getUserByRole(4); // 2nd admin
-                } elseif ($role == 4) { // 2nd admin pass to 1st admin
+                } else { // 2nd admin pass to 1st admin
                     $revert = 1;
                     $status = 1;
                     $user   = $this->getUserByRole(3);
                 }
             } else {
-
-
                 $status = 1;
                 if ($role == 3) {
                     $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
@@ -172,7 +170,7 @@ class ApplicationList extends Component
                             $user = $this->approveCollege($approve);
                         } elseif ($role == 3) { // 1st admin pass to 2nd admin
                             $user = $this->getUserByRole(4); // 2nd admin
-                        } elseif ($role == 4) { // 2nd admin pass to 1st admin
+                        } else { // 2nd admin pass to 1st admin
                             $revert = 1;
                             $status = 1;
                             $user   = $this->getUserByRole(3);
