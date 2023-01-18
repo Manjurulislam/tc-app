@@ -214,8 +214,8 @@ class StudentApplication extends Component
         $details      = CollegeDetails::where($clause)->where('min_gpa', '<=', $this->sscGpa)->first();
         $totalSit     = data_get($details, 'total_seats');
         $availableSit = data_get($details, 'available_seats');
-        $countApplied = Application::where('to_college_eiin', data_get($details, 'eiin'))->count();
-        return $availableSit >= 1 && $availableSit < $totalSit && $availableSit < $countApplied;
+        //$countApplied = Application::where('to_college_eiin', data_get($details, 'eiin'))->count();
+        return $availableSit >= 1 && $availableSit < $totalSit;
     }
 
     protected function sendSms($student)

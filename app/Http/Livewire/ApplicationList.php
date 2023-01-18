@@ -107,11 +107,6 @@ class ApplicationList extends Component
             $isRevert = (bool)data_get($approve, 'is_revert');
 
             if ($isRevert) {
-                $status = 1;
-                if ($role == 3) {
-                    $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
-                }
-            } else {
                 //data approve from both college
                 if ($role == 2) {
                     $user = $this->approveCollege($approve);
@@ -121,6 +116,13 @@ class ApplicationList extends Component
                     $revert = 1;
                     $status = 1;
                     $user   = $this->getUserByRole(3);
+                }
+            } else {
+
+
+                $status = 1;
+                if ($role == 3) {
+                    $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no,]);
                 }
             }
 
