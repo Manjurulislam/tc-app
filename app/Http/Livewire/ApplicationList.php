@@ -50,7 +50,7 @@ class ApplicationList extends Component
     {
         $user      = auth()->guard('web')->user();
         $isCollege = Str::contains(data_get(auth()->guard('web')->user(), 'user_role'), 2);
-        $query     = Application::latest();
+        $query     = Application::query();
 
         if ($this->search) {
             $query->where(function ($query) {

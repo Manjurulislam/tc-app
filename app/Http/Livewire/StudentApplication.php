@@ -219,7 +219,7 @@ class StudentApplication extends Component
             ->whereHas('student.academicInfo', function ($q) {
                 $q->where('group', $this->group);
             })->count();
-        return $availableSit >= 1 && $availableSit < $totalSit && $availableSit > $countApplied;
+        return $availableSit >= 1 && $availableSit <= $totalSit && $availableSit > $countApplied;
     }
 
     protected function sendSms($student)
