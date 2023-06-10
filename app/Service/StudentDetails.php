@@ -11,13 +11,14 @@ use Illuminate\Support\Facades\Log;
 class StudentDetails
 {
 
-    public function post($rollNo, $year)
+    public function post($rollNo, $year, $board)
     {
         try {
-            $key      = 'dn_' . $rollNo . '_' . $year;
-            $response = Cache::remember($key, 300, function () use ($rollNo, $year) {
+            $key      = 'dn_' . $rollNo . '_' . $year . '_' . $board;
+            $response = Cache::remember($key, 300, function () use ($rollNo, $year, $board) {
                 $apiUrl   = 'http://172.104.51.235:9999/api/student.php';
-                $response = Http::timeout(25)->withOptions(['debug' => false, 'verify' => false,])->get($apiUrl, $this->setBodyParam($rollNo, $year));
+                $response = Http::timeout(25)->withOptions(['debug' => false, 'verify' => false])
+                    ->get($apiUrl, $this->setBodyParam($rollNo, $year, $board));
                 $content  = json_decode($response);
                 return [
                     'name'        => data_get($content, 'data.name', ''),
@@ -38,10 +39,10 @@ class StudentDetails
         }
     }
 
-    public function setBodyParam($roll, $year): array
+    public function setBodyParam($roll, $year, $board = 'din'): array
     {
         return [
-            'board' => 'din',
+            'board' => $board,
             'exam'  => 'ssc',
             'year'  => $year,
             'roll'  => $roll,

@@ -25,7 +25,7 @@ class StudentApplication extends Component
         $curCollegeEiin, $curCollegeName, $group, $class, $roll,
         $session, $curPostOffice, $curUpozilla, $curDistrict,
         $addColEiin, $addColCode, $addColName, $addColPost,
-        $addColUpozila, $addColDistrict, $instituteId,
+        $addColUpozila, $addColDistrict, $instituteId, $board,
         $subjects, $subject_elec, $subject_optn, $attachment;
 
     public $hasSit  = false;
@@ -45,6 +45,7 @@ class StudentApplication extends Component
         'addColEiin'     => 'required|numeric',
         'addColCode'     => 'required|numeric',
         'addColPost'     => 'required',
+        'board'          => 'required',
     ];
     protected $messages = [
         'attachment.required'     => 'Marksheet is required',
@@ -176,7 +177,8 @@ class StudentApplication extends Component
     public function details()
     {
         if ($this->ssc_roll_no && $this->sscPassYear) {
-            $response            = app(StudentDetails::class)->post($this->ssc_roll_no, $this->sscPassYear);
+            $board               = $this->board;
+            $response            = app(StudentDetails::class)->post($this->ssc_roll_no, $this->sscPassYear, $board);
             $this->stdName       = data_get($response, 'name');
             $this->stdFatherName = data_get($response, 'father_name');
             $this->stdMotherName = data_get($response, 'mother_name');

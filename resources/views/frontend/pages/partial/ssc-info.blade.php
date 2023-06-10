@@ -6,26 +6,42 @@
     </div>
     <div class="card-body border border-2">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group required">
                     <label for="ssc_roll">Roll No.</label>
                     <input type="text" class="form-control" id="ssc_roll" wire:model="ssc_roll_no">
                     @error('ssc_roll_no') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group required">
                     <label for="ssc_reg">Registration No.</label>
                     <input type="text" class="form-control" id="ssc_reg" wire:model="sscReg">
                     @error('sscReg') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="form-group required">
                     <label for="pass_year">Passing Year</label>
-                    <input type="text" class="form-control" id="pass_year" wire:model="sscPassYear"
-                           wire:change="details">
+                    <input type="text" class="form-control" id="pass_year" wire:model="sscPassYear">
                     @error('sscPassYear') <small class="form-text text-danger">{{ $message }}</small>@enderror
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group required">
+                    <label for="pass_year">Board</label>
+                    <select class="form-control" wire:model="board" id="pass_year" wire:change="details">
+                        <option value="">Select Board</option>
+                        <option value="dha">Dhaka</option>
+                        <option value="com">Comilla</option>
+                        <option value="raj">Rajshahi</option>
+                        <option value="jes">Jessore</option>
+                        <option value="chi">Chittagong</option>
+                        <option value="bar">Barisal</option>
+                        <option value="syl">Sylhet</option>
+                        <option value="din">Dinajpur</option>
+                    </select>
+                    @error('board') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
             </div>
         </div>
