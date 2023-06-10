@@ -40,6 +40,8 @@
                         <option value="bar">Barisal</option>
                         <option value="syl">Sylhet</option>
                         <option value="din">Dinajpur</option>
+                        <option value="mad">Madrassah</option>
+                        <option value="tec">Technical</option>
                     </select>
                     @error('board') <small class="form-text text-danger">{{ $message }}</small>@enderror
                 </div>
