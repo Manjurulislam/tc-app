@@ -103,6 +103,7 @@ class DataService
             $appStatus     = data_get($item, 'status');
             $paymentStatus = data_get($item, 'payment_status');
 
+            $item->id                = data_get($item, 'id');
             $item->name              = data_get($item, 'student.name');
             $item->father_name       = data_get($item, 'student.father_name');
             $item->mother_name       = data_get($item, 'student.mother_name');
