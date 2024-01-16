@@ -104,8 +104,10 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{route('details', $item->application_id)}}"
+
+                                    <a href="{{route('details', $item->id)}}"
                                        class="btn btn-warning btn-xs">Details</a>
+
                                     @if($item->showApproveBtn)
                                         <button data-toggle="modal" data-target="#updateModal"
                                                 wire:click="updateStatus({{ $item->id }})"
