@@ -15,7 +15,7 @@ class AdjustSit extends Component
     protected $paginationTheme = 'bootstrap';
     protected $queryString     = ['search'];
 
-    public $search;
+    public $search, $details, $collegeId, $availableSeats;
 
     public function render()
     {
@@ -36,5 +36,19 @@ class AdjustSit extends Component
             });
         }
         return $query->paginate(30);
+    }
+
+
+    public function getItem(CollegeDetails $details)
+    {
+        $this->collegeId      = data_get($details, 'id');
+        $this->availableSeats = data_get($details, 'available_seats');
+        $this->details        = $details;
+    }
+
+    public function update()
+    {
+        $details = CollegeDetails::find($this->collegeId);
+        $details->fill(['available_seats' => $this->availableSeats])->save();
     }
 }

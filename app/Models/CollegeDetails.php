@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CollegeDetails extends Model
 {
+    public $timestamps = false;
     protected $fillable = [
         'district', 'thana', 'eiin', 'college_name',
         'shift', 'version', 'group_name', 'gender',

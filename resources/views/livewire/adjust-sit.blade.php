@@ -1,4 +1,6 @@
 <div class="row">
+
+    @include('backend.modal.sit-adjust')
     <div class="col-12">
         <div class="card card-outline card-primary">
             <div class="card-header">
@@ -53,11 +55,11 @@
                                 <td class="text-center">{{$item->total_seats}}</td>
                                 <td class="text-center">{{$item->available_seats}}</td>
                                 <td>
-{{--                                    <button data-toggle="modal" data-target="#updateModal"--}}
-{{--                                            wire:click="updateStatus({{ $item->id }})"--}}
-{{--                                            class="btn btn-primary btn-xs">--}}
-{{--                                        Edit--}}
-{{--                                    </button>--}}
+                                    <button data-toggle="modal" data-target="#updateModal"
+                                            wire:click="getItem({{ $item->id }})"
+                                            class="btn btn-primary btn-xs">
+                                        Edit
+                                    </button>
                                 </td>
                             </tr>
                         @endforeach
