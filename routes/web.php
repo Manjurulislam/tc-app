@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'dashboard'], function () {
     Route::get('/export-pdf/{application}/download', [DashboardController::class, 'downloadPdf'])->name('export-pdf');
     Route::get('/approved', [DashboardController::class, 'getApprove'])->name('approved');
     Route::get('/signature', [DashboardController::class, 'signatures'])->name('signature');
+    Route::get('/sit-adjust', [DashboardController::class, 'sitAdjust'])->name('sit-adjust');
     Route::get('/comments', [DashboardController::class, 'comments'])->name('comments');
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });

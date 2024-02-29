@@ -199,6 +199,11 @@ class DashboardController extends Controller
         return view('backend.signature.index');
     }
 
+    public function sitAdjust()
+    {
+        return view('backend.adjust.index');
+    }
+
     //================================ student =========================
 
     public function student()

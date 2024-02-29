@@ -46,6 +46,16 @@
                                     Approved
                                 </a>
                             </li>
+
+                            @if(auth()->user()->user_role ==3)
+                                <li class="nav-item">
+                                    <a href="{{route('sit-adjust')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        Sit Adjust
+                                    </a>
+                                </li>
+                            @endif
+
                         </ul>
                     </li>
                 @endif
