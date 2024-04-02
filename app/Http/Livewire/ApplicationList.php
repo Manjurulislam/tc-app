@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Enum\ApplicationStatus;
 use App\Models\Application;
 use App\Models\ApproveApplication;
+use App\Models\CollegeDetails;
 use App\Models\Comment;
 use App\Models\User;
 use App\Service\DataService;
@@ -169,6 +170,7 @@ class ApplicationList extends Component
                     } elseif ($role == 3 && $isRevert && $isApproved) {
                         $status = 1;
                         $approve->applications->update(['status' => 2, 'sharok_no' => $this->sharok_no]);
+                        $this->collegeSitAdjust($approve);
                     } else {
                         if ($role == 3 && !$isApproved) { // 1st admin pass to 2nd admin
                             $user = $this->getUserByRole(4); // 2nd admin
@@ -189,6 +191,20 @@ class ApplicationList extends Component
         }
     }
 
+
+    protected function collegeSitAdjust($approve)
+    {
+        $isApproved  = data_get($approve, 'applications.status') == ApplicationStatus::APPROVED;
+        $fromEiin    = data_get($approve, 'applications.from_college_eiin');
+        $toEiin      = data_get($approve, 'applications.to_college_eiin');
+        $fromCollege = CollegeDetails::where('eiin', $fromEiin)->first();
+        $toCollege   = CollegeDetails::where('eiin', $toEiin)->first();
+
+        if ($isApproved) {
+            $fromCollege->increment('available_seats');
+            $toCollege->decrement('available_seats');
+        }
+    }
 
     public function approveCollege($approve)
     {
