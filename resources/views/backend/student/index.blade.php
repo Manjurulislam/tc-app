@@ -102,9 +102,12 @@
                                     </span>
                                 </td>
                                 <td>
-{{--                                    <a href="{{route('student.download')}}" class="btn btn-sm btn-success">--}}
-{{--                                        <i class="fas fa-download"></i>--}}
-{{--                                    </a>--}}
+                                    @if(data_get($student,'application.status') ==2)
+                                        <a href="{{route('student.download',data_get($student,'application.id'))}}"
+                                           class="btn btn-sm btn-success">
+                                            <i class="fas fa-download"></i>
+                                        </a>
+                                    @endif
                                 </td>
                             </tr>
                         @endif

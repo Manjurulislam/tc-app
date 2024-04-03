@@ -28,7 +28,7 @@ Route::post('/login/student', [AuthStudentController::class, 'store'])->name('st
 
 Route::group(['middleware' => ['student'], 'prefix' => 'student'], function () {
     Route::get('/', [DashboardController::class, 'student'])->name('student.dashboard');
-    Route::get('/download', [StudentController::class, 'downloadPdf'])->name('student.download');
+    Route::get('{application}/download', [StudentController::class, 'downloadPdf'])->name('student.download');
     Route::post('/logout', [AuthStudentController::class, 'destroy'])->name('student.logout');
 });
 
