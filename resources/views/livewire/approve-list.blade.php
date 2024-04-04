@@ -76,7 +76,7 @@
                                     <span class="badge bg-success">{{$item->status}}</span>
                                 </td>
                                <td>
-                                   <a href="{{route('export-pdf', $item->id)}}" class="btn btn-success btn-sm" >
+                                   <a href="{{route('export-pdf', $item->id)}}" target="_blank" class="btn btn-success btn-sm" >
                                        Download
                                    </a>
                                </td>
