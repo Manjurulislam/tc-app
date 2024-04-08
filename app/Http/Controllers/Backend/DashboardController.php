@@ -52,36 +52,35 @@ class DashboardController extends Controller
     }
 
 
-
     public function downloadPdf(Application $application)
     {
-//        $defaultConfig     = (new ConfigVariables())->getDefaults();
-//        $fontDirs          = $defaultConfig['fontDir'];
-//        $defaultFontConfig = (new FontVariables())->getDefaults();
-//        $fontData          = $defaultFontConfig['fontdata'];
-//        $mpdf              = new Mpdf([
-//            'tempDir'  => storage_path('tempdir'),
-//            'fontDir'  => array_merge($fontDirs, [
-//                public_path('assets/fonts'),
-//            ]),
-//            'fontdata' => $fontData + [
-//                    'nikosh'  => [
-//                        'R'      => "Nikosh.ttf",
-//                        'useOTL' => 0xFF,
-//                    ],
-//                    'dm-sans' => [
-//                        'R'      => "DMSans-Regular.ttf",
-//                        'B'      => "DMSans-Bold.ttf",
-//                        'useOTL' => 0xFF,
-//                    ],
-//                ],
-//
-//            'default_font'     => 'dm-sans',
-//            'mode'             => 'utf-8',
-//            'autoScriptToLang' => true,
-//            'autoLangToFont'   => true,
-//            'format'           => 'A4',
-//        ]);
+        $defaultConfig     = (new ConfigVariables())->getDefaults();
+        $fontDirs          = $defaultConfig['fontDir'];
+        $defaultFontConfig = (new FontVariables())->getDefaults();
+        $fontData          = $defaultFontConfig['fontdata'];
+        $mpdf              = new Mpdf([
+            'tempDir'  => storage_path('tempdir'),
+            'fontDir'  => array_merge($fontDirs, [
+                public_path('assets/fonts'),
+            ]),
+            'fontdata' => $fontData + [
+                    'nikosh'  => [
+                        'R'      => "Nikosh.ttf",
+                        'useOTL' => 0xFF,
+                    ],
+                    'dm-sans' => [
+                        'R'      => "DMSans-Regular.ttf",
+                        'B'      => "DMSans-Bold.ttf",
+                        'useOTL' => 0xFF,
+                    ],
+                ],
+
+            'default_font'     => 'dm-sans',
+            'mode'             => 'utf-8',
+            'autoScriptToLang' => true,
+            'autoLangToFont'   => true,
+            'format'           => 'A4',
+        ]);
 
         $user        = User::where('eiin_no', 444444)->first();
         $approveDate = ApproveApplication::where('application_id', data_get($application, 'id'))->where('user_id', 668)->first();
@@ -101,18 +100,14 @@ class DashboardController extends Controller
                 data_get($application, 'student.academicInfo.ssc_bord'),
         ];
 
-//        $view = view('pdf.approve-student', compact('sharok', 'student', 'user', 'approveDate'));
-//        $mpdf->WriteHTML($view->render());
-//
-//        $fileName = 'tc_' . data_get($application, 'student.name') . '.pdf';
-//        $mpdf->Output($fileName, 'D');
+        $view = view('pdf.approve-student', compact('sharok', 'student', 'user', 'approveDate'));
+        $mpdf->WriteHTML($view->render());
 
-        return view('pdf.approve-student', compact('sharok', 'student', 'user', 'approveDate'));
+        $fileName = 'tc_' . data_get($application, 'student.name') . '.pdf';
+        $mpdf->Output($fileName, 'D');
+
+//        return view('pdf.approve-student', compact('sharok', 'student', 'user', 'approveDate'));
     }
-
-
-
-
 
 
     public function downloadApproveList()
@@ -175,7 +170,7 @@ class DashboardController extends Controller
                             data_get($item, 'student.academic_info.ssc_bord'),
                     ];
                 });
-                $view = view('pdf.approve-pdf', compact('sharok', 'item', 'user','approveDate'));
+                $view = view('pdf.approve-pdf', compact('sharok', 'item', 'user', 'approveDate'));
                 $mpdf->WriteHTML($view->render());
             }
         }
